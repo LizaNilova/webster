@@ -10,7 +10,7 @@ export class PostsService {
     constructor(@InjectModel(Post) private postsRepository : typeof Post,
     private filesService: FilesService) {}
 
-    async create(dto: CreatePostDto, image: any) {
+    async create(dto: CreatePostDto, image : Express.Multer.File) {
         const filename = await this.filesService.createFile(image);
         const post = await this.postsRepository.create({...dto, image: filename});
         return post;
