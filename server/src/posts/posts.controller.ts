@@ -1,9 +1,9 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards } from '@nestjs/common';
-
+import { Body, Controller, Post, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto'
 import { PostsService } from './posts.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RequastUserDto } from 'src/users/dto/requast-user.dto';
+import { RequestUserDto } from 'src/users/dto/request-user.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -11,9 +11,11 @@ export class PostsController {
     constructor(private postServer: PostsService){}
 
     @Post()
+    @UseInterceptors(FileInterceptor('image'))
     @UseGuards(JwtAuthGuard)
-    createPost(@Body() dto: CreatePostDto, @Request() req: {user: RequastUserDto},
-                @UploadedFile() image) {
+    createPost(@Body() dto: CreatePostDto, @Request() req: {user: RequestUserDto},
+    @UploadedFile() image: Express.Multer.File) {
         return this.postServer.create({...dto, userId: req.user.id}, image);
     }  
 }
+
