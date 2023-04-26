@@ -13,7 +13,7 @@ export class CreateUserDto {
 
   @ApiProperty({ example: 'qwerty123', description: 'user password' })
   @IsString({ message: 'Should be a string' })
-  @Length(8, 32, { message: 'Тo more than 4 and no more than 32' })
+  @Length(8, 32, { message: 'Тo more than 8 and no more than 32' })
   readonly password: string;
 
   @ApiProperty({ example: 'qwerty123', description: 'user comfirm password' })
