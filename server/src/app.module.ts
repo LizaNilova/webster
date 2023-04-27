@@ -35,7 +35,7 @@ import { FilesModule } from './files/files.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, UserBanned, Post],
+      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category],
       autoLoadModels: true,
     }),
     UsersModule,

@@ -15,6 +15,7 @@ export class AuthController {
 
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
+    console.log(userDto)
     return this.authervice.registration(userDto);
   }
 }
