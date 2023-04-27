@@ -4,7 +4,7 @@ import { CreatePostDto } from './dto/create-post.dto'
 import { AddCategoryDto } from './dto/add-category.dto'
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RequastUserDto } from 'src/users/dto/requast-user.dto';
+import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
@@ -16,7 +16,7 @@ export class PostsController {
     // http://localhost:8080/posts
     @Post()
     @UseGuards(JwtAuthGuard)
-    createPost(@Body() dto: CreatePostDto, @Request() req: { user: RequastUserDto }, @UploadedFile() image: Express.Multer.File) {
+    createPost(@Body() dto: CreatePostDto, @Request() req: { user: RequestUserDto }, @UploadedFile() image: Express.Multer.File) {
         return this.postServer.create({ ...dto, userId: req.user.id }, image);
     }
 
@@ -45,7 +45,7 @@ export class PostsController {
     // http://localhost:8080/posts/my
     @Get('/my')
     @UseGuards(JwtAuthGuard)
-    getMyPosts(@Request() req: { user: RequastUserDto }) {
+    getMyPosts(@Request() req: { user: RequestUserDto }) {
         return this.postServer.getMyPosts(req.user.id);
     }
 
@@ -61,7 +61,7 @@ export class PostsController {
     // http://localhost:8080/posts/:id_post
     @Delete(':id_post')
     // @UseGuards(JwtAuthGuard)
-    deletePost(@Param('id_post') id: number, @Request() req: { user: RequastUserDto }) {
+    deletePost(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }) {
         return this.postServer.deletePost(id, req.user.id,);
     }
 
@@ -69,7 +69,7 @@ export class PostsController {
     // http://localhost:8080/posts/add-category/:id_post
     @Patch('/add-category/:id_post')
     @UseGuards(JwtAuthGuard)
-    addPostCategories(@Param('id_post') id: number, @Request() req: { user: RequastUserDto }, @Body() dto: AddCategoryDto) {
+    addPostCategories(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
         return this.postServer.addPostCategories(dto, req.user.id, id);
     }
 }
