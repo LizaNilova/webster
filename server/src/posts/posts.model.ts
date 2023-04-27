@@ -5,9 +5,12 @@ import {
   ForeignKey,
   Model,
   Table,
+  BelongsToMany
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../users/users.model';
+import { Category } from 'src/categories/categories.model';
+import { PostCategory } from 'src/categories/post-category.model';
 
 interface PostCreationAttrs {
   title: string;
@@ -49,4 +52,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 
   @BelongsTo(() => User)
   author: User;
+
+  @BelongsToMany(() => Category, () => PostCategory)
+  categories: Category[];
 }
