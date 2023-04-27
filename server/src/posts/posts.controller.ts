@@ -53,7 +53,7 @@ export class PostsController {
     // http://localhost:8080/posts/:id_post
     @Patch(':id_post')
     @UseGuards(JwtAuthGuard)
-    editPost(@Param('id_post') id: number, @Body() dto: CreatePostDto, @Request() req: { user: RequastUserDto }, @UploadedFile() image) {
+    editPost(@Param('id_post') id: number, @Body() dto: CreatePostDto, @Request() req: { user: RequestUserDto }, @UploadedFile() image: Express.Multer.File) {
         return this.postServer.editPost(dto, req.user.id, id, image);
     }
 

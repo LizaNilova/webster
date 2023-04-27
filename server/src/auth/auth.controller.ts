@@ -1,4 +1,4 @@
-import { Body, Controller, Injectable, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Injectable, Post } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -9,6 +9,7 @@ export class AuthController {
   constructor(private authervice: AuthService) {}
 
   @Post('/login')
+  @HttpCode(200)
   login(@Body() userDto: CreateUserDto) {
     return this.authervice.login(userDto);
   }

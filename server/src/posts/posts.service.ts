@@ -2,19 +2,19 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
 import { CreatePostDto } from './dto/create-post.dto';
-import {AddCategoryDto} from './dto/add-category.dto'
+import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
-import { CategoriesService } from 'src/categories/categories.service';
+import { CategoriesService } from '../categories/categories.service';
 
 @Injectable()
 export class PostsService {
 
-    constructor(@InjectModel(Post) private postsRepository : typeof Post,  private categoriesService: CategoriesService,
-    private filesService: FilesService) {}
+    constructor(@InjectModel(Post) private postsRepository: typeof Post, private categoriesService: CategoriesService,
+        private filesService: FilesService) { }
 
     async create(dto: CreatePostDto, image: Express.Multer.File) {
         const filename = await this.filesService.createFile(image);
-        const post = await this.postsRepository.create({...dto, image: filename});
+        const post = await this.postsRepository.create({ ...dto, image: filename });
         return post;
     }
 
@@ -44,7 +44,7 @@ export class PostsService {
     }
 
     async deletePost(id: number, userId: number,) {
-        const post = await this.postsRepository.findOne({where: { id, userId }});
+        const post = await this.postsRepository.findOne({ where: { id, userId } });
         if (!post) {
             throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
         }
