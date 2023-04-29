@@ -16,6 +16,10 @@ export class UserBanned extends Model<UserBanned> {
   @Column({ type: DataType.INTEGER })
   userId: number;
 
+  @Column({ type: DataType.INTEGER })
+  @ForeignKey(() => User)
+  adminId: number;
+
   @ApiProperty({
     example: 'Post with censor +18',
     description: 'Reason for blocking',
