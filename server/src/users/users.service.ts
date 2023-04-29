@@ -57,6 +57,7 @@ export class UsersService {
     if (user) {
       await this.userBennedRepository.create({
         userId: dto.userId,
+        adminId: dto.adminId,
         description: dto.banReason,
       });
       return user;
