@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param } from '@nestjs/common';
+import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors } from '@nestjs/common';
 
 import { CreatePostDto } from './dto/create-post.dto'
 import { AddCategoryDto } from './dto/add-category.dto'
