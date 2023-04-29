@@ -10,7 +10,7 @@ import { Role } from './roles/roles.model';
 import { RolesModule } from './roles/roles.module';
 import { UserRoles } from './roles/user-roles.model';
 
-import { PostModule } from './posts/posts.module';
+import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/posts.model';
 
 import { CategoriesModule } from './categories/categories.module';
@@ -41,11 +41,10 @@ import { FilesModule } from './files/files.module';
     UsersModule,
     RolesModule,
     AuthModule,
-    PostModule,
+    PostsModule,
     CategoriesModule,
     FilesModule,
-    PostCategory,
-    Category
+    PostCategory
   ],
 })
 export class AppModule {}
