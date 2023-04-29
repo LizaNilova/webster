@@ -32,7 +32,7 @@ import { PostsService } from 'src/posts/posts.service';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService,
-            private postService: PostsService) { }
+    private postService: PostsService) { }
 
   @ApiOperation({ summary: 'Create users' })
   @ApiCreatedResponse({ description: 'The record has been successfully created.', type: User })
