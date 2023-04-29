@@ -33,7 +33,7 @@ export class PostsController {
     // get post by id +
     // http://localhost:8080/posts/:id_post
     @Get(':id')
-    getById(@Param('id_post') id: number) {
+    getById(@Param('id') id: number) {
         return this.postServer.getById(id);
     }
 
@@ -42,7 +42,7 @@ export class PostsController {
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
-    editPost(@Param('id_post') id: number,
+    editPost(@Param('id') id: number,
         @Body() dto: CreatePostDto,
         @Request() req: { user: RequestUserDto },
         @UploadedFile() image: Express.Multer.File) {
@@ -53,7 +53,7 @@ export class PostsController {
     // http://localhost:8080/posts/:id_post
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
-    deletePost(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }) {
+    deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
         return this.postServer.deletePost(id, req.user.id,);
     }
 
@@ -61,7 +61,7 @@ export class PostsController {
     // http://localhost:8080/posts/add-category/:id_post
     @Patch('/add-category/:id')
     @UseGuards(JwtAuthGuard)
-    addPostCategories(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
+    addPostCategories(@Param('id') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
         return this.postServer.addPostCategories(dto, req.user.id, id);
     }
 }
