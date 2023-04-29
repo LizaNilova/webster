@@ -37,13 +37,6 @@ export class PostsController {
         return this.postServer.getById(id);
     }
 
-    // get user's posts (another user) +
-    // http://localhost:8080/posts/:id_user
-    @Get(':id')
-    getUserPosts(@Param('id') id: number) {
-        return this.postServer.getUserPosts(id);
-    }
-
     // get my posts ?
     // http://localhost:8080/posts/my
     @Get('/my')
