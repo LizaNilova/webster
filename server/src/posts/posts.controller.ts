@@ -15,9 +15,11 @@ export class PostsController {
     // create post +
     // http://localhost:8080/posts
     @Post()
-    @UseInterceptors(FileInterceptor('image'))
     @UseGuards(JwtAuthGuard)
-    createPost(@Body() dto: CreatePostDto, @Request() req: { user: RequestUserDto }, @UploadedFile() image: Express.Multer.File) {
+    @UseInterceptors(FileInterceptor('image'))
+    createPost(@Body() dto: CreatePostDto, 
+    @Request() req: { user: RequestUserDto },
+    @UploadedFile() image: Express.Multer.File) {
         return this.postServer.create({ ...dto, userId: req.user.id }, image);
     }
 
