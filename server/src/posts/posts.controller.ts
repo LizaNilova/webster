@@ -37,14 +37,6 @@ export class PostsController {
         return this.postServer.getById(id);
     }
 
-    // get my posts ?
-    // http://localhost:8080/posts/my
-    @Get('/my')
-    @UseGuards(JwtAuthGuard)
-    getMyPosts(@Request() req: { user: RequestUserDto }) {
-        return this.postServer.getMyPosts(req.user.id);
-    }
-
     // edit post +
     // http://localhost:8080/posts/:id_post
     @Patch(':id')
