@@ -48,8 +48,21 @@ export class AuthService {
     return await this.generateToken(user);
   }
 
+  async validateToken(token: string): Promise<TokenPayloadDto> {
+    try {
+      const payload = this.jwtService.verify(token);
+      return payload;
+    } catch {
+      throw new UnauthorizedException()
+    }
+  }
+
+  private async generateToken(user: User) {
+    const accessPayload = { id: user.id, login: user.login, role: user.roles[0].value, isBanned: Boolean(user.ban)  };
+    const refreshPayload = { login: user.login };
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(accessPayload),
+      refreshToken: this.jwtService.sign(refreshPayload)
     };
   }
 
