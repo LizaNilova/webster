@@ -20,4 +20,4 @@ import { CategoriesModule } from 'src/categories/categories.module';
     CategoriesModule
   ]
 })
-export class PostModule {}
+export class PostsModule {}
