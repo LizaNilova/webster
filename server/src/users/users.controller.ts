@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Req,
   UseGuards,
   UsePipes
 } from '@nestjs/common';
@@ -23,16 +25,22 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { User } from './users.model';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { RequestDto } from '../auth/dto/request.dto';
+import { PostsService } from 'src/posts/posts.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService,
+            private postService: PostsService) { }
 
   @ApiOperation({ summary: 'Create users' })
   @ApiCreatedResponse({ description: 'The record has been successfully created.', type: User })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiBody({ type: CreateUserDto })
+  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(RolesAuthGuard)
   @UsePipes(ValidationPipe)
   @Post()
   create(@Body() userDto: CreateUserDto) {
@@ -40,7 +48,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get all date users' })
-  @ApiResponse({ status: 200, description: 'Return all users' })
+  @ApiResponse({ status: 200, description: 'Return all users (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
@@ -63,7 +71,14 @@ export class UsersController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Post('/ban')
-  ban(@Body() dto: BanUserDto) {
-    return this.usersService.ban(dto);
+  ban(@Body() dto: BanUserDto, @Req() request: RequestDto) {
+    return this.usersService.ban({ ...dto, adminId: request.user.id });
   }
+
+  // get user's posts (another user) +
+    // http://localhost:8080/posts/:id_user
+    @Get('/posts')
+    getUserPosts(@Param('id') id: number) {
+        return this.postService.getUserPosts(id);
+    }
 }
