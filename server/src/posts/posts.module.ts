@@ -18,6 +18,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
     AuthModule,
     FilesModule,
     CategoriesModule
-  ]
+  ],
+  exports: [PostsService]
 })
 export class PostsModule {}
