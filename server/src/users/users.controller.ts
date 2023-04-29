@@ -85,11 +85,4 @@ export class UsersController {
   getUserById(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }
-
-  // get user's posts (another user) +
-  // http://localhost:8080/posts/:id_user
-  @Get('/posts')
-  getUserPosts(@Param('id') id: number) {
-    return this.postService.getUserPosts(id);
-  }
 }
