@@ -36,10 +36,7 @@ export class RolesAuthGuard implements CanActivate {
       const authHeader = req.headers.authorization;
       const token = authHeader.split(' ')[1];
       const user = this.jwtService.verify(token);
-
-      return user.role.some((role: { value: string }) =>
-        requairedRole.includes(role.value),
-      );
+      return requairedRole.includes(user.role);
     } catch (err) {
       throw new HttpException('User role no Admin', HttpStatus.FORBIDDEN);
     }
