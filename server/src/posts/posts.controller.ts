@@ -30,15 +30,15 @@ export class PostsController {
 
     // get post by id +
     // http://localhost:8080/posts/:id_post
-    @Get(':id_post')
+    @Get(':id')
     getById(@Param('id_post') id: number) {
         return this.postServer.getById(id);
     }
 
     // get user's posts (another user) +
     // http://localhost:8080/posts/:id_user
-    @Get(':id_user')
-    getUserPosts(@Param('id_user') id: number) {
+    @Get(':id')
+    getUserPosts(@Param('id') id: number) {
         return this.postServer.getUserPosts(id);
     }
 
@@ -52,7 +52,7 @@ export class PostsController {
 
     // edit post +
     // http://localhost:8080/posts/:id_post
-    @Patch(':id_post')
+    @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
     editPost(@Param('id_post') id: number,
@@ -64,15 +64,15 @@ export class PostsController {
 
     // delete post +
     // http://localhost:8080/posts/:id_post
-    @Delete(':id_post')
-    // @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     deletePost(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }) {
         return this.postServer.deletePost(id, req.user.id,);
     }
 
     // add posts categories +
     // http://localhost:8080/posts/add-category/:id_post
-    @Patch('/add-category/:id_post')
+    @Patch('/add-category/:id')
     @UseGuards(JwtAuthGuard)
     addPostCategories(@Param('id_post') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
         return this.postServer.addPostCategories(dto, req.user.id, id);
