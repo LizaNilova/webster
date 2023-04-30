@@ -1,10 +1,12 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
+import { Category } from 'src/categories/categories.model';
 import { CreatePostDto } from './dto/create-post.dto';
 import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class PostsService {
@@ -23,8 +25,72 @@ export class PostsService {
         return post;
     }
 
-    async getAll() {
-        const post = await this.postsRepository.findAll({ include: { all: true } });
+    async getAll(sort, filter, search) {
+        let post = [];
+        filter = filter ? JSON.parse(filter) : [];
+
+        if (sort === 'byCategories'){
+             post = (filter.length > 0 && search) ? await this.postsRepository.findAll({
+            where: {
+                title: { [Op.like]: `%${search}%` }
+            },
+            include: [{
+                model: Category,
+                where: { value: { [Op.in]: filter } }
+            }, { all: true }],
+            order: [
+                [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
+            ]
+            }) : (filter.length > 0) ? await this.postsRepository.findAll({
+            include: [{
+                model: Category,
+                where: { value: { [Op.in]: filter } },
+            }],
+            order: [
+               [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
+            ]
+            }) : (search) ? await this.postsRepository.findAll({
+            include: [{ model: Category}, {all: true} ],
+            where: {
+                title: { [Op.like]: `%${search}%` }
+            },
+            order: [
+                [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
+            ]
+            }) : await this.postsRepository.findAll({
+                 include: [{ model: Category }, { all: true }],
+                order: [
+                    [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
+                ]
+            });
+        } else {
+            post = (filter.length > 0 && search) ? await this.postsRepository.findAll({
+            where: {
+                title: { [Op.like]: `%${search}%` }
+            },
+            include: [{
+                model: Category,
+                where: { value: { [Op.in]: filter } }
+            }, { all: true }],
+            order: [['createdAt', 'DESC']]
+            }) : (filter.length > 0) ? await this.postsRepository.findAll({
+            include: [{
+                model: Category,
+                where: { value: { [Op.in]: filter } }
+            }, { all: true }],
+            order: [['createdAt', 'DESC']]
+            }) : (search) ? await this.postsRepository.findAll({
+            include: { all: true },
+            where: {
+                title: { [Op.like]: `%${search}%` }
+            },
+            order: [['createdAt', 'DESC']]
+            }) : await this.postsRepository.findAll({
+                include: { all: true },
+                order: [['createdAt', 'DESC']]
+            });
+
+        }
         return post;
     }
 
@@ -52,8 +118,8 @@ export class PostsService {
         return "Post was deleted";
     }
 
-    async addPostCategories(dto: AddCategoryDto, userId: number, id: number) {
-        const post = await this.postsRepository.findOne({ where: { id, userId }, include: { all: true } });
+    async addPostCategories(dto: AddCategoryDto,  id: number) {
+        const post = await this.postsRepository.findOne({ where: { id }, include: { all: true } });
         if (!post) {
             throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
         }
@@ -61,23 +127,7 @@ export class PostsService {
         if (!category) {
             throw new HttpException(`Category with value ${dto.value} not found`, HttpStatus.NOT_FOUND);
         }
-        await post.$add('category', category.id);
+        await post.$add('categories', category.id);
         return post;
-    }
-
-    async getUserPosts(id: number) {
-        const userPosts = await this.postsRepository.findAll({ where: { id } });
-        if (!userPosts) {
-            throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
-        }
-        return userPosts;
-    }
-
-    async getMyPosts(userId: number) {
-        const userPosts = await this.postsRepository.findAll({ where: { userId } });
-        if (!userPosts) {
-            throw new HttpException(`Post with ID ${userId} not found`, HttpStatus.NOT_FOUND);
-        }
-        return userPosts;
     }
 }

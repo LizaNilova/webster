@@ -75,12 +75,14 @@ export class UsersController {
     return this.usersService.ban({ ...dto, adminId: request.user.id });
   }
 
+  // get me and my posts
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
   profile(@Req() request: RequestDto) {
     return this.usersService.getUserById(request.user.id);
   }
 
+  // get another user by id and his posts
   @Get('/:id')
   getUserById(@Param('id') id: number) {
     return this.usersService.getUserById(id);

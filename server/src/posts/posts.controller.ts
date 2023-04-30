@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query  } from '@nestjs/common';
 
 import { CreatePostDto } from './dto/create-post.dto'
 import { AddCategoryDto } from './dto/add-category.dto'
@@ -26,8 +26,8 @@ export class PostsController {
     // get all posts +
     // http://localhost:8080/posts
     @Get()
-    getAll() {
-        return this.postServer.getAll();
+    getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
+        return this.postServer.getAll(sort, filter, search);
     }
 
     // get post by id +
@@ -60,8 +60,8 @@ export class PostsController {
     // add posts categories +
     // http://localhost:8080/posts/add-category/:id_post
     @Patch('/add-category/:id')
-    @UseGuards(JwtAuthGuard)
-    addPostCategories(@Param('id') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
-        return this.postServer.addPostCategories(dto, req.user.id, id);
+    // @UseGuards(JwtAuthGuard)
+    addPostCategories(@Param('id') id: number,  @Body() dto: AddCategoryDto) {
+        return this.postServer.addPostCategories(dto,  id);
     }
 }
