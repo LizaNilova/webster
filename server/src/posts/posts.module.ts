@@ -14,7 +14,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
   providers: [PostsService],
   controllers: [PostsController],
   imports: [
-    SequelizeModule.forFeature([User, Post, Category, PostCategory]),
+    SequelizeModule.forFeature([User, Post, Category, PostCategory,]),
     AuthModule,
     FilesModule,
     CategoriesModule

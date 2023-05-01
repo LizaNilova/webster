@@ -23,7 +23,7 @@ export class CategoriesController {
   }
 
   // get category by value 
-  // http://localhost:5000/categories/value/:value
+  // http://localhost:8080/categories/value/:value
   @ApiOperation({ summary: 'get category by value' })
   @Get('value/:value')
   getByValue(@Param('value') value: string) {
@@ -31,7 +31,7 @@ export class CategoriesController {
   }
 
   // get category by id
-  // http://localhost:5000/categories/:id
+  // http://localhost:8080/categories/:id
   @ApiOperation({ summary: 'get category by id' })
   @Get(':id')
   getById(@Param('id') id: number) {
@@ -39,7 +39,7 @@ export class CategoriesController {
   }
 
   // update category 
-  // http://localhost:5000/categories/:id
+  // http://localhost:8080/categories/:id
   @ApiOperation({ summary: 'update category by id (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
@@ -50,7 +50,7 @@ export class CategoriesController {
   }
 
   // delete category
-  // http://localhost:5000/categories/:id
+  // http://localhost:8080/categories/:id
   @ApiOperation({ summary: 'delete category by id (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
@@ -61,7 +61,7 @@ export class CategoriesController {
   }
 
   // get all categories
-  // http://localhost:5000/categories
+  // http://localhost:8080/categories
   @ApiOperation({ summary: 'get all category' })
   @Get()
   getAll() {

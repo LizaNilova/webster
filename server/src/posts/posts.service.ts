@@ -74,8 +74,8 @@ export class PostsService {
         return "Post was deleted";
     }
 
-    async addPostCategories(dto: AddCategoryDto,  id: number) {
-        const post = await this.postsRepository.findOne({ where: { id }, include: { all: true } });
+    async addPostCategories(dto: AddCategoryDto, userId:number, id: number) {
+        const post = await this.postsRepository.findOne({ where: { id, userId }, include: { all: true } });
         if (!post) {
             throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
         }

@@ -20,6 +20,9 @@ import {Category} from './categories/categories.model'
 import { AuthModule } from './auth/auth.module';
 
 import { FilesModule } from './files/files.module';
+import { CommentsModule } from './comments/comments.module';
+import { Comment } from './comments/comments.model';
+
 
 @Module({
   controllers: [],
@@ -35,7 +38,7 @@ import { FilesModule } from './files/files.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category],
+      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -44,7 +47,8 @@ import { FilesModule } from './files/files.module';
     PostsModule,
     CategoriesModule,
     FilesModule,
-    PostCategory
+    PostCategory,
+    CommentsModule
   ],
 })
 export class AppModule {}
