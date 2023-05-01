@@ -6,7 +6,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
-import { Op } from 'sequelize';
+import { Op, FindOptions  } from 'sequelize';
 
 @Injectable()
 export class PostsService {
@@ -28,69 +28,25 @@ export class PostsService {
     async getAll(sort, filter, search) {
         let post = [];
         filter = filter ? JSON.parse(filter) : [];
-
-        if (sort === 'byCategories'){
-             post = (filter.length > 0 && search) ? await this.postsRepository.findAll({
-            where: {
-                title: { [Op.like]: `%${search}%` }
-            },
-            include: [{
-                model: Category,
-                where: { value: { [Op.in]: filter } }
-            }, { all: true }],
-            order: [
-                [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
-            ]
-            }) : (filter.length > 0) ? await this.postsRepository.findAll({
-            include: [{
-                model: Category,
-                where: { value: { [Op.in]: filter } },
-            }],
-            order: [
-               [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
-            ]
-            }) : (search) ? await this.postsRepository.findAll({
-            include: [{ model: Category}, {all: true} ],
-            where: {
-                title: { [Op.like]: `%${search}%` }
-            },
-            order: [
-                [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
-            ]
-            }) : await this.postsRepository.findAll({
-                 include: [{ model: Category }, { all: true }],
-                order: [
-                    [{ model: Category, as: 'categories' }, 'value', 'ASC'] // сортировка по value категорий в возрастающем порядке
-                ]
-            });
-        } else {
-            post = (filter.length > 0 && search) ? await this.postsRepository.findAll({
-            where: {
-                title: { [Op.like]: `%${search}%` }
-            },
-            include: [{
-                model: Category,
-                where: { value: { [Op.in]: filter } }
-            }, { all: true }],
-            order: [['createdAt', 'DESC']]
-            }) : (filter.length > 0) ? await this.postsRepository.findAll({
-            include: [{
-                model: Category,
-                where: { value: { [Op.in]: filter } }
-            }, { all: true }],
-            order: [['createdAt', 'DESC']]
-            }) : (search) ? await this.postsRepository.findAll({
-            include: { all: true },
-            where: {
-                title: { [Op.like]: `%${search}%` }
-            },
-            order: [['createdAt', 'DESC']]
-            }) : await this.postsRepository.findAll({
-                include: { all: true },
-                order: [['createdAt', 'DESC']]
-            });
-
+        
+        const filterOptions: FindOptions<Post> = (sort === 'byCategories')? {
+            include: [{ model: Category, where: {} }, { all: true }],
+            order: [[{ model: Category, as: 'categories' }, 'value', 'ASC']],
+            where: {}
+        } : 
+        {
+            include: [{ model: Category, where: {} }, { all: true }],
+            order: [['createdAt', 'DESC']],
+            where: {}
         }
+        if (search) {
+            filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
+        }
+        if (filter.length > 0) {
+            filterOptions.include[0].where = { value: { [Op.in]: filter } };
+        }
+
+        post = await this.postsRepository.findAll(filterOptions);
         return post;
     }
 

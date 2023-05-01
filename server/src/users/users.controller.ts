@@ -87,19 +87,4 @@ export class UsersController {
   getUserById(@Param('id') id: number) {
     return this.usersService.getUserById(id);
   }
-
-  // get user's posts (another user) +
-<<<<<<<<< Temporary merge branch 1
-  // http://localhost:8080/posts/:id_user
-  @Get('/posts')
-  getUserPosts(@Param('id') id: number) {
-    return this.postService.getUserPosts(id);
-  }
-=========
-    // http://localhost:8080/posts/:id_user
-    @Get('/posts/:id')
-    getUserPosts(@Param('id') id: number) {
-        return this.postService.getUserPosts(id);
-    }
->>>>>>>>> Temporary merge branch 2
 }
