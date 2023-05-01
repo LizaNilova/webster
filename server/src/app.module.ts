@@ -30,7 +30,7 @@ import { FilesModule } from './files/files.module';
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-       host: process.env.POSTGRES_HOST,
+      host: process.env.POSTGRES_HOST,
       port: Number(process.env.POSTGRESS_PORT),
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRESS_PASSWORD,
