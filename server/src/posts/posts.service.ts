@@ -1,10 +1,12 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
+import { Category } from 'src/categories/categories.model';
 import { CreatePostDto } from './dto/create-post.dto';
 import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
+import { Op, FindOptions  } from 'sequelize';
 
 @Injectable()
 export class PostsService {
@@ -23,8 +25,28 @@ export class PostsService {
         return post;
     }
 
-    async getAll() {
-        const post = await this.postsRepository.findAll({ include: { all: true } });
+    async getAll(sort, filter, search) {
+        let post = [];
+        filter = filter ? JSON.parse(filter) : [];
+        
+        const filterOptions: FindOptions<Post> = (sort === 'byCategories')? {
+            include: [{ model: Category, where: {} }, { all: true }],
+            order: [[{ model: Category, as: 'categories' }, 'value', 'ASC']],
+            where: {}
+        } : 
+        {
+            include: [{ model: Category, where: {} }, { all: true }],
+            order: [['createdAt', 'DESC']],
+            where: {}
+        }
+        if (search) {
+            filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
+        }
+        if (filter.length > 0) {
+            filterOptions.include[0].where = { value: { [Op.in]: filter } };
+        }
+
+        post = await this.postsRepository.findAll(filterOptions);
         return post;
     }
 
@@ -52,7 +74,7 @@ export class PostsService {
         return "Post was deleted";
     }
 
-    async addPostCategories(dto: AddCategoryDto, userId: number, id: number) {
+    async addPostCategories(dto: AddCategoryDto, userId:number, id: number) {
         const post = await this.postsRepository.findOne({ where: { id, userId }, include: { all: true } });
         if (!post) {
             throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
@@ -61,23 +83,7 @@ export class PostsService {
         if (!category) {
             throw new HttpException(`Category with value ${dto.value} not found`, HttpStatus.NOT_FOUND);
         }
-        await post.$add('category', category.id);
+        await post.$add('categories', category.id);
         return post;
-    }
-
-    async getUserPosts(id: number) {
-        const userPosts = await this.postsRepository.findAll({ where: { id } });
-        if (!userPosts) {
-            throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
-        }
-        return userPosts;
-    }
-
-    async getMyPosts(userId: number) {
-        const userPosts = await this.postsRepository.findAll({ where: { userId } });
-        if (!userPosts) {
-            throw new HttpException(`Post with ID ${userId} not found`, HttpStatus.NOT_FOUND);
-        }
-        return userPosts;
     }
 }

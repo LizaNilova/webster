@@ -13,6 +13,8 @@ import { Role } from '../roles/roles.model';
 import { UserRoles } from '../roles/user-roles.model';
 import { UserBanned } from './user-banned.model';
 import { Post } from 'src/posts/posts.model';
+import { Comment } from 'src/comments/comments.model';
+import { Like } from 'src/likes/likes.model';
 
 interface UserCreationAttrs {
   login: string;
@@ -49,6 +51,12 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @HasMany(() => Post)
   posts: Post[];
+
+  @HasMany(() => Comment)
+  comments: Comment[];
+
+   @HasMany(() => Like)
+  likes: Like[];
 
   @HasOne(() => UserBanned)
   ban: UserBanned[];
