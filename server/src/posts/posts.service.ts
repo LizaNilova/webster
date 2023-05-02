@@ -28,24 +28,21 @@ export class PostsService {
     async getAll(sort, filter, search) {
         let post = [];
         filter = filter ? JSON.parse(filter) : [];
-        
-        const filterOptions: FindOptions<Post> = (sort === 'byCategories')? {
-            include: [{ model: Category, where: {} }, { all: true }],
-            order: [[{ model: Category, as: 'categories' }, 'value', 'ASC']],
+      
+        const filterOptions: FindOptions<Post> = {
+            include: (filter.length > 0) ? [{ model: Category, where: {}}, { all: true }] : {all: true},
+            order: (sort === 'byCategories')? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
             where: {}
-        } : 
-        {
-            include: [{ model: Category, where: {} }, { all: true }],
-            order: [['createdAt', 'DESC']],
-            where: {}
-        }
+        } 
+
         if (search) {
             filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
         }
+
         if (filter.length > 0) {
             filterOptions.include[0].where = { value: { [Op.in]: filter } };
         }
-
+        
         post = await this.postsRepository.findAll(filterOptions);
         return post;
     }
