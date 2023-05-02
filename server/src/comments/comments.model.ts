@@ -28,7 +28,7 @@ export class Comment extends Model<Comment, CommentCreationAttrs> {
   id: number;
 
   @ApiProperty({ example: 'This is awesome!', description: 'comment value' })
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({ type: DataType.STRING, unique: false, allowNull: false })
   value: string;
 
   @ForeignKey(() => Post)
