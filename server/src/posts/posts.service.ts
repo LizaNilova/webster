@@ -12,12 +12,25 @@ import { Op, FindOptions  } from 'sequelize';
 export class PostsService {
 
     constructor(@InjectModel(Post) private postsRepository: typeof Post, private categoriesService: CategoriesService,
-        private filesService: FilesService) { }
+        private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
 
     async create(dto: CreatePostDto, image: Express.Multer.File) {
         const filename = await this.filesService.createFile(image);
-        const post = await this.postsRepository.create({ ...dto, image: filename });
-        return post;
+
+        const existPost = await this.postsRepository.findOne({where: {title: dto.title}});
+        if (existPost) {
+            throw new HttpException('Post already exists', HttpStatus.BAD_REQUEST);
+        }
+
+        const categories =  await this.categoryRepository.findAll({where: {value: { [Op.in]: dto.value }}});
+        if (categories.length !== dto.value.length) {
+            throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
+        }
+
+        const post = await this.postsRepository.create({ ...dto, image: filename}, { include: { all: true } });
+        await post.$add('categories', [...categories.map(category => category.id)]);
+        await post.reload();
+        return {post};
     }
 
     async getById(id: number) {
@@ -48,7 +61,7 @@ export class PostsService {
     }
 
     async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {
-        const post = await this.postsRepository.findOne({ where: { id, userId } });
+        let post = await this.postsRepository.findOne({ where: { id, userId }, include: { all: true } });
         if (!post) {
             throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
         }
@@ -58,7 +71,17 @@ export class PostsService {
             filename = await this.filesService.createFile(image);
         }
 
-        await post.update({ ...dto, image: filename });
+        await post.update({ ...dto, image: filename});
+
+        if (dto.value) {
+            const categories =  await this.categoryRepository.findAll({where: {value: { [Op.in]: dto.value }}});
+            if (categories.length !== dto.value.length) {
+                throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
+            }
+            await post.$set('categories', [...categories.map(category => category.id)]);
+            await post.reload();
+        }
+        
         return post;
     }
 
@@ -69,18 +92,5 @@ export class PostsService {
         }
         await post.destroy();
         return "Post was deleted";
-    }
-
-    async addPostCategories(dto: AddCategoryDto, userId:number, id: number) {
-        const post = await this.postsRepository.findOne({ where: { id, userId }, include: { all: true } });
-        if (!post) {
-            throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
-        }
-        const category = await this.categoriesService.getCategoryByValue(dto.value);
-        if (!category) {
-            throw new HttpException(`Category with value ${dto.value} not found`, HttpStatus.NOT_FOUND);
-        }
-        await post.$add('categories', category.id);
-        return post;
     }
 }
