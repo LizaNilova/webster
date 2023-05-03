@@ -42,7 +42,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
       'The unicorn, or inrog, is a mythical creature that since ancient times has been described as a kind of hoofed animal, most often a horse, with one large, pointed, spiral-shaped horn coming out of its forehead.',
     description: 'Content this post',
   })
-  @Column({ type: DataType.STRING, unique: false, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   content: string;
 
   @ApiProperty({ example: ':(', description: 'Image this post' })
