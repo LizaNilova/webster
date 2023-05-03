@@ -24,6 +24,8 @@ import { CommentsModule } from './comments/comments.module';
 import { Comment } from './comments/comments.model';
 import { LikesModule } from './likes/likes.module';
 import { Like } from './likes/likes.model';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 
 @Module({
@@ -33,12 +35,15 @@ import { Like } from './likes/likes.model';
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRESS_PORT),
+      port: Number(process.env.POSTGRES_PORT),
       username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRESS_PASSWORD,
+      password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like],
       autoLoadModels: true,
