@@ -1,7 +1,6 @@
 import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query  } from '@nestjs/common';
 
 import { CreatePostDto } from './dto/create-post.dto'
-import { AddCategoryDto } from './dto/add-category.dto'
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
@@ -56,12 +55,5 @@ export class PostsController {
     deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
         return this.postServer.deletePost(id, req.user.id,);
     }
-
-    // add posts categories +
-    // http://localhost:8080/posts/add-category/:id_post
-    @Patch('/add-category/:id')
-    @UseGuards(JwtAuthGuard)
-    addPostCategories(@Param('id') id: number, @Request() req: { user: RequestUserDto }, @Body() dto: AddCategoryDto) {
-        return this.postServer.addPostCategories(dto, req.user.id, id);
-    }
+    
 }
