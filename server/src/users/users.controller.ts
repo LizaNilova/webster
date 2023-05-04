@@ -23,16 +23,14 @@ import { Roles } from '../auth/roles-auth.decorator';
 import { RolesAuthGuard } from '../auth/roles-auth.guard';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
-import { User } from './users.model';
+import { User } from './models/users.model';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
-import { PostsService } from 'src/posts/posts.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService,
-    private postService: PostsService) { }
+  constructor(private usersService: UsersService) { }
 
   @ApiOperation({ summary: 'Create users' })
   @ApiCreatedResponse({ description: 'The record has been successfully created.', type: User })
