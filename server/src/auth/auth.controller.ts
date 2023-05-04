@@ -23,6 +23,7 @@ export class AuthController {
     return { accessToken: tokens.accessToken };
   }
 
+  @UsePipes(ValidationPipe)
   @Post('/registration')
   async registration(@Body() userDto: CreateUserDto) {
     return await this.authService.registration(userDto);
