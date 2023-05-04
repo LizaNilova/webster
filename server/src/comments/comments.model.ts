@@ -8,7 +8,7 @@ import {
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Post } from 'src/posts/posts.model';
-import { User } from 'src/users/users.model';
+import { User } from 'src/users/models/users.model';
 
 interface CommentCreationAttrs {
   value: string;
