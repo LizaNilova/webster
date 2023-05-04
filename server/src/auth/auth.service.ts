@@ -23,7 +23,8 @@ export class AuthService {
 
   async login(userDto: CreateUserDto): Promise<CreateTokenDto> {
     const user = await this.validateUser(userDto);
-    return this.generateToken(user);
+    const tokens = await this.generateToken(user);
+    return tokens;
   }
 
   async registration(userDto: CreateUserDto) {
@@ -41,7 +42,7 @@ export class AuthService {
       ...userDto,
       password: hash,
     });
-    return this.generateToken(user);
+    return await this.sendCode(user);
   }
 
   async sendCode(user: User) {
@@ -77,10 +78,10 @@ export class AuthService {
   }
 
   private async generateToken(user: User) {
-    const accessPayload = { id: user.id, login: user.login, role: user.roles[0].value, isBanned: Boolean(user.ban)  };
+    const accessPayload = { id: user.id, login: user.login, role: user.roles[0].value, isBanned: Boolean(user.ban) };
     const refreshPayload = { login: user.login };
     return {
-      accessToken: this.jwtService.sign(accessPayload),
+      accessToken: this.jwtService.sign(accessPayload, {expiresIn: '15m'}),
       refreshToken: this.jwtService.sign(refreshPayload)
     };
   }
