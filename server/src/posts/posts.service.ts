@@ -6,7 +6,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
-import { Op, FindOptions  } from 'sequelize';
+import { Op, FindOptions } from 'sequelize';
 
 @Injectable()
 export class PostsService {
@@ -17,20 +17,20 @@ export class PostsService {
     async create(dto: CreatePostDto, image: Express.Multer.File) {
         const filename = await this.filesService.createFile(image);
 
-        const existPost = await this.postsRepository.findOne({where: {title: dto.title}});
+        const existPost = await this.postsRepository.findOne({ where: { title: dto.title } });
         if (existPost) {
             throw new HttpException('Post already exists', HttpStatus.BAD_REQUEST);
         }
 
-        const categories =  await this.categoryRepository.findAll({where: {value: { [Op.in]: dto.value }}});
+        const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
         if (categories.length !== dto.value.length) {
             throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
         }
 
-        const post = await this.postsRepository.create({ ...dto, image: filename}, { include: { all: true } });
+        const post = await this.postsRepository.create({ ...dto, image: filename }, { include: { all: true } });
         await post.$add('categories', [...categories.map(category => category.id)]);
         await post.reload();
-        return {post};
+        return { post };
     }
 
     async getById(id: number) {
@@ -39,14 +39,13 @@ export class PostsService {
     }
 
     async getAll(sort, filter, search) {
-        let post = [];
         filter = filter ? JSON.parse(filter) : [];
-      
+
         const filterOptions: FindOptions<Post> = {
-            include: (filter.length > 0) ? [{ model: Category, where: {}}, { all: true }] : {all: true},
-            order: (sort === 'byCategories')? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
+            include: (filter.length > 0) ? [{ model: Category, where: {} }, { all: true }] : { all: true },
+            order: (sort === 'byCategories') ? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
             where: {}
-        } 
+        }
 
         if (search) {
             filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
@@ -55,9 +54,13 @@ export class PostsService {
         if (filter.length > 0) {
             filterOptions.include[0].where = { value: { [Op.in]: filter } };
         }
-        
-        post = await this.postsRepository.findAll(filterOptions);
-        return post;
+
+        return await this.postsRepository.findAll({
+            attributes: ['title',
+            'id',
+            'categories'
+        ],
+        });
     }
 
     async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {
@@ -71,17 +74,17 @@ export class PostsService {
             filename = await this.filesService.createFile(image);
         }
 
-        await post.update({ ...dto, image: filename});
+        await post.update({ ...dto, image: filename });
 
         if (dto.value) {
-            const categories =  await this.categoryRepository.findAll({where: {value: { [Op.in]: dto.value }}});
+            const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
             if (categories.length !== dto.value.length) {
                 throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
             }
             await post.$set('categories', [...categories.map(category => category.id)]);
             await post.reload();
         }
-        
+
         return post;
     }
 

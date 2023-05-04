@@ -5,14 +5,14 @@ import {
   ForeignKey,
   Model,
   Table,
-  BelongsToMany, 
+  BelongsToMany,
   HasMany,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../users/users.model';
+import { User } from '../users/models/users.model';
 import { Category } from 'src/categories/categories.model';
 import { PostCategory } from 'src/categories/post-category.model';
-import {Comment} from 'src/comments/comments.model';
+import { Comment } from 'src/comments/comments.model';
 import { Like } from 'src/likes/likes.model';
 
 interface PostCreationAttrs {
@@ -59,9 +59,9 @@ export class Post extends Model<Post, PostCreationAttrs> {
   @BelongsToMany(() => Category, () => PostCategory)
   categories: Category[];
 
-   @HasMany(() => Comment)
+  @HasMany(() => Comment)
   comments: Comment[];
 
-   @HasMany(() => Like)
+  @HasMany(() => Like)
   likes: Like[];
 }
