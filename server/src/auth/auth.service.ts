@@ -11,13 +11,15 @@ import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/models/users.model';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
-
+import { MailService } from 'src/mail/mail.service';
+import generateCode from '../utils/generate-code.util';
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
-  ) {}
+    private mailService: MailService
+  ) { }
 
   async login(userDto: CreateUserDto): Promise<CreateTokenDto> {
     const user = await this.validateUser(userDto);
@@ -40,6 +42,23 @@ export class AuthService {
       password: hash,
     });
     return this.generateToken(user);
+  }
+
+  async sendCode(user: User) {
+    const code = generateCode();
+    const event = await this.userService.createEvent({ 
+      userId: user.id, 
+      event_content: code.join('') 
+    });
+    await this.mailService.sendUserConfirmation(user, code);
+    return {
+      eventId: event.id
+    }
+  }
+
+  async confirm(eventId: string, code: string) {
+    const user = await this.userService.confirm(eventId, code);
+    return await this.generateToken(user);
   }
 
   async refresh(refreshToken: string) {
