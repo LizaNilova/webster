@@ -5,4 +5,7 @@ export interface RequestDto extends Request {
     user: {
       id: number;
     };
+    body: {
+      code: string;
+    }
   }
