@@ -3,8 +3,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 
 import { UsersModule } from './users/users.module';
-import { User } from './users/users.model';
-import { UserBanned } from './users/user-banned.model';
+import { User } from './users/models/users.model';
+import { UserBanned } from './users/models/user-banned.model';
 
 import { Role } from './roles/roles.model';
 import { RolesModule } from './roles/roles.module';
@@ -25,9 +25,9 @@ import { Comment } from './comments/comments.model';
 import { LikesModule } from './likes/likes.module';
 import { Like } from './likes/likes.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { MailModule } from './mail/mail.module';
 import * as path from 'path';
-
-
+import { UserEvents } from './users/models/user-event.model';
 @Module({
   controllers: [],
   providers: [],
@@ -45,7 +45,7 @@ import * as path from 'path';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like],
+      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like, UserEvents],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -56,7 +56,8 @@ import * as path from 'path';
     FilesModule,
     PostCategory,
     CommentsModule,
-    LikesModule
+    LikesModule,
+    MailModule
   ],
 })
 export class AppModule {}
