@@ -38,4 +38,14 @@ export class AuthController {
     });
     return { accessToken: tokens.accessToken };
   }
+
+  @Post('confirm/:id')
+  async confirm(@Param('id') id: string, @Req() request: RequestDto, @Res({ passthrough: true }) response: Response) {
+    const tokens = await this.authService.confirm(id, request.body.code);
+    response.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+    });
+    return { accessToken: tokens.accessToken };
+  }
 }
