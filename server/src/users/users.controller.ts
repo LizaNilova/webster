@@ -28,7 +28,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
 
 @ApiTags('Users')
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(private usersService: UsersService) { }
 
@@ -41,8 +41,11 @@ export class UsersController {
   @UseGuards(RolesAuthGuard)
   @UsePipes(ValidationPipe)
   @Post()
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.createUser(userDto);
+  async create(@Body() userDto: CreateUserDto) {
+    return {
+      user: await this.usersService.createUser(userDto),
+      message: 'Create user'
+    };
   }
 
   @ApiOperation({ summary: 'Get all date users' })
@@ -51,8 +54,11 @@ export class UsersController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Get()
-  getAll() {
-    return this.usersService.getAllUsers();
+  async getAll() {
+    return {
+      users: await this.usersService.getAllUsers(),
+      message: 'Success'
+    }
   }
 
   @ApiOperation({ summary: 'Set user role (only admin)' })
@@ -60,8 +66,11 @@ export class UsersController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Post('/role')
-  addRole(@Body() dto: AddRoleDto) {
-    return this.usersService.addRole(dto);
+  async addRole(@Body() dto: AddRoleDto) {
+    return {
+      user: await this.usersService.addRole(dto),
+      message: `Set user role - ${dto.value}`
+    }
   }
 
   @ApiOperation({ summary: 'Benned user (only admin)' })
@@ -69,20 +78,29 @@ export class UsersController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Post('/ban')
-  ban(@Body() dto: BanUserDto, @Req() request: RequestDto) {
-    return this.usersService.ban({ ...dto, adminId: request.user.id });
+  async ban(@Body() dto: BanUserDto, @Req() request: RequestDto) {
+    return {
+      user: await this.usersService.ban({ ...dto, adminId: request.user.id }),
+      message: 'User banned'
+    };
   }
 
   // get me and my posts
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
-  profile(@Req() request: RequestDto) {
-    return this.usersService.getUserById(request.user.id);
+  async profile(@Req() request: RequestDto) {
+    return {
+      user: await this.usersService.getUserById(request.user.id),
+      message: 'Success'
+    }
   }
 
   // get another user by id and his posts
   @Get('/:id')
-  getUserById(@Param('id') id: number) {
-    return this.usersService.getUserById(id);
+  async getUserById(@Param('id') id: number) {
+    return {
+      user: await this.usersService.getUserById(id),
+      message: 'Success'
+    };
   }
 }

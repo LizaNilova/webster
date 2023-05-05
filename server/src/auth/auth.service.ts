@@ -52,9 +52,8 @@ export class AuthService {
       event_content: code.join('') 
     });
     await this.mailService.sendUserConfirmation(user, code);
-    return {
-      eventId: event.id
-    }
+    return event.id
+    
   }
 
   async confirm(eventId: string, code: string) {
