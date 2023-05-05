@@ -10,7 +10,7 @@ import { LoginPage } from '../pages/loginPage';
 // import { Profile } from '../pages/Profile';
 // import CheckOutSuccess from '../pages/CheckOutSuccess';
 // import CalendarPage from '../pages/CalendarPage';
-// import Header from '../components/Header';
+import Header from '../components/Header';
 // import { VerifyCompanyEmailPage } from '../pages/VerifyCompanyEmailPage';
 // import { CompanyPage } from '../pages/CompanyPage';
 // import { VerifyInvite } from '../pages/VerifyInvite';
@@ -20,7 +20,7 @@ export const useRoutes = (isAuthenticated) => {
     if (isAuthenticated) {
         return (
             <>
-                {/* <Header /> */}
+                <Header />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
                     {/* <Route path="/checkout-success/:cartItems" element={<CheckOutSuccess />} />
@@ -41,8 +41,8 @@ export const useRoutes = (isAuthenticated) => {
         )
     } else {
         return (
-            <>
-            {/* <Header /> */}
+            <div className='flex flex-col w-full h-screen'>
+            <Header />
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 {/* <Route path="/events/:id" element={<EventView />} />
@@ -60,7 +60,7 @@ export const useRoutes = (isAuthenticated) => {
 
                 <Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>
-            </>
+            </div>
 
         )
     }

@@ -13,7 +13,7 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async ({ username, full_name, password, email, repeatPassword }) => {
     try {
-      const { data } = await axios.post(authRouter.registerPath, {
+      const { data } = await axios.post(authRouter.registerPath(), {
         username,
         full_name,
         password,
@@ -148,8 +148,8 @@ export const authSlice = createSlice({
     },
     [loginUser.fulfilled]: (state, action) => {
       state.isLoading = false
-      state.status = action.payload.message
-      state.user = action.payload.user
+      state.status = action.payload?.message
+      state.user = action.payload?.user
       state.userId = action.payload.user?._id
     },
     [loginUser.rejected]: (state, action) => {
