@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk(
   async ({ username_or_email, password }) => {
     try {
       const { data } = await axios.post(authRouter.loginPath(), {
-        login: username_or_email,
+        username: username_or_email,
         password
       }, { withCredentials: true })
 
