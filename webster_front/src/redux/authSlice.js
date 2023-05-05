@@ -13,7 +13,7 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async ({ username, full_name, password, email, repeatPassword }) => {
     try {
-      const { data } = await axios.post(authRouter.registerPath, {
+      const { data } = await axios.post(authRouter.registerPath(), {
         username,
         full_name,
         password,
