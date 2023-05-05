@@ -50,7 +50,7 @@ export const LoginPage = () => {
             onSubmit={e => e.preventDefault()}
             className="box-border flex justify-center items-center min-h-[100vh] bg-dark-purple">
             <div className="loginCard">
-                <img className="h-[100px] mt-4" src='uevent_logo.png' alt='logo' />
+                {/* <img className="h-[100px] mt-4" src='uevent_logo.png' alt='logo' /> */}
                 <h3 className="uppercase tracking-[2px] text-light-beige text-xl">Sign In</h3>
                 <div className="relative w-[250px]">
                     <input

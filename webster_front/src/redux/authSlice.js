@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from 'axios'
 import $api from "../utils/api" // типо мы импортируем инстанс чтоб потом его юхать в запросах
+import authRouter from "../routes/auth-router"
 const initialState = {
   user: null,
   isLoading: false,
@@ -12,7 +13,7 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async ({ username, full_name, password, email, repeatPassword }) => {
     try {
-      const { data } = await axios.post('http://localhost:8080/api/auth/register', {
+      const { data } = await axios.post(authRouter.registerPath, {
         username,
         full_name,
         password,
@@ -30,8 +31,8 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ username_or_email, password }) => {
     try {
-      const { data } = await axios.post('http://localhost:8080/api/auth/login', {
-        username_or_email,
+      const { data } = await axios.post(authRouter.loginPath(), {
+        login: username_or_email,
         password
       }, { withCredentials: true })
 
