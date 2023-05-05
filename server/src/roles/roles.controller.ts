@@ -6,17 +6,23 @@ import { ApiAcceptedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 @ApiTags('Roles')
 @Controller('api/roles')
 export class RolesController {
-  constructor(private roleService: RolesService) {}
+  constructor(private roleService: RolesService) { }
 
   @ApiOperation({ summary: 'Create role' })
   @Post()
-  create(@Body() dto: CreateRoleDto) {
-    return this.roleService.createRole(dto);
+  async create(@Body() dto: CreateRoleDto) {
+    return {
+      role: await this.roleService.createRole(dto),
+      message: 'Create role'
+    };
   }
 
   @ApiOperation({ summary: 'get role by value' })
   @Get('/:value')
-  getByValue(@Param('value') value: string) {
-    return this.roleService.getRoleByValue(value);
+  async getByValue(@Param('value') value: string) {
+    return {
+      role: await this.roleService.getRoleByValue(value),
+      message: 'Success'
+    };
   }
 }

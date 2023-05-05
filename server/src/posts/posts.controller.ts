@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query  } from '@nestjs/common';
+import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query } from '@nestjs/common';
 
 import { CreatePostDto } from './dto/create-post.dto'
 import { PostsService } from './posts.service';
@@ -16,24 +16,33 @@ export class PostsController {
     @Post()
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
-    createPost(@Body() dto: CreatePostDto, 
-    @Request() req: { user: RequestUserDto },
-    @UploadedFile() image: Express.Multer.File) {
-        return this.postServer.create({ ...dto, userId: req.user.id }, image);
+    async createPost(@Body() dto: CreatePostDto,
+        @Request() req: { user: RequestUserDto },
+        @UploadedFile() image: Express.Multer.File) {
+        return {
+            post: await this.postServer.create({ ...dto, userId: req.user.id }, image),
+            message: 'Create post'
+        };
     }
 
     // get all posts their categories and comments +
     // http://localhost:8080/posts
     @Get()
-    getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
-        return this.postServer.getAll(sort, filter, search);
+    async getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
+        return {
+            posts: await this.postServer.getAll(sort, filter, search),
+            message: 'Success'
+        };
     }
 
     // get post, its categories and comments by id +
     // http://localhost:8080/posts/:id_post
     @Get(':id')
-    getById(@Param('id') id: number) {
-        return this.postServer.getById(id);
+    async getById(@Param('id') id: number) {
+        return {
+            post: await this.postServer.getById(id),
+            message: 'Success'
+        };
     }
 
     // edit post +
@@ -41,19 +50,24 @@ export class PostsController {
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
-    editPost(@Param('id') id: number,
+    async editPost(@Param('id') id: number,
         @Body() dto: CreatePostDto,
         @Request() req: { user: RequestUserDto },
         @UploadedFile() image: Express.Multer.File) {
-        return this.postServer.editPost(dto, req.user.id, id, image);
+        return {
+            post: await this.postServer.editPost(dto, req.user.id, id, image),
+            message: 'Update post'
+        };
     }
 
     // delete post +
     // http://localhost:8080/posts/:id_post
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
-    deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
-        return this.postServer.deletePost(id, req.user.id,);
+    async deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
+        return {
+            message: await this.postServer.deletePost(id, req.user.id,)
+        };
     }
-    
+
 }

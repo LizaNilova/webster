@@ -8,7 +8,7 @@ import { MailService } from '../mail/mail.service';
 import { RequestDto } from './dto/request.dto';
 
 @ApiTags('Authentication')
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
@@ -20,13 +20,16 @@ export class AuthController {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
     });
-    return { accessToken: tokens.accessToken };
+    return { accessToken: tokens.accessToken, message: 'The user is authorized' };
   }
 
   @UsePipes(ValidationPipe)
   @Post('/registration')
   async registration(@Body() userDto: CreateUserDto) {
-    return await this.authService.registration(userDto);
+    return {
+      eventId: await this.authService.registration(userDto),
+      message: 'Send mail'
+    };
   }
 
   @Get('/refresh')
@@ -37,7 +40,7 @@ export class AuthController {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
     });
-    return { accessToken: tokens.accessToken };
+    return { accessToken: tokens.accessToken, message: 'Success' };
   }
 
   @Post('confirm/:id')
@@ -47,6 +50,6 @@ export class AuthController {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
     });
-    return { accessToken: tokens.accessToken };
+    return { accessToken: tokens.accessToken, message: 'User comfirm account' };
   }
 }

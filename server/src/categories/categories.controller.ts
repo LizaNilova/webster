@@ -9,7 +9,7 @@ import { RolesAuthGuard } from '../auth/roles-auth.guard';
 @ApiTags('Categories')
 @Controller('api/categories')
 export class CategoriesController {
-  constructor(private categoryService: CategoriesService) {}
+  constructor(private categoryService: CategoriesService) { }
 
   // create category 
   // http://localhost:5000/categories
@@ -18,24 +18,33 @@ export class CategoriesController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Post()
-  create(@Body() dto: CreateCategoryDto) {
-    return this.categoryService.createCategory(dto);
+  async create(@Body() dto: CreateCategoryDto) {
+    return {
+    category: await this.categoryService.createCategory(dto),
+    message: 'Create category'
+  };
   }
 
   // get category by value 
   // http://localhost:8080/categories/value/:value
   @ApiOperation({ summary: 'get category by value' })
   @Get('value/:value')
-  getByValue(@Param('value') value: string) {
-    return this.categoryService.getCategoryByValue(value);
+  async getByValue(@Param('value') value: string) {
+    return {
+      category: await this.categoryService.getCategoryByValue(value),
+      message: 'Success'
+    };
   }
 
   // get category by id
   // http://localhost:8080/categories/:id
   @ApiOperation({ summary: 'get category by id' })
   @Get(':id')
-  getById(@Param('id') id: number) {
-    return this.categoryService.getCategoryById(id);
+  async getById(@Param('id') id: number) {
+    return {
+      category: await this.categoryService.getCategoryById(id),
+      message: 'Success'
+    };
   }
 
   // update category 
@@ -45,8 +54,11 @@ export class CategoriesController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Patch(':id')
-  updateById(@Param('id') id: number, @Body() dto: CreateCategoryDto) {
-    return this.categoryService.updateCategory(id, dto);
+  async updateById(@Param('id') id: number, @Body() dto: CreateCategoryDto) {
+    return {
+      category: await this.categoryService.updateCategory(id, dto),
+      message: 'Update category'
+    };
   }
 
   // delete category
@@ -56,15 +68,20 @@ export class CategoriesController {
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
   @Delete(':id')
-  deleteById(@Param('id') id: number) {
-    return this.categoryService.deleteCategory(id);
+  async deleteById(@Param('id') id: number) {
+    return {
+      message: await this.categoryService.deleteCategory(id)
+    };
   }
 
   // get all categories
   // http://localhost:8080/categories
   @ApiOperation({ summary: 'get all category' })
   @Get()
-  getAll() {
-    return this.categoryService.getAllCategories();
+  async getAll() {
+    return {
+      categories: await this.categoryService.getAllCategories(),
+      message: 'Success'
+    };
   }
 }
