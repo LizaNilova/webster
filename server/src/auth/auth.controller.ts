@@ -1,20 +1,21 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, UsePipes } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Req, Res, UsePipes } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { ValidationPipe } from '../pipes/validation.pipe'
-import { MailService } from '../mail/mail.service';
 import { RequestDto } from './dto/request.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('Authentication')
 @Controller('api/auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
 
+  @ApiOperation({ summary: 'Create users' })
+  @ApiCreatedResponse({ description: 'The record has been successfully created.'})
   @Post('/login')
-  @HttpCode(200)
-  async login(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
+  async login(@Body() userDto: LoginUserDto, @Res({ passthrough: true }) response: Response) {
     const tokens = await this.authService.login(userDto);
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
