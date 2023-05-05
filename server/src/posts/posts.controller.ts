@@ -6,7 +6,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('posts')
+@Controller('api/posts')
 export class PostsController {
 
     constructor(private postServer: PostsService) { }

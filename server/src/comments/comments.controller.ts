@@ -5,7 +5,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 
-@Controller('comments')
+@Controller('api/comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 

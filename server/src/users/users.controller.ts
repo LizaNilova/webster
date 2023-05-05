@@ -28,7 +28,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
 
 @ApiTags('Users')
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   constructor(private usersService: UsersService) { }
 

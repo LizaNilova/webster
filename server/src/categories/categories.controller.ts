@@ -7,7 +7,7 @@ import { Roles } from '../auth/roles-auth.decorator';
 import { RolesAuthGuard } from '../auth/roles-auth.guard';
 
 @ApiTags('Categories')
-@Controller('categories')
+@Controller('api/categories')
 export class CategoriesController {
   constructor(private categoryService: CategoriesService) {}
 

@@ -4,7 +4,7 @@ import { LikesService } from './likes.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 
-@Controller('likes')
+@Controller('api/likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 

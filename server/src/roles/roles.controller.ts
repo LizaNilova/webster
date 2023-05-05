@@ -4,7 +4,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { ApiAcceptedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Roles')
-@Controller('roles')
+@Controller('api/roles')
 export class RolesController {
   constructor(private roleService: RolesService) {}
 
