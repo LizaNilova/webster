@@ -12,7 +12,7 @@ export class CategoriesController {
   constructor(private categoryService: CategoriesService) { }
 
   // create category 
-  // http://localhost:5000/categories
+  // http://localhost:8080/api/categories
   @ApiOperation({ summary: 'Create category (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
@@ -26,7 +26,7 @@ export class CategoriesController {
   }
 
   // get category by value 
-  // http://localhost:8080/categories/value/:value
+  // http://localhost:8080/api/categories/value/:value
   @ApiOperation({ summary: 'get category by value' })
   @Get('value/:value')
   async getByValue(@Param('value') value: string) {
@@ -37,7 +37,7 @@ export class CategoriesController {
   }
 
   // get category by id
-  // http://localhost:8080/categories/:id
+  // http://localhost:8080/api/categories/:id
   @ApiOperation({ summary: 'get category by id' })
   @Get(':id')
   async getById(@Param('id') id: number) {
@@ -48,7 +48,7 @@ export class CategoriesController {
   }
 
   // update category 
-  // http://localhost:8080/categories/:id
+  // http://localhost:8080/api/categories/:id
   @ApiOperation({ summary: 'update category by id (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
@@ -62,7 +62,7 @@ export class CategoriesController {
   }
 
   // delete category
-  // http://localhost:8080/categories/:id
+  // http://localhost:8080/api/categories/:id
   @ApiOperation({ summary: 'delete category by id (only admin)' })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
@@ -75,7 +75,7 @@ export class CategoriesController {
   }
 
   // get all categories
-  // http://localhost:8080/categories
+  // http://localhost:8080/api/categories
   @ApiOperation({ summary: 'get all category' })
   @Get()
   async getAll() {

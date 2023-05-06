@@ -28,6 +28,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MailModule } from './mail/mail.module';
 import * as path from 'path';
 import { UserEvents } from './users/models/user-event.model';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { Subscriptions } from './subscriptions/subscriptions.model';
 @Module({
   controllers: [],
   providers: [],
@@ -45,7 +47,7 @@ import { UserEvents } from './users/models/user-event.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like, UserEvents],
+      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like, UserEvents, Subscriptions],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -57,7 +59,8 @@ import { UserEvents } from './users/models/user-event.model';
     PostCategory,
     CommentsModule,
     LikesModule,
-    MailModule
+    MailModule,
+    SubscriptionsModule
   ],
 })
 export class AppModule {}

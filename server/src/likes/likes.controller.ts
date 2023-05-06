@@ -9,7 +9,7 @@ export class LikesController {
   constructor(private readonly likesService: LikesService) { }
 
   // make or remove like
-  // http://localhost:8080/likes/post/:id
+  // http://localhost:8080/api/likes/post/:id
   @UseGuards(JwtAuthGuard)
   @Get('/post/:id')
   async update(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {

@@ -15,15 +15,18 @@ import { CommentsModule } from 'src/comments/comments.module';
 import { Like } from 'src/likes/likes.model';
 import { LikesModule } from 'src/likes/likes.module';
 import { UserEvents } from './models/user-event.model';
+import { Subscriptions } from 'src/subscriptions/subscriptions.model';
+import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents]),
+    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents, Subscriptions]),
     RolesModule,
     AuthModule,
     PostsModule, 
     CommentsModule,
-    LikesModule
+    LikesModule, 
+    SubscriptionsModule
   ],
   controllers: [UsersController],
   providers: [UsersService],
