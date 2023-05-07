@@ -5,7 +5,8 @@ import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Posts')
 @Controller('api/posts')
 export class PostsController {
 

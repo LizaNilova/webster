@@ -2,7 +2,9 @@ import { Controller, Get, Param, UseGuards, Req } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestDto } from '../auth/dto/request.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Subscriptions')
 @Controller('api/subscriptions')
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}

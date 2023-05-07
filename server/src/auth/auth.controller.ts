@@ -69,7 +69,7 @@ export class AuthController {
   })
   @ApiBadRequestResponse({
     description: 'Bad request', schema: {
-      example: new UnauthorizedException({
+      example: new BadRequestException({
         massage: {
           "login": {
             "value": "undefined",
