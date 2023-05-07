@@ -159,7 +159,7 @@ export class AuthController {
   })
   @Post('confirm/:id')
   async confirm(@Param('id', new ParseUUIDPipe()) id: string, @Req() request: RequestDto, @Res({ passthrough: true }) response: Response) {
-    const tokens = await this.authService.confirm({ eventId: id, code: request.body.code });
+    const tokens = await this.authService.confirm(id, request.body.code);
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
