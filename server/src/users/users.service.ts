@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './models/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -8,6 +8,7 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanned } from './models/user-banned.model';
 import { UserEvents } from './models/user-event.model';
 import { UserEventDto } from './dto/user-event.dto';
+import * as bcrypt from 'bcryptjs'
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,13 @@ export class UsersService {
   ) { }
 
   async createUser(dto: CreateUserDto) {
-    const user = await this.userRepository.create(dto);
+    const isTruth = await this.isExistsUser(dto.login, dto.email);
+    if (isTruth) {
+      throw new BadRequestException('User exists');
+    }
+    const salt = 5;
+    const hash = await bcrypt.hash(dto.password, salt);
+    const user = await this.userRepository.create({ ...dto, password: hash });
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
@@ -37,7 +44,10 @@ export class UsersService {
   }
 
   async getUserById(id: number) {
-    const user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+    const user = await this.userRepository.findByPk(id, { include: { all: true } });
+    if (!user) {
+      throw new NotFoundException('User undefined');
+    }
     return {
       id: user.id,
       login: user.login,
@@ -98,5 +108,12 @@ export class UsersService {
       return user;
     }
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
+  }
+
+  async isExistsUser(login: string, email: string): Promise<boolean> {
+    const condidateEmail = await this.getUserByEmail(email);
+    const condidateLogin = await this.getUserByLogin(login);
+
+    return Boolean(condidateEmail || condidateLogin);
   }
 }
