@@ -32,8 +32,10 @@ import { RequestDto } from '../auth/dto/request.dto';
 export class UsersController {
   constructor(private usersService: UsersService) { }
 
-  @ApiOperation({ summary: 'Create users' })
-  @ApiCreatedResponse({ description: 'The record has been successfully created.', type: User })
+  @ApiOperation({ summary: 'Create users (only ADMIN)' })
+  @ApiCreatedResponse({ description: 'The record has been successfully created.', schema: {
+    example: {}
+  } })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiBody({ type: CreateUserDto })
   @UseGuards(JwtAuthGuard)
@@ -104,3 +106,26 @@ export class UsersController {
     };
   }
 }
+
+
+// @ApiOperation({ summary: 'Corfirm user account' })
+//   @ApiCreatedResponse({
+//     description: 'Confirm', schema: {
+//       example: {
+//         accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibG9naW4iOiJ1c2VyIiwicm9sZSI6IkFETUlOIiwiaXNCYW5uZWQiOmZhbHNlmV4cCI6MTY4MzMxNzI5MH0.xxcBpV...'
+//       }
+//     }
+//   })
+//   @ApiBadRequestResponse({
+//     description: 'Bad request', schema: {
+//       example: new BadRequestException({
+//         massage: 'Validation failed (uuid is expected)'
+//       })
+//     }
+//   })
+//   @ApiNotFoundResponse({
+//     description: 'Event not found',
+//     schema: {
+//       example: new NotFoundException('Session not found')
+//     }
+//   })

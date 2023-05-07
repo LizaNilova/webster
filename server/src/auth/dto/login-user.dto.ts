@@ -8,6 +8,5 @@ export class LoginUserDto {
 
   @ApiProperty({ example: 'qwerty123', description: 'user password' })
   @IsString({ message: 'Should be a string' })
-
   readonly password: string;
 }

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './models/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -75,7 +75,7 @@ export class UsersService {
   async confirm(eventId: string, code: string): Promise<User> {
     const event = await this.userEventRepository.findByPk(eventId);
     if (!event) {
-      throw new HttpException({ message: 'Session not found' }, HttpStatus.NOT_FOUND);
+      throw new NotFoundException({ message: 'Session not found' });
     }
     if (code !== event.event_content) {
       throw new HttpException({ message: 'Code do not match' }, HttpStatus.BAD_REQUEST);

@@ -96,7 +96,7 @@ export class AuthService {
       return user;
     }
     if (!user.is_active) {
-      throw new HttpException('User imactive account', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User inactive account', HttpStatus.BAD_REQUEST);
     }
     throw new UnauthorizedException({ massage: 'Incorrect login or password' });
   }
