@@ -18,23 +18,15 @@ interface LikeCreationAttrs {
   postId: number;
 }
 
-@Table({ tableName: 'likes' })
+@Table({ tableName: 'likes', createdAt: false, updatedAt: false })
 export class Like extends Model<Like, LikeCreationAttrs> {
-  @ApiProperty({ example: '1', description: 'identify ' })
-  @Column({
-    type: DataType.INTEGER,
-    unique: false,
-    autoIncrement: true,
-    primaryKey: true,
-  })
-  id: number;
 
-   @ForeignKey(() => Post)
+  @ForeignKey(() => Post)
   @Column({ type: DataType.INTEGER })
   postId: number;
 
   @BelongsTo(() => Post)
-  posts: Post[];
+  post: Post[];
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })

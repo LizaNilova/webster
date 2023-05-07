@@ -10,7 +10,7 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) { }
 
   // create comment 
-  // http://localhost:8080/comments/post/:id
+  // http://localhost:8080/api/comments/post/:id
   @UseGuards(JwtAuthGuard)
   @Post('/post/:id')
   async create(@Param('id') id: number, @Body() dto: CreateCommentDto, @Request() req: { user: RequestUserDto },) {
@@ -21,7 +21,7 @@ export class CommentsController {
   }
 
   // update comment
-  // http://localhost:8080/comments/:id
+  // http://localhost:8080/api/comments/:id
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(@Param('id') id: number, @Body() updateCommentDto: UpdateCommentDto, @Request() req: { user: RequestUserDto }) {
@@ -32,7 +32,7 @@ export class CommentsController {
   }
 
   // delete comment
-  // http://localhost:8080/comments/:id
+  // http://localhost:8080/api/comments/:id
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {

@@ -45,6 +45,7 @@ export class UsersService {
       role: user.roles[0].value,
       posts: user.posts,
       ban: user.ban,
+      subscriptions: user.subscriptions
     };
   }
 

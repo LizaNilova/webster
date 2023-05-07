@@ -12,7 +12,7 @@ export class PostsController {
     constructor(private postServer: PostsService) { }
 
     // create post +
-    // http://localhost:8080/posts
+    // http://localhost:8080/api/posts
     @Post()
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
@@ -26,7 +26,7 @@ export class PostsController {
     }
 
     // get all posts their categories and comments +
-    // http://localhost:8080/posts
+    // http://localhost:8080/api/posts
     @Get()
     async getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
         return {
@@ -36,7 +36,7 @@ export class PostsController {
     }
 
     // get post, its categories and comments by id +
-    // http://localhost:8080/posts/:id_post
+    // http://localhost:8080/api/posts/:id_post
     @Get(':id')
     async getById(@Param('id') id: number) {
         return {
@@ -46,7 +46,7 @@ export class PostsController {
     }
 
     // edit post +
-    // http://localhost:8080/posts/:id_post
+    // http://localhost:8080/api/posts/:id_post
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('image'))
@@ -61,7 +61,7 @@ export class PostsController {
     }
 
     // delete post +
-    // http://localhost:8080/posts/:id_post
+    // http://localhost:8080/api/posts/:id_post
     @Delete(':id')
     @UseGuards(JwtAuthGuard)
     async deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {

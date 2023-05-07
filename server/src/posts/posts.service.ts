@@ -15,6 +15,7 @@ export class PostsService {
         private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
 
     async create(dto: CreatePostDto, image: Express.Multer.File) {
+        try {
         const filename = await this.filesService.createFile(image);
 
         const existPost = await this.postsRepository.findOne({ where: { title: dto.title } });
@@ -31,6 +32,9 @@ export class PostsService {
         await post.$add('categories', [...categories.map(category => category.id)]);
         await post.reload();
         return { post };
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async getById(id: number) {
@@ -47,6 +51,8 @@ export class PostsService {
             where: {}
         }
 
+           console.log(filterOptions)
+
         if (search) {
             filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
         }
@@ -55,12 +61,7 @@ export class PostsService {
             filterOptions.include[0].where = { value: { [Op.in]: filter } };
         }
 
-        return await this.postsRepository.findAll({
-            attributes: ['title',
-            'id',
-            'categories'
-        ],
-        });
+        return await this.postsRepository.findAll(filterOptions);
     }
 
     async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {
