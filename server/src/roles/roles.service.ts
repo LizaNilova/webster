@@ -23,4 +23,9 @@ export class RolesService {
     }
     return role;
   }
+
+  async isExistRole(value: string): Promise<boolean> {
+    const role = await this.roleRepository.findOne({ where: { value } });
+    return Boolean(role);
+  }
 }
