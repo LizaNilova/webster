@@ -29,20 +29,14 @@ export class AuthService {
   }
 
   async registration(userDto: CreateUserDto) {
-    const condidateEmail = await this.userService.getUserByEmail(userDto.email);
-    const condidateLogin = await this.userService.getUserByLogin(userDto.login);
-    if (condidateEmail || condidateLogin) {
+    const isTruth = await this.userService.isExistsUser(userDto.login, userDto.email);
+    if (isTruth) {
       throw new HttpException('User exists', HttpStatus.BAD_REQUEST);
     }
     if (userDto.password !== userDto.passwordComfirm) {
       throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
     }
-    const salt = 5;
-    const hash = await bcrypt.hash(userDto.password, salt);
-    const user = await this.userService.createUser({
-      ...userDto,
-      password: hash,
-    });
+    const user = await this.userService.createUser(userDto);
     return await this.sendCode(user);
   }
 
