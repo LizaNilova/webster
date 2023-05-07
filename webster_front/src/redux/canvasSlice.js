@@ -7,13 +7,15 @@ const canvasSlice = createSlice({
         width: null,
         height: null,
         color: '#000',
-        mode: 'default'
+        mode: 'default',
+        name: ''
     },
     reducers: {
-        setWidthHeight(state, action){
+        setData(state, action){
             state.width = action.payload.width;
             state.height = action.payload.height;
             state.color = action.payload.color;
+            state.name = action.payload.name;
         },
         setMode(state, action)
         {
@@ -26,5 +28,5 @@ const canvasSlice = createSlice({
 })
 
 export default canvasSlice.reducer;
-export const { setWidthHeight, setMode, } = canvasSlice.actions;
+export const { setData, setMode, } = canvasSlice.actions;
 

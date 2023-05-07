@@ -53,10 +53,13 @@ const MainPage = () => {
     }
 
     const removeSelectedClick = () => {
+        console.log('Object:', editor.canvas.getActiveObject(), 'Objects:', editor.canvas.getActiveObjects())
         let newHistory = history;
         // console.log(editor.canvas.getActiveObject());
-        newHistory.push(editor.canvas.getActiveObject());
-        editor.canvas.remove(editor.canvas.getActiveObject());
+        // newHistory.push(editor.canvas.getActiveObject());
+        // editor.canvas.remove(editor.canvas.getActiveObject());
+        newHistory.push(...editor.canvas.getActiveObjects());
+        editor.canvas.remove(...editor.canvas.getActiveObjects());
         // console.log('new', newHistory, 'hist', history);
         setHistory(newHistory);
     };
@@ -71,28 +74,45 @@ const MainPage = () => {
     }
 
     const redoClick = () => {
-        console.log('Redo: ', history, editor.canvas._objects)
+        // console.log('Redo: ', history, editor.canvas._objects);
         if (history.length > 0) {
             editor.canvas.add(history.pop());
         }
         // editor.canvas.renderAll();
     }
+
+    const setBrushSize = (width) => {
+        // console.log(width);
+        editor.canvas.freeDrawingBrush.width = width;
+        // editor.canvas.renderAll();
+    }
+
+    const setBrushColor = (color) => {
+        editor.canvas.freeDrawingBrush.color = color;
+        editor.setStrokeColor(color);
+    }
     
-    console.log(history)
+    // console.log(history);
     return(
         <>
             { openedForm && <CreateCanvasForm closeForm={closeForm}/> }
             <Header />
             <div className='w-full h-full min-h-screen flex bg-dark-purple'>
-                <SideBar 
+                <SideBar
                     createCanvasClick={createCanvasClick} 
-                    toggleDrawingClick={toggleDrawingClick} 
-                    removeSelectedClick={removeSelectedClick}
                     clearCanvasClick={clearCanvasClick}
                     redoClick={redoClick}
                     undoClick={undoClick}/>
-                <CanvasContainer onReady={onReady}/>
-                <RightSideBar />
+                <CanvasContainer name={canvasData?.name} onReady={onReady}/>
+                <RightSideBar 
+                    canvasData={canvasData} 
+                    brushSize={editor?.canvas.freeDrawingBrush.width}
+                    toggleDrawingClick={toggleDrawingClick} 
+                    removeSelectedClick={removeSelectedClick}
+                    // mode={canvasData?.mode} 
+                    setBrushSize={setBrushSize}
+                    setBrushColor={setBrushColor}
+                />
             </div>
         </>
     );

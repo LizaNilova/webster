@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setWidthHeight } from './redux/CanvasSlice';
+import { setData } from './redux/CanvasSlice';
 
 const CreateCanvasForm = ({ closeForm }) => {
 
     const dispatch = useDispatch();
 
     const [state, setState] = useState({
-        name: null,
+        name: 'Unnamed',
         width: null,
         height: null,
-        color: '#000000',
+        color: '#FFFFFF',
         errMessage: null
     })
 
@@ -34,7 +34,7 @@ const CreateCanvasForm = ({ closeForm }) => {
         }
         if(state.width && state.height && state.name)
         {
-            dispatch(setWidthHeight({width: state.width, height: state.height, color: state.color}));
+            dispatch(setData({width: state.width, height: state.height, color: state.color, name: state.name}));
             closeForm();
         }
     }
@@ -65,6 +65,7 @@ const CreateCanvasForm = ({ closeForm }) => {
                                 className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-2/3 rounded-full outline-none text-black p-2 bg-light-beige"
                                 name='name' onChange={handleChange}
                                 placeholder='name ... '
+                                defaultValue={'Unnamed'}
                             />
                         </div>
                         <div className='pb-1 my-1 flex items-center justify-center w-full text-xl text-beige'>
@@ -86,7 +87,7 @@ const CreateCanvasForm = ({ closeForm }) => {
                         </div>
                         <div className='w-full flex items-center justify-around text-xl text-beige'>
                             <label>Choose background color: </label>
-                            <input className='w-1/3 rounded-sm' type='color' name='color' onChange={handleChange}/>
+                            <input className='w-1/3 rounded-sm' type='color' name='color' onChange={handleChange} defaultValue={"#FFFFFF"}/>
                         </div>
                         <div className='text-red-500 text-2xl font-semibold underline underline-offset-4 text-center w-full m-1 p-1'>
                             {state.errMessage}
