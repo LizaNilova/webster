@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import {MainPage} from '../pages/mainPage';
 // import { RegistrationPage } from '../pages/RegistrationPage';
 // import { VerifyEmailPage } from '../pages/VerifyEmailPage';
-import { LoginPage } from '../pages/loginPage';
+import { LoginPage } from '../pages/loginTestPage';
 // import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 // import EventView from '../components/EventView';
 // import { Profile } from '../pages/Profile';
