@@ -59,8 +59,6 @@ export class PostsService {
       where: {}
     }
 
-    console.log(filterOptions)
-
     if (search) {
       filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
     }
