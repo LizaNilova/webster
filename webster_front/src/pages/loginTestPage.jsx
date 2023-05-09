@@ -50,7 +50,7 @@ export const LoginPage = () => {
             onSubmit={e => e.preventDefault()}
             className="main-container">
             {/* <div className="card-border"> */}
-                <div className="card diagonal-gridlines card-border">
+                <div className="card diagonal-gridlines card-border bb">
                     {/* <img className="h-[100px] mt-4" src='uevent_logo.png' alt='logo' /> */}
                     <h3 className="card_title">sign in</h3>
                     <div className="separator"></div>
