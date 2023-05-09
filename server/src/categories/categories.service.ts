@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Category } from './categories.model';
@@ -14,11 +14,17 @@ export class CategoriesService {
 
   async getCategoryByValue(value: string) {
     const category = await this.categoryRepository.findOne({ where: { value } });
+    if (!category) {
+      throw new NotFoundException('Category undefined');
+    }
     return category;
   }
 
   async getCategoryById(id: number) {
     const category = await this.categoryRepository.findByPk(id);
+    if (!category) {
+      throw new NotFoundException('Category undefined');
+    }
     return category;
   }
 
