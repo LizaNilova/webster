@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
 import { Category } from 'src/categories/categories.model';
 import { CreatePostDto } from './dto/create-post.dto';
-import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
 import { Op, FindOptions } from 'sequelize';
@@ -11,20 +10,23 @@ import { Op, FindOptions } from 'sequelize';
 @Injectable()
 export class PostsService {
 
-    constructor(@InjectModel(Post) private postsRepository: typeof Post, private categoriesService: CategoriesService,
+    constructor(@InjectModel(Post) private postsRepository: typeof Post,
         private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
 
     async create(dto: CreatePostDto, image: Express.Multer.File) {
-        try {
-        const filename = await this.filesService.createFile(image);
+        if (!image || !dto.title || !dto.category_value) {
+            throw new HttpException('Missing required parameters', HttpStatus.BAD_REQUEST);
+        }
 
+        const filename = await this.filesService.createFile(image);
+       
         const existPost = await this.postsRepository.findOne({ where: { title: dto.title } });
         if (existPost) {
             throw new HttpException('Post already exists', HttpStatus.BAD_REQUEST);
         }
 
-        const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
-        if (categories.length !== dto.value.length) {
+        const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.category_value } } });
+        if (categories.length !== dto.category_value.length) {
             throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
         }
 
@@ -32,13 +34,13 @@ export class PostsService {
         await post.$add('categories', [...categories.map(category => category.id)]);
         await post.reload();
         return { post };
-        } catch (error) {
-            console.log(error)
-        }
     }
 
     async getById(id: number) {
         const post = await this.postsRepository.findByPk(id, { include: { all: true } });
+        if (!post) {
+            throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
+        }
         return post;
     }
 
@@ -77,9 +79,9 @@ export class PostsService {
 
         await post.update({ ...dto, image: filename });
 
-        if (dto.value) {
-            const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
-            if (categories.length !== dto.value.length) {
+        if (dto.category_value) {
+            const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.category_value } } });
+            if (categories.length !== dto.category_value.length) {
                 throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
             }
             await post.$set('categories', [...categories.map(category => category.id)]);

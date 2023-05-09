@@ -8,17 +8,26 @@ export class CategoriesService {
   constructor(@InjectModel(Category) private categoryRepository: typeof Category) {}
 
   async createCategory(dto: CreateCategoryDto) {
+    if (!dto) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const category = await this.categoryRepository.create(dto);
     return category;
   }
 
   async getCategoryByValue(value: string) {
     const category = await this.categoryRepository.findOne({ where: { value } });
+    if (!category) {
+      throw new HttpException(`Category with value ${value} not found`, HttpStatus.NOT_FOUND);
+    }
     return category;
   }
 
   async getCategoryById(id: number) {
     const category = await this.categoryRepository.findByPk(id);
+    if (!category) {
+      throw new HttpException(`Category with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
     return category;
   }
 

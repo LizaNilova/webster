@@ -5,5 +5,5 @@ export class CreatePostDto {
   readonly content: string;
   readonly image: string;
   readonly userId: number;
-  readonly value: string[];
+  readonly category_value: string[];
 }

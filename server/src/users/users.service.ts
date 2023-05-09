@@ -19,6 +19,9 @@ export class UsersService {
   ) { }
 
   async createUser(dto: CreateUserDto) {
+    if (!dto) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const user = await this.userRepository.create(dto);
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role.id]);
@@ -27,6 +30,9 @@ export class UsersService {
   }
 
   async createEvent(data: UserEventDto) {
+    if (!data) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const event = await this.userEventRepository.create(data);
     return event;
   }
@@ -38,6 +44,9 @@ export class UsersService {
 
   async getUserById(id: number) {
     const user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+    if (!user) {
+            throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
     return {
       id: user.id,
       login: user.login,

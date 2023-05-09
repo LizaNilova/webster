@@ -9,7 +9,9 @@ export class CommentsService {
    constructor(@InjectModel(Comment) private commentsRepository: typeof Comment) { }
 
   async create(dto: CreateCommentDto) {
-    console.log(dto)
+    if (!dto) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const comment = await this.commentsRepository.create({ ...dto });
     return comment;
   }
