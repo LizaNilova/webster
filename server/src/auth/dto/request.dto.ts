@@ -1,12 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Request } from 'express';
-import { TokenPayloadDto } from './token-payload.dto';
 
 export interface RequestDto extends Request {
-    user: {
-      id: number;
-      role: string;
-    };
-    body: {
-      code: string;
-    }
+  user: {
+    id: number;
+    login: string;
+    email: string;
+    role: string;
+  };
+  body: {
+    code: string;
   }
+}
