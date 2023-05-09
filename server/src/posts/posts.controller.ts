@@ -1,12 +1,11 @@
 import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query, UnauthorizedException, ForbiddenException, BadRequestException, ParseFilePipe, NotFoundException } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-
 import { CreatePostDto } from './dto/create-post.dto'
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationPipe } from '../pipes/validation.pipe';
+import { RequestDto } from '../auth/dto/request.dto';
 @ApiTags('Posts')
 @Controller('api/posts')
 export class PostsController {
@@ -93,7 +92,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async createPost(@Body(ValidationPipe) dto: CreatePostDto,
-    @Request() req: { user: RequestUserDto },
+    @Request() req: RequestDto,
     @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return {
       post: await this.postServer.create({ ...dto, userId: req.user.id, image }),
@@ -347,7 +346,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor('image'))
   async editPost(@Param('id') id: number,
     @Body(ValidationPipe) dto: CreatePostDto,
-    @Request() req: { user: RequestUserDto },
+    @Request() req: RequestDto ,
     @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return {
       post: await this.postServer.editPost(dto, req.user.id, id, image),
@@ -382,7 +381,7 @@ export class PostsController {
   })
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deletePost(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
+  async deletePost(@Param('id') id: number, @Request() req: RequestDto) {
     return {
       message: await this.postServer.deletePost(id, req.user.id,)
     };
