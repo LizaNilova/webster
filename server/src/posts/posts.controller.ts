@@ -6,6 +6,7 @@ import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ValidationPipe } from '../pipes/validation.pipe';
 @ApiTags('Posts')
 @Controller('api/posts')
 export class PostsController {
@@ -93,6 +94,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor('image'))
   async createPost(@Body(ValidationPipe) dto: CreatePostDto,
     @Request() req: { user: RequestUserDto },
+    @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return {
       post: await this.postServer.create({ ...dto, userId: req.user.id, image }),
       message: 'Create post'
@@ -346,6 +348,7 @@ export class PostsController {
   async editPost(@Param('id') id: number,
     @Body(ValidationPipe) dto: CreatePostDto,
     @Request() req: { user: RequestUserDto },
+    @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return {
       post: await this.postServer.editPost(dto, req.user.id, id, image),
       message: 'Update post'
