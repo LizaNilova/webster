@@ -12,8 +12,9 @@ export class LikesController {
   // make or remove like
   // http://localhost:8080/api/likes/post/:id
   @UseGuards(JwtAuthGuard)
-  @Get('/post/:id')
-  async update(@Param('id') id: number, @Request() req: { user: RequestUserDto }) {
-    return { message: await this.likesService.update(id, req.user.id) }
+  @Post('/post/:id')
+  async likePost(@Param('id') id: number, @Req() req: RequestDto, @Res() res: Response) {
+    const result = await this.likesService.likePost(id, req.user.id)
+    res.status(result.status).json({ message: result.message })
   }
 }

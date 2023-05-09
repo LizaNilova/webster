@@ -9,14 +9,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
-  // subscribe or unsubscribe 
-  // http://localhost:8080/api/subscriptions/subscribeTo/:id
-  @Get('/subscribeTo/:id')
-  @UseGuards(JwtAuthGuard)
-  async subscribe(@Req() request: RequestDto, @Param('id') id: number) {
-    return {
-      subscriptions: await this.subscriptionsService.subscribeTo(request.user.id, id),
-      message: 'Success'
     }
+  @Post('/subscribe/user/:id')
+  @UseGuards(JwtAuthGuard)
+  async subscribe(@Param('id') id: number, @Req() request: RequestDto, @Res() res: Response) {
+    const result = await this.subscriptionsService.subscribeTo({ authorId: id, userId: request.user.id })
+    res.status(result.status).json({message: result.message})
   }
 }
