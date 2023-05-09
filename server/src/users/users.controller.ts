@@ -16,15 +16,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
-  ApiBody,
   ApiCreatedResponse,
   ApiForbiddenResponse,
-  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';

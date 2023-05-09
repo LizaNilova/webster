@@ -1,12 +1,11 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query, UnauthorizedException, ForbiddenException, BadRequestException, UsePipes, ParseFilePipe, HttpException, ParseFilePipeBuilder, HttpStatus, NotFoundException } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query, UnauthorizedException, ForbiddenException, BadRequestException, ParseFilePipe, NotFoundException } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 import { CreatePostDto } from './dto/create-post.dto'
 import { PostsService } from './posts.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestUserDto } from '../users/dto/request-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Posts')
 @Controller('api/posts')
 export class PostsController {
