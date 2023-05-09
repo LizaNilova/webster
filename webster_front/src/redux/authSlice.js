@@ -148,8 +148,8 @@ export const authSlice = createSlice({
     },
     [loginUser.fulfilled]: (state, action) => {
       state.isLoading = false
-      state.status = action.payload.message
-      state.user = action.payload.user
+      state.status = action.payload?.message
+      state.user = action.payload?.user
       state.userId = action.payload.user?._id
     },
     [loginUser.rejected]: (state, action) => {
