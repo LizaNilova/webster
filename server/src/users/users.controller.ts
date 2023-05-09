@@ -103,7 +103,6 @@ export class UsersController {
       example: new UnauthorizedException('User unauthorized')
     }
   })
-  @ApiBody({ type: CreateUserDto })
   @UseGuards(JwtAuthGuard)
   @Roles('ADMIN')
   @UseGuards(RolesAuthGuard)
