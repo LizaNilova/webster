@@ -53,7 +53,6 @@ export class AuthService {
     });
     await this.mailService.sendUserConfirmation(user, code);
     return event.id
-    
   }
 
   async confirm(eventId: string, code: string) {

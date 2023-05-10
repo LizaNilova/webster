@@ -8,12 +8,15 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanned } from './models/user-banned.model';
 import { UserEvents } from './models/user-event.model';
 import { UserEventDto } from './dto/user-event.dto';
+import * as bcrypt from 'bcryptjs';
+// import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     private roleService: RolesService,
+    // private authService: AuthService,
     @InjectModel(UserBanned) private userBennedRepository: typeof UserBanned,
     @InjectModel(UserEvents) private userEventRepository: typeof UserEvents,
   ) { }
@@ -45,7 +48,7 @@ export class UsersService {
   async getUserById(id: number) {
     const user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
     if (!user) {
-            throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
     return {
       id: user.id,
@@ -107,5 +110,41 @@ export class UsersService {
       return user;
     }
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
+  }
+
+  async edit_profile(id: number, dto: CreateUserDto){
+    let user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+    if (!user) {
+      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+
+    if (dto.login) {
+      user.login = dto.login;
+    }
+
+    if (dto.password) {
+      if (dto.password !== dto.passwordComfirm) {
+        throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
+      }
+      const salt = 5;
+      const hash = await bcrypt.hash(dto.password, salt);
+      user.password = hash; // Update the password
+    }
+
+    if (dto.email) {
+      user.email = dto.email; 
+      // await this.authService.sendCode(user);
+    }
+    await user.save();
+    return user;
+  }
+
+  async delete_profile(id: number){
+    const user = await this.userRepository.findByPk(id);
+    if (!user) {
+      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    await user.destroy();
+    return "User was deleted";
   }
 }

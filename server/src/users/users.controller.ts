@@ -6,7 +6,9 @@ import {
   Post,
   Req,
   UseGuards,
-  UsePipes
+  UsePipes, 
+  Delete, 
+  Patch
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -91,6 +93,26 @@ export class UsersController {
   async profile(@Req() request: RequestDto) {
     return {
       user: await this.usersService.getUserById(request.user.id),
+      message: 'Success'
+    }
+  }
+
+  // edit my profile
+  @Patch('/edit')
+  @UseGuards(JwtAuthGuard)
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto) {
+    return {
+      user: await this.usersService.edit_profile(request.user.id, userDto),
+      message: 'Success'
+    }
+  }
+
+  // get me and my posts
+  @Delete('/delete')
+  @UseGuards(JwtAuthGuard)
+  async delete_profile(@Req() request: RequestDto) {
+    return {
+      user: await this.usersService.delete_profile(request.user.id),
       message: 'Success'
     }
   }
