@@ -1,5 +1,5 @@
 ## Description
-
+Webster is an editor that allows any user without design skills to easily create and process images.
 
 ## Installation
 
