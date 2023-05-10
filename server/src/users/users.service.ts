@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './models/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,10 +22,13 @@ export class UsersService {
   ) { }
 
   async createUser(dto: CreateUserDto) {
-    if (!dto) {
-      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    const isTruth = await this.isExistsUser(dto.login, dto.email);
+    if (isTruth) {
+      throw new BadRequestException('User exists');
     }
-    const user = await this.userRepository.create(dto);
+    const salt = 5;
+    const hash = await bcrypt.hash(dto.password, salt);
+    const user = await this.userRepository.create({ ...dto, password: hash });
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
@@ -46,9 +49,9 @@ export class UsersService {
   }
 
   async getUserById(id: number) {
-    const user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+    const user = await this.userRepository.findByPk(id, { include: { all: true } });
     if (!user) {
-      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User undefined');
     }
     return {
       id: user.id,
@@ -88,7 +91,7 @@ export class UsersService {
   async confirm(eventId: string, code: string): Promise<User> {
     const event = await this.userEventRepository.findByPk(eventId);
     if (!event) {
-      throw new HttpException({ message: 'Session not found' }, HttpStatus.NOT_FOUND);
+      throw new NotFoundException({ message: 'Session not found' });
     }
     if (code !== event.event_content) {
       throw new HttpException({ message: 'Code do not match' }, HttpStatus.BAD_REQUEST);
@@ -146,5 +149,11 @@ export class UsersService {
     }
     await user.destroy();
     return "User was deleted";
+}
+
+  async isExistsUser(login: string, email: string): Promise<boolean> {
+    const condidateEmail = await this.getUserByEmail(email);
+    const condidateLogin = await this.getUserByLogin(login);
+    return Boolean(condidateEmail || condidateLogin);
   }
 }

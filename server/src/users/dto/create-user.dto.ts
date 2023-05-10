@@ -19,4 +19,6 @@ export class CreateUserDto {
   @ApiProperty({ example: 'qwerty123', description: 'user comfirm password' })
   @IsString({ message: 'Should be a string' })
   readonly passwordComfirm: string;
+
+  readonly is_active: boolean;
 }

@@ -13,7 +13,10 @@ export class ValidationPipe implements PipeTransform<any> {
       const messages = errors.reduce(
         (acc: object, error) => ({
           ...acc,
-          [error.property]: Object.values(error.constraints),
+          [error.property]: {
+            value: `${error.value}`,
+            constraints: Object.values(error.constraints)
+          },
         }),
         {},
       );

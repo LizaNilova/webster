@@ -1,7 +1,9 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
+
+  ForbiddenException,
+
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
@@ -9,13 +11,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { ROLEY_KEY } from './roles-auth.decorator';
-
-interface reqDto {
-  user: object;
-  headers: {
-    authorization: string;
-  };
-}
+import { RequestDto } from './dto/request.dto';
 
 @Injectable()
 export class RolesAuthGuard implements CanActivate {
@@ -25,7 +21,7 @@ export class RolesAuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     try {
-      const req: reqDto = context.switchToHttp().getRequest();
+      const req: RequestDto = context.switchToHttp().getRequest();
       const requairedRole = this.reflector.getAllAndOverride<string[]>(
         ROLEY_KEY,
         [context.getHandler(), context.getClass()],
@@ -38,7 +34,7 @@ export class RolesAuthGuard implements CanActivate {
       const user = this.jwtService.verify(token);
       return requairedRole.includes(user.role);
     } catch (err) {
-      throw new HttpException('User role no Admin', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('User role no Admin');
     }
   }
 }

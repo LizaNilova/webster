@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
 import {fabric} from 'fabric'
+import { useRoutes } from './utils/useRouts';
 
 export default function App() {
   const [canvas, setCanvas] = useState('');
@@ -14,10 +15,13 @@ export default function App() {
       backgroundColor: 'pink'
     })
   )
+
+  const routes = useRoutes(false)
   return(
     <div>
-      <h1>Fabric.js on React - fabric.Canvas('...')</h1>
-      <canvas id="canvas" />
+      {/* <h1>Fabric.js on React - fabric.Canvas('...')</h1>
+      <canvas id="canvas" /> */}
+      {routes}
     </div>
   );
 }
