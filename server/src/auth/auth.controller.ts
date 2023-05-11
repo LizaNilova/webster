@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpException, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UsePipes } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpException, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiCookieAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiSecurity, ApiTags, ApiUnauthorizedResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import { ValidationPipe } from '../pipes/validation.pipe'
 import { RequestDto } from './dto/request.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('Authentication')
 @Controller('api/auth')
@@ -16,7 +17,6 @@ export class AuthController {
   @ApiOkResponse({
     description: 'The user is authorized', schema: {
       example: {
-        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibG9naW4iOiJ1c2VyIiwicm9sZSI6IkFETUlOIiwiaXNCYW5uZWQiOmZhbHNlmV4cCI6MTY4MzMxNzI5MH0.xxcBpV...",
         message: "The user is authorized"
       }
     }
@@ -50,11 +50,15 @@ export class AuthController {
   @Post('/login')
   async login(@Body() userDto: LoginUserDto, @Res({ passthrough: true }) response: Response) {
     const tokens = await this.authService.login(userDto);
+    response.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+    });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
     });
-    return { accessToken: tokens.accessToken, message: 'The user is authorized' };
+    return { message: 'The user is authorized' };
   }
 
 
@@ -114,7 +118,7 @@ export class AuthController {
   @ApiCreatedResponse({
     description: 'Token refreshed', schema: {
       example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibG9naW4iOiJ1c2VyIiwicm9sZSI6IkFETUlOIiwiaXNCYW5uZWQiOmZhbHNlmV4cCI6MTY4MzMxNzI5MH0.xxcBpV...'
+        message: 'Success'
       }
     }
   })
@@ -128,7 +132,12 @@ export class AuthController {
   @Get('/refresh')
   async refresh(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
     const tokens = await this.authService.refresh(request.cookies['refreshToken']);
+    response.clearCookie('accessToken');
     response.clearCookie('refreshToken');
+    response.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+    });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
@@ -140,7 +149,7 @@ export class AuthController {
   @ApiCreatedResponse({
     description: 'Confirm', schema: {
       example: {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibG9naW4iOiJ1c2VyIiwicm9sZSI6IkFETUlOIiwiaXNCYW5uZWQiOmZhbHNlmV4cCI6MTY4MzMxNzI5MH0.xxcBpV...'
+        message: 'User comfirm account'
       }
     }
   })
@@ -157,13 +166,42 @@ export class AuthController {
       example: new NotFoundException('Session not found')
     }
   })
-  @Post('confirm/:id')
+  @Post('/confirm/:id')
   async confirm(@Param('id', new ParseUUIDPipe()) id: string, @Req() request: RequestDto, @Res({ passthrough: true }) response: Response) {
     const tokens = await this.authService.confirm(id, request.body.code);
+    response.cookie('accessToken', tokens.accessToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
+    });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000),
     });
-    return { accessToken: tokens.accessToken, message: 'User comfirm account' };
+    return { message: 'User comfirm account' };
+  }
+
+  @ApiOperation({ summary: 'Logout token' })
+  @ApiCreatedResponse({
+    description: 'Token refreshed', schema: {
+      example: {
+        message: 'User logout'
+      }
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException(),
+
+    }
+  })
+  @UseGuards(JwtAuthGuard)
+  @Post('/logout')
+  async logout(@Res() response: Response) {
+    response.clearCookie('refreshToken');
+    response.clearCookie('accessToken');
+    response.status(200).json({
+      message: 'User logout'
+    })
   }
 }

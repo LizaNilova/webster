@@ -8,7 +8,11 @@ export interface RequestDto extends Request {
     email: string;
     role: string;
   };
+  cookies: {
+    accessToken: string;
+    refreshToken: string;
+  };
   body: {
     code: string;
-  }
+  };
 }
