@@ -5,9 +5,15 @@ import {
   ForeignKey,
   Model,
   Table,
+  BelongsToMany,
+  HasMany,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../users/users.model';
+import { User } from '../users/models/users.model';
+import { Category } from 'src/categories/categories.model';
+import { PostCategory } from 'src/categories/post-category.model';
+import { Comment } from 'src/comments/comments.model';
+import { Like } from 'src/likes/likes.model';
 
 interface PostCreationAttrs {
   title: string;
@@ -36,7 +42,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
       'The unicorn, or inrog, is a mythical creature that since ancient times has been described as a kind of hoofed animal, most often a horse, with one large, pointed, spiral-shaped horn coming out of its forehead.',
     description: 'Content this post',
   })
-  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   content: string;
 
   @ApiProperty({ example: ':(', description: 'Image this post' })
@@ -49,4 +55,13 @@ export class Post extends Model<Post, PostCreationAttrs> {
 
   @BelongsTo(() => User)
   author: User;
+
+  @BelongsToMany(() => Category, () => PostCategory)
+  categories: Category[];
+
+  @HasMany(() => Comment)
+  comments: Comment[];
+
+  @HasMany(() => Like)
+  likes: Like[];
 }

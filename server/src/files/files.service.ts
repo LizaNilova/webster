@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as fsp from 'fs/promises';
-import path from 'path';
+import * as path from 'path';
 import * as uuid from 'uuid';
 
 @Injectable()
@@ -14,10 +14,10 @@ export class FilesService {
         }
     }
 
-    async createFile(file: any): Promise<string> {
+    async createFile(file: Express.Multer.File): Promise<string> {
         try {
             const filename = uuid.v4() + '.jpg';
-            const filePath = path.resolve(__dirname, '..', 'static')
+            const filePath = path.resolve(__dirname, '..', 'static');
             await this.isDirectoryExists(filePath);
             await fsp.writeFile(path.join(filePath, filename), file.buffer);
             return filename;
