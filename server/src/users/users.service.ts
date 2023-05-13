@@ -8,17 +8,17 @@ import { BanUserDto } from './dto/ban-user.dto';
 import { UserBanned } from './models/user-banned.model';
 import { UserEvents } from './models/user-event.model';
 import { UserEventDto } from './dto/user-event.dto';
-import * as bcrypt from 'bcryptjs';
-// import { AuthService } from 'src/auth/auth.service';
+import * as bcrypt from 'bcryptjs'
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
-    private roleService: RolesService,
     // private authService: AuthService,
     @InjectModel(UserBanned) private userBennedRepository: typeof UserBanned,
     @InjectModel(UserEvents) private userEventRepository: typeof UserEvents,
+    private roleService: RolesService,
   ) { }
 
   async createUser(dto: CreateUserDto) {

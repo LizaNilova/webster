@@ -7,12 +7,12 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
-import { User } from 'src/users/models/users.model';
+import { User } from '../users/models/users.model';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { TokenPayloadDto } from './dto/token-payload.dto';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
 import { LoginUserDto } from './dto/login-user.dto';
 @Injectable()
@@ -22,7 +22,6 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService: MailService
   ) { }
-
   async login(userDto: LoginUserDto): Promise<CreateTokenDto> {
     const user = await this.validateUser(userDto);
     const tokens = await this.generateToken(user);
@@ -49,7 +48,6 @@ export class AuthService {
     });
     await this.mailService.sendUserConfirmation(user, code);
     return event.id
-    
   }
 
   async confirm(eventId: string, code: string) {
