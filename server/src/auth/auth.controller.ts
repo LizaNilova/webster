@@ -105,7 +105,6 @@ export class AuthController {
       })
     }
   })
-  @UsePipes(ValidationPipe)
   @Post('/registration')
   async registration(@Body() userDto: CreateUserDto) {
     return {
@@ -143,13 +142,6 @@ export class AuthController {
     description: 'Bad request', schema: {
       example: new BadRequestException({
         massage: {
-          "email": {
-            "value": "undefined",
-            "constraints": [
-              "The e-mail address is invalid",
-              "Should be a string"
-            ]
-          },
           "password": {
             "value": "undefined",
             "constraints": [
@@ -167,10 +159,10 @@ export class AuthController {
       })
     }
   })
-  @Post('/reset')
-  async resetPassword(@Body() userDto: CreateUserDto) {
+  @Post('/reset/:id')
+  async resetPassword(@Body() userDto: CreateUserDto, @Param('id') id: string) {
     return {
-      user: await this.authService.resetPassword(userDto),
+      user: await this.authService.resetPassword(userDto, id),
       message: 'Password is changed'
     };
   }

@@ -5,6 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
@@ -15,12 +16,16 @@ import { TokenPayloadDto } from './dto/token-payload.dto';
 import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UserEvents } from 'src/users/models/user-event.model';
+
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
-    private mailService: MailService
+    private mailService: MailService,
+    @InjectModel(UserEvents) private userEventsRepository: typeof UserEvents,
+     @InjectModel(User) private userRepository: typeof User,
   ) { }
   async login(userDto: LoginUserDto): Promise<CreateTokenDto> {
     const user = await this.validateUser(userDto);
@@ -100,14 +105,15 @@ export class AuthService {
     if (!userDto.email) throw new HttpException('No content', HttpStatus.BAD_REQUEST);
     let user = await this.userService.getUserByEmail(userDto.email);
     if (!user) throw new HttpException('No users with such email', HttpStatus.BAD_REQUEST);
-    const url = `${process.env.URL_CLIENT}/reset`;
+    const url = `${process.env.URL_CLIENT}/reset/${user.events[0].id}`;
     await this.mailService.sendUserConfirmationLink(user, url);
     return 
   }
 
-  async resetPassword(userDto: CreateUserDto){
-    if (!userDto.email || !userDto.password || !userDto.passwordComfirm) throw new HttpException('No content', HttpStatus.BAD_REQUEST);
-    let user = await this.userService.getUserByEmail(userDto.email);
+  async resetPassword(userDto: CreateUserDto, id: string){
+    if (!userDto.password || !userDto.passwordComfirm) throw new HttpException('No content', HttpStatus.BAD_REQUEST);
+    const event = await this.userEventsRepository.findByPk(id);
+    let user = await this.userRepository.findOne({where: {id: event.userId}});
     if (!user) throw new HttpException('No users with such email', HttpStatus.BAD_REQUEST);
     if (userDto.password !== userDto.passwordComfirm) {
       throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
