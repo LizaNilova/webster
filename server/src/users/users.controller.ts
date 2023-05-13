@@ -411,7 +411,7 @@ export class UsersController {
   async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto) {
     return {
       user: await this.usersService.edit_profile(request.user.id, userDto),
-      message: 'Success'
+      message: 'Changes are saved. If you have changed your email, check the it'
     }
   }
 

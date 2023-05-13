@@ -95,4 +95,27 @@ export class AuthService {
     }
     throw new UnauthorizedException({ massage: 'Incorrect login or password' });
   }
+
+  async forgotPassword(userDto: CreateUserDto){
+    if (!userDto.email) throw new HttpException('No content', HttpStatus.BAD_REQUEST);
+    let user = await this.userService.getUserByEmail(userDto.email);
+    if (!user) throw new HttpException('No users with such email', HttpStatus.BAD_REQUEST);
+    const url = `${process.env.URL_CLIENT}/reset`;
+    await this.mailService.sendUserConfirmationLink(user, url);
+    return 
+  }
+
+  async resetPassword(userDto: CreateUserDto){
+    if (!userDto.email || !userDto.password || !userDto.passwordComfirm) throw new HttpException('No content', HttpStatus.BAD_REQUEST);
+    let user = await this.userService.getUserByEmail(userDto.email);
+    if (!user) throw new HttpException('No users with such email', HttpStatus.BAD_REQUEST);
+    if (userDto.password !== userDto.passwordComfirm) {
+      throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
+    }
+    const salt = 5;
+    const hash = await bcrypt.hash(userDto.password, salt);
+    user.password = hash; 
+    await user.save();
+    return user
+  }
 }

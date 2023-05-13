@@ -9,16 +9,17 @@ import { UserBanned } from './models/user-banned.model';
 import { UserEvents } from './models/user-event.model';
 import { UserEventDto } from './dto/user-event.dto';
 import * as bcrypt from 'bcryptjs'
-import { AuthService } from 'src/auth/auth.service';
+import { MailService } from '../mail/mail.service';
+import generateCode from '../utils/generate-code.util';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
-    // private authService: AuthService,
     @InjectModel(UserBanned) private userBennedRepository: typeof UserBanned,
     @InjectModel(UserEvents) private userEventRepository: typeof UserEvents,
     private roleService: RolesService,
+    private mailService: MailService
   ) { }
 
   async createUser(dto: CreateUserDto) {
@@ -136,10 +137,23 @@ export class UsersService {
 
     if (dto.email) {
       user.email = dto.email; 
-      // await this.authService.sendCode(user);
+      user.is_active = false;
+      await user.save();
+      return await this.sendCode(user);
     }
     await user.save();
     return user;
+  }
+
+  async sendCode(user: User) {
+    const code = generateCode();
+    const event = await this.createEvent({
+      userId: user.id,
+      event_content: code.join('')
+    });
+    await this.mailService.sendUserConfirmation(user, code);
+    const id = event.id
+    return {event_id: id}
   }
 
   async delete_profile(id: number){

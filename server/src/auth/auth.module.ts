@@ -14,7 +14,7 @@ import { MailModule } from 'src/mail/mail.module';
         expiresIn: '24h',
       },
     }),
-    MailModule
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

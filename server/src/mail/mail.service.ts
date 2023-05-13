@@ -18,4 +18,17 @@ export class MailService {
             },
         });
     }
+
+    async sendUserConfirmationLink(user: User, link: string) {
+        return await this.mailerService.sendMail({
+            to: user.email,
+            from: '"Support Team" <support@example.com>',
+            subject: 'Confirm your Email to change a password',
+            template: './change_password_confirmation',
+            context: {
+                name: user.login,
+                link
+            },
+        });
+    }
 }
