@@ -105,6 +105,7 @@ export class AuthController {
       })
     }
   })
+  @UseGuards(ValidationPipe)
   @Post('/registration')
   async registration(@Body() userDto: CreateUserDto) {
     return {
