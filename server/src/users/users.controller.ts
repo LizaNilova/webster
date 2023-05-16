@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  Query,
   Controller,
   ForbiddenException,
   Get,
@@ -213,12 +214,11 @@ export class UsersController {
     }
   })
   @UseGuards(JwtAuthGuard)
-  @Roles('ADMIN')
-  @UseGuards(RolesAuthGuard)
+  // get all users and their rating
   @Get()
-  async getAll() {
+  async getAll(@Query('search') search: string) {
     return {
-      users: await this.usersService.getAllUsers(),
+      users: await this.usersService.getAllUsers(search),
       message: 'Success'
     }
   }
@@ -395,7 +395,7 @@ export class UsersController {
       example: new UnauthorizedException('User unauthorized')
     }
   })
-  // get me and my posts
+  // get me, my rating and my posts
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
   async profile(@Req() request: RequestDto) {
@@ -458,8 +458,7 @@ export class UsersController {
       example: new NotFoundException('User undefined')
     }
   })
-
-  // get another user by id and his posts
+  // get another user by id, his rating and his posts
   @Get('/:id')
   async getUserById(@Param('id') id: number) {
     return {

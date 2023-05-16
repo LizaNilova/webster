@@ -63,6 +63,7 @@ export class AuthController {
 
 
   @ApiOperation({ summary: 'Registration user' })
+  @UsePipes(ValidationPipe)
   @ApiCreatedResponse({
     description: 'The user is registration', schema: {
       example: {
@@ -129,7 +130,7 @@ export class AuthController {
       })
     }
   })
-  @Post('/forgot_password')
+  @Post('/forgot-password')
   async forgotPassword(@Body() userDto: CreateUserDto) {
     await this.authService.forgotPassword(userDto);
     return {
