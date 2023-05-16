@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/loginPage';
 // import CheckOutSuccess from '../pages/CheckOutSuccess';
 // import CalendarPage from '../pages/CalendarPage';
 import Header from '../components/Header';
+import { ConfirmPage } from '../pages/confirmPage';
 // import { VerifyCompanyEmailPage } from '../pages/VerifyCompanyEmailPage';
 // import { CompanyPage } from '../pages/CompanyPage';
 // import { VerifyInvite } from '../pages/VerifyInvite';
@@ -54,6 +55,7 @@ export const useRoutes = (isAuthenticated) => {
                 <Route path="/registration" element={<RegistrationPage />} />
                 {/* <Route path='recover/:token' element={<ResetPasswordPage />} /> */}
                 {/* <Route path='verify/:token' element={<VerifyEmailPage />} /> */}
+                <Route path='/confirm/:id' element={<ConfirmPage/>} />
                 
                 {/* <Route path="companies/:id/add-new-member" element={<VerifyInvite />} /> */}
                 {/* <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} /> */}

@@ -6,7 +6,8 @@ const initialState = {
   user: null,
   isLoading: false,
   status: null,
-  userId: null
+  userId: null,
+  eventId: null
 }
 
 export const registerUser = createAsyncThunk(
@@ -24,6 +25,17 @@ export const registerUser = createAsyncThunk(
       console.log(error)
     }
   },
+)
+
+export const confirmRegistration = createAsyncThunk(
+  'auth/confirmRegistration',
+  async ({code}) => {
+    try{
+      
+    } catch(error) {
+      console.log(error)
+    }
+  }
 )
 
 export const loginUser = createAsyncThunk(
@@ -111,8 +123,9 @@ export const authSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, action) => {
       state.isLoading = false
-      state.status = action.payload.message
-      state.user = action.payload.user
+      state.status = action.payload?.message
+      state.eventId = action.payload?.eventId
+      // state.user = action.payload?.user
     },
     [registerUser.rejected]: (state, action) => {
       state.status = action.payload.message

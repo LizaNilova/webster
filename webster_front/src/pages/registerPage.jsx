@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { registerUser } from "../redux/authSlice";
+import { registerUser } from '../redux/authSlice.js';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 // import '../styles/registerPage.css'
@@ -12,16 +12,16 @@ export const RegistrationPage = () => {
     const navigate = useNavigate()
 
     const [login, setLogin] = useState('')
-    const [fullName, setFullName] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
 
     const { status } = useSelector((state) => state.auth)
+    const { eventId } = useSelector((state) => state.auth)
 
     useEffect(() => {
-        if (status === 'Send mail') {
-            navigate('/')
+        if (status === 'Send mail' && eventId) {
+            navigate(`/confirm/${eventId}`)
         }
     }, [status, navigate])
 
