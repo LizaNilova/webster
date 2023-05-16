@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../redux/authSlice.js'
-import '../styles/loginTestPage.scss'
+import '../styles/loginPage.scss'
 
-export const LoginPage = () => {
+export const RegistrationPage = () => {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [errorText, setErrorText] = useState('')
     const [errorVisible, setErrorVisible] = useState(false)
 
@@ -21,11 +22,11 @@ export const LoginPage = () => {
         }
         console.log(status)
         setErrorText(status)
-        // if (status !== '' && status) {
-        //     setErrorVisible(true)
-        // } else {
-        //     setErrorVisible(false)
-        // }
+        if (status !== 'Send mail' && status) {
+            setErrorVisible(true)
+        } else {
+            setErrorVisible(false)
+        }
     }, [status, navigate])
 
     const handleSubmit = () => {

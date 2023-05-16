@@ -44,15 +44,15 @@ export const loginUser = createAsyncThunk(
     }
   },
 )
-export const getUserData = createAsyncThunk('auth/getUserData', async () => {
-  try {
-    const { data } = await axios.get('http://localhost:8080/api/auth/me', { withCredentials: true })
-    // console.log('Get me:',data)
-    return data
-  } catch (error) {
-    console.log(error)
-  }
-})
+// export const getUserData = createAsyncThunk('auth/getUserData', async () => {
+//   try {
+//     const { data } = await axios.get('http://localhost:8080/api/auth/me', { withCredentials: true })
+//     // console.log('Get me:',data)
+//     return data
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
 
 export const passwordForgot = createAsyncThunk(
   "auth/passwordForgot",
@@ -149,8 +149,8 @@ export const authSlice = createSlice({
     [loginUser.fulfilled]: (state, action) => {
       state.isLoading = false
       state.status = action.payload?.message
-      state.user = action.payload?.user
-      state.userId = action.payload.user?._id
+      // state.user = action.payload?.user
+      // state.userId = action.payload.user?._id
     },
     [loginUser.rejected]: (state, action) => {
       state.status = action.payload.message
@@ -169,23 +169,6 @@ export const authSlice = createSlice({
       state.userId = null
     },
     [logout.rejected]: (state, action) => {
-      state.status = action.payload.message
-      state.isLoading = false
-    },
-
-    //Check authorization (Get ME)
-    [getUserData.pending]: (state) => {
-      state.isLoading = true
-      state.status = null
-    },
-    [getUserData.fulfilled]: (state, action) => {
-      state.isLoading = false
-      state.status = null
-      console.log(action.payload);
-      state.user = action.payload?.user
-      state.userId = action.payload?.user._id
-    },
-    [getUserData.rejected]: (state, action) => {
       state.status = action.payload.message
       state.isLoading = false
     },
