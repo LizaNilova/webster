@@ -1,0 +1,10 @@
+@tailwind components;
+
+@layer components {
+    .sidebar-item-title{
+        @apply w-full flex items-center justify-between m-3 py-2 px-1 text-xl font-semibold border-y-2 border-purple-800;
+    }
+    .sidebar-item-container{
+        @apply w-full flex flex-col border-b border-emerald-700;
+    }
+}
