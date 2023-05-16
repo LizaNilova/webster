@@ -16,5 +16,5 @@ export class CreatePostDto {
   readonly userId: number;
   @ApiProperty({ type: 'string', required: true, example: '[]', description: 'post categories' })
   @IsArray({ message: 'Should be a string' })
-  readonly value: string[];
+  readonly category_value: string[];
 }

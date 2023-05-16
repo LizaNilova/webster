@@ -17,6 +17,7 @@ import { LikesModule } from 'src/likes/likes.module';
 import { UserEvents } from './models/user-event.model';
 import { Subscriptions } from 'src/subscriptions/subscriptions.model';
 import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
     PostsModule, 
     CommentsModule,
     LikesModule, 
-    SubscriptionsModule
+    SubscriptionsModule,
+    MailModule
   ],
   controllers: [UsersController],
   providers: [UsersService],

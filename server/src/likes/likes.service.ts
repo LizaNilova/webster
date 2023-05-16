@@ -13,6 +13,7 @@ export class LikesService {
     private postService: PostsService) { }
 
   async likePost(postId: number, userId: number): Promise<ResultLikeDto> {
+    console.log('hello')
     const post = await this.postService.getById(postId);
     if (!post) {
       throw new NotFoundException('Post undefiend');

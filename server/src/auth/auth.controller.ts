@@ -105,12 +105,66 @@ export class AuthController {
       })
     }
   })
-  @UsePipes(ValidationPipe)
+  @UseGuards(ValidationPipe)
   @Post('/registration')
   async registration(@Body() userDto: CreateUserDto) {
     return {
       eventId: await this.authService.registration(userDto),
       message: 'Send mail'
+    };
+  }
+
+  @ApiOperation({ summary: 'Forgot password' })
+  @ApiBadRequestResponse({
+    description: 'Bad request', schema: {
+      example: new BadRequestException({
+        massage: {
+          "email": {
+            "value": "undefined",
+            "constraints": [
+              "The e-mail address is invalid",
+              "Should be a string"
+            ]
+          },
+        }
+      })
+    }
+  })
+  @Post('/forgot_password')
+  async forgotPassword(@Body() userDto: CreateUserDto) {
+    await this.authService.forgotPassword(userDto);
+    return {
+      message: 'Send mail'
+    };
+  }
+
+  @ApiOperation({ summary: 'Reset password' })
+  @ApiBadRequestResponse({
+    description: 'Bad request', schema: {
+      example: new BadRequestException({
+        massage: {
+          "password": {
+            "value": "undefined",
+            "constraints": [
+              "Тo more than 8 and no more than 32",
+              "Should be a string"
+            ]
+          },
+          "passwordComfirm": {
+            "value": "undefined",
+            "constraints": [
+              "Should be a string"
+            ]
+          }
+        }
+      })
+    }
+  })
+  @Post('/reset/:id')
+  async resetPassword(@Body() userDto: CreateUserDto, @Param('id') id: string) {
+    return {
+      user: await this.authService.resetPassword(userDto, id),
+      message: 'Password is changed'
     };
   }
 

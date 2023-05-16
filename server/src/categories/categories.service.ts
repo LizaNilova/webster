@@ -8,6 +8,9 @@ export class CategoriesService {
   constructor(@InjectModel(Category) private categoryRepository: typeof Category) {}
 
   async createCategory(dto: CreateCategoryDto) {
+    if (!dto) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const category = await this.categoryRepository.create(dto);
     return category;
   }

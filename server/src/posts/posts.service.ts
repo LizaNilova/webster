@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
 import { Category } from '../categories/categories.model';
 import { CreatePostDto } from './dto/create-post.dto';
-import { AddCategoryDto } from './dto/add-category.dto'
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
 import { Op, FindOptions } from 'sequelize';
@@ -24,8 +23,8 @@ export class PostsService {
       throw new HttpException('Post already exists', HttpStatus.BAD_REQUEST);
     }
 
-    const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
-    if (categories.length !== dto.value.length) {
+    const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.category_value } } });
+    if (categories.length !== dto.category_value.length) {
       throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
     }
 
@@ -58,7 +57,6 @@ export class PostsService {
       order: (sort === 'byCategories') ? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
       where: {}
     }
-
     if (search) {
       filterOptions.where = { title: { [Op.iLike]: `%${search}%` } };
     }
@@ -94,9 +92,9 @@ export class PostsService {
 
     await post.update({ ...dto, image: filename });
 
-    if (dto.value) {
-      const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.value } } });
-      if (categories.length !== dto.value.length) {
+    if (dto.category_value) {
+      const categories = await this.categoryRepository.findAll({ where: { value: { [Op.in]: dto.category_value } } });
+      if (categories.length !== dto.category_value.length) {
         throw new HttpException(`One or more categories not found`, HttpStatus.NOT_FOUND);
       }
       await post.$set('categories', [...categories.map(category => category.id)]);
