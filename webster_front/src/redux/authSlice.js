@@ -29,11 +29,13 @@ export const registerUser = createAsyncThunk(
 
 export const confirmRegistration = createAsyncThunk(
   'auth/confirmRegistration',
-  async ({code}) => {
+  async ({code, id}) => {
     try{
-      
+      const {data} = await axios.post(authRouter.confirmUserPath(id), {code}, {withCredentials: true})
+      return (data)
     } catch(error) {
       console.log(error)
+      return ({message: error.response.message})
     }
   }
 )
@@ -128,6 +130,21 @@ export const authSlice = createSlice({
       // state.user = action.payload?.user
     },
     [registerUser.rejected]: (state, action) => {
+      state.status = action.payload.message
+      state.isLoading = false
+    },
+
+    //confirm Registration
+    [confirmRegistration.pending]: (state) => {
+      state.isLoading = true
+      state.status = null
+    },
+    [confirmRegistration.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.status = action.payload?.message
+      // state.user = action.payload?.user
+    },
+    [confirmRegistration.rejected]: (state, action) => {
       state.status = action.payload.message
       state.isLoading = false
     },

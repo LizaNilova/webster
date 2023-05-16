@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { confirmCode } from '../redux/authSlice.js'
+import { confirmRegistration } from '../redux/authSlice.js'
 import '../styles/loginPage.scss'
 
 export const ConfirmPage = () => {
@@ -13,6 +13,7 @@ export const ConfirmPage = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const params = useParams()
 
     useEffect(() => {
         if (status === 'User comfirm account') {
@@ -29,7 +30,7 @@ export const ConfirmPage = () => {
 
     const handleSubmit = () => {
         try {
-            dispatch(confirmCode(code))
+            dispatch(confirmRegistration({code, id : params.id}))
             setErrorText(status)
 
         } catch (error) {
@@ -50,21 +51,12 @@ export const ConfirmPage = () => {
                 <div className="separator"></div>
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="flex flex-col my-3 w-2/3">
-                        <span className="">Login/email</span>
+                        <span className="">Code</span>
                         <input
                             type="text"
                             required="required"
-                            value={login}
-                            onChange={e => setLogin(e.target.value)} />
-                    </div>
-
-                    <div className="flex flex-col my-3 w-2/3">
-                        <span className="password-span">Password</span>
-                        <input
-                            type="password"
-                            required="required"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)} />
+                            value={code}
+                            onChange={e => setCode(e.target.value)} />
                     </div>
 
                     {
@@ -84,17 +76,14 @@ export const ConfirmPage = () => {
 
 
                     <div className="flex flex-col gap-2 items-center justify-center">
-                        <Link
-                            to='/auth/resetPassword'
-                            className="flex justify-center items-center text-xs text-beige hover:text-light-beige hover:transition-[1s]"
-                        >Forgot password?</Link>
+                        
                         <div className="w-fit">
-                            <button className="button btn-skew" type='submit' onClick={handleSubmit} >Log in</button>
+                            <button className="button btn-skew" type='submit' onClick={handleSubmit} >Confirm</button>
                         </div>
-                        <Link
+                        {/* <Link
                             to='/registration'
                             className="flex justify-center items-center text-xs m-5 text-beige hover:text-light-beige hover:transition-[1s]"
-                        >Create an account</Link>
+                        >Create an account</Link> */}
                     </div>
                 </div>
 
