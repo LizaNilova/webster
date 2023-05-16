@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 // import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
 import {MainPage} from '../pages/mainPage';
-// import { RegistrationPage } from '../pages/RegistrationPage';
+import { RegistrationPage } from '../pages/registerPage';
 // import { VerifyEmailPage } from '../pages/VerifyEmailPage';
 import { LoginPage } from '../pages/loginPage';
 // import { ResetPasswordPage } from '../pages/ResetPasswordPage';
@@ -45,20 +45,20 @@ export const useRoutes = (isAuthenticated) => {
             <Header />
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                {/* <Route path="/events/:id" element={<EventView />} />
-                <Route path="/events/:event_id/company/:company_id" element={<CompanyPage />} />
+                {/* <Route path="/events/:id" element={<EventView />} /> */}
+                {/* <Route path="/events/:event_id/company/:company_id" element={<CompanyPage />} /> */}
 
                 
-                <Route path="/auth" element={<LoginPage />} />
-                <Route path="/auth/resetPassword" element={<RecoverPasswordPage />} />
+                {/* <Route path="/auth" element={<LoginPage />} /> */}
+                {/* <Route path="/auth/resetPassword" element={<RecoverPasswordPage />} /> */}
                 <Route path="/registration" element={<RegistrationPage />} />
-                <Route path='recover/:token' element={<ResetPasswordPage />} />
-                <Route path='verify/:token' element={<VerifyEmailPage />} />
+                {/* <Route path='recover/:token' element={<ResetPasswordPage />} /> */}
+                {/* <Route path='verify/:token' element={<VerifyEmailPage />} /> */}
                 
-                <Route path="companies/:id/add-new-member" element={<VerifyInvite />} />
-                <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} />
+                {/* <Route path="companies/:id/add-new-member" element={<VerifyInvite />} /> */}
+                {/* <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} /> */}
 
-                <Route path="*" element={<Navigate to="/" />} /> */}
+                {/* <Route path="*" element={<Navigate to="/" />} /> */}
             </Routes>
             </div>
 

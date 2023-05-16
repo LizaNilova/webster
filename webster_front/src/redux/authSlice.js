@@ -11,13 +11,12 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ username, full_name, password, email, repeatPassword }) => {
+  async ({ login, password, email, passwordComfirm }) => {
     try {
       const { data } = await axios.post(authRouter.registerPath(), {
-        username,
-        full_name,
+        login,
         password,
-        repeatPassword,
+        passwordComfirm,
         email
       }, { withCredentials: true })
       return data
@@ -40,19 +39,13 @@ export const loginUser = createAsyncThunk(
 
       return data
     } catch (error) {
-      console.log(error)
+      if (error.response.status == 404) {
+        // console.log("Лошара, тут нет такого чела")
+        return ({message: "User is not exist."})
+     }
     }
   },
 )
-// export const getUserData = createAsyncThunk('auth/getUserData', async () => {
-//   try {
-//     const { data } = await axios.get('http://localhost:8080/api/auth/me', { withCredentials: true })
-//     // console.log('Get me:',data)
-//     return data
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
 
 export const passwordForgot = createAsyncThunk(
   "auth/passwordForgot",
@@ -68,21 +61,6 @@ export const passwordForgot = createAsyncThunk(
   }
 );
 
-// export const resetPassword = createAsyncThunk(
-//   "auth/resetPassword",
-//   async ({ newPassword, repeatPassword, token }) => {
-//     try {
-//       const { data } = await axios.post(`http://localhost:5000/api/auth/recover/${token}}`,
-//         {
-//           new_password: newPassword,
-//           confirm_password: repeatPassword
-//         })
-//         return data
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
-// )
 
 export const verifyPassword = createAsyncThunk(
   "auth/verifyPassword",
@@ -151,6 +129,7 @@ export const authSlice = createSlice({
       state.status = action.payload?.message
       // state.user = action.payload?.user
       // state.userId = action.payload.user?._id
+      
     },
     [loginUser.rejected]: (state, action) => {
       state.status = action.payload.message

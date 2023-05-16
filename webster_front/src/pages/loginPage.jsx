@@ -49,28 +49,26 @@ export const LoginPage = () => {
         <form
             onSubmit={e => e.preventDefault()}
             className="main-container">
-            {/* <div className="card-border"> */}
-                <div className="card diagonal-gridlines card-border bb">
-                    {/* <img className="h-[100px] mt-4" src='uevent_logo.png' alt='logo' /> */}
-                    <h3 className="card_title">sign in</h3>
-                    <div className="separator"></div>
-
-                    <div className="relative w-[250px]">
+            <div className="login-card diagonal-gridlines card-border bb-login">
+                <h3 className="card_title">sign in</h3>
+                <div className="separator"></div>
+                <div className="flex flex-col justify-center items-center w-full">
+                    <div className="flex flex-col my-3 w-2/3">
+                        <span className="">Login/email</span>
                         <input
                             type="text"
                             required="required"
                             value={login}
                             onChange={e => setLogin(e.target.value)} />
-                        <span className="">Login/email</span>
                     </div>
 
-                    <div className="relative w-[250px]">
+                    <div className="flex flex-col my-3 w-2/3">
+                        <span className="password-span">Password</span>
                         <input
                             type="password"
                             required="required"
                             value={password}
                             onChange={e => setPassword(e.target.value)} />
-                        <span className="password-span">Password</span>
                     </div>
 
                     {
@@ -94,14 +92,17 @@ export const LoginPage = () => {
                             to='/auth/resetPassword'
                             className="flex justify-center items-center text-xs text-beige hover:text-light-beige hover:transition-[1s]"
                         >Forgot password?</Link>
-                        <button className="button btn-skew" type='submit' onClick={handleSubmit} >Log in</button>
+                        <div className="w-fit">
+                            <button className="button btn-skew" type='submit' onClick={handleSubmit} >Log in</button>
+                        </div>
                         <Link
                             to='/registration'
                             className="flex justify-center items-center text-xs m-5 text-beige hover:text-light-beige hover:transition-[1s]"
                         >Create an account</Link>
                     </div>
                 </div>
-            {/* </div> */}
+
+            </div>
         </form>
     )
 }

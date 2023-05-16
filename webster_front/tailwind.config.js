@@ -15,8 +15,8 @@ export default {
         'beige': '#C9ADA7',
         'light-beige': '#F2E9E4',
         'lilovii': '#9A7197',
-        'light-blue': colors.lightBlue,
-        cyan: colors.cyan,
+        'light-blue': colors.sky,
+        'cyan': colors.cyan,
         'plum': '#f092dd',
         'bone': '#dad2bc',
         'pomp-and-power': '#8f6593'
