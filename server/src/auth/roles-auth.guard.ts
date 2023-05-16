@@ -1,10 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
-
   ForbiddenException,
-
-  HttpStatus,
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -29,8 +26,7 @@ export class RolesAuthGuard implements CanActivate {
       if (!requairedRole) {
         return true;
       }
-      const authHeader = req.headers.authorization;
-      const token = authHeader.split(' ')[1];
+      const token = req.cookies.accessToken;
       const user = this.jwtService.verify(token);
       return requairedRole.includes(user.role);
     } catch (err) {
