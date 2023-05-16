@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, HttpException, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiCookieAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiSecurity, ApiTags, ApiUnauthorizedResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
@@ -200,6 +200,13 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Corfirm user account' })
+  @ApiBody({
+    schema: {
+      example: {
+        code: '1234',
+      }
+    }
+  })
   @ApiCreatedResponse({
     description: 'Confirm', schema: {
       example: {
