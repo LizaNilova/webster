@@ -19,9 +19,11 @@ const MainPage = () => {
 
   const [listeners, setListeners] = useState([]);
 
-  const [savedCanvasState, setCanvasState] = useState([]);
+  const [savedCanvasState, setCanvasState] = useState(null);
 
   const [openedForm, changeFormState] = useState(null);
+
+  // const [selectedObject, setSelectedObject] = useState(null);
 
   useEffect(() => {
     if (!editor || !fabric) {
@@ -65,36 +67,40 @@ const MainPage = () => {
     //   })
     // }
 
-    if (listeners.findIndex(name => name === "selection:created") < 0) {
-      editor.canvas.on("selection:created", (opt) => {
-        let selected_object = opt.selected;
-        console.log(selected_object);
-      })
-      let newListeners = listeners;
-      newListeners.push("selection:created");
-      setListeners(newListeners);
-    }
+    // if (listeners.findIndex(name => name === "selection:created") < 0) {
+
+    //   editor.canvas.on("selection:created", (opt) => {
+
+    //     let selected_object = opt.selected;
+    //     console.log(selected_object[0].type);
+    //     // setSelectedObject(selected_object[0]);
+
+    //   })
+
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:created");
+    //   setListeners(newListeners);
+    // }
 
 
-    if (!editor.canvas.__eventListeners["selection:updated"]) {
-      editor.canvas.on("selection:updated", (opt) => {
-        let selected_object = opt.selected;
-        console.log(selected_object);
-      })
-      let newListeners = listeners;
-      newListeners.push("selection:updated");
-      setListeners(newListeners);
-    }
+    // if (!editor.canvas.__eventListeners["selection:updated"]) {
+    //   editor.canvas.on("selection:updated", (opt) => {
+    //     let selected_object = opt.selected;
+    //     console.log(selected_object);
+    //   })
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:updated");
+    //   setListeners(newListeners);
+    // }
 
-    if (!editor.canvas.__eventListeners["selection:cleared"]) {
-      editor.canvas.on("selection:cleared", (opt) => {
-        let selected_object = opt.selected;
-        console.log(selected_object);
-      })
-      let newListeners = listeners;
-      newListeners.push("selection:cleared");
-      setListeners(newListeners);
-    }
+    // if (!editor.canvas.__eventListeners["selection:cleared"]) {
+    //   editor.canvas.on("selection:cleared", (opt) => {
+    //     // setSelectedObject(null);
+    //   })
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:cleared");
+    //   setListeners(newListeners);
+    // }
 
 
     if (!editor.canvas.__eventListeners["mouse:down"]) {
@@ -232,6 +238,7 @@ const MainPage = () => {
     // editor.canvas.remove(editor.canvas.getActiveObject());
     newHistory.push(...editor.canvas.getActiveObjects());
     editor.canvas.remove(...editor.canvas.getActiveObjects());
+    editor.canvas.discardActiveObject();
     // console.log('new', newHistory, 'hist', history);
     setHistory(newHistory);
   };
@@ -324,7 +331,9 @@ const MainPage = () => {
     setCanvasState(editor.canvas.toJSON());
   }
 
-  const restoreCanvasState = () => { }
+  const restoreCanvasState = () => { 
+    editor.canvas.loadFromJSON(savedCanvasState);
+  }
 
   const changeShadow = (color, blur, offset) => {
 
@@ -364,6 +373,7 @@ const MainPage = () => {
           onUploadImage={onUploadImage}
           saveAsPNG={saveAsPNG}
           saveCanvasState={saveCanvasState}
+          restoreCanvasState={restoreCanvasState}
         />
 
         <CanvasContainer name={canvasData?.name} onReady={onReady} />
@@ -384,6 +394,7 @@ const MainPage = () => {
           unGroupClick={unGroupObjects}
           applyFilter={applyFilter}
           applyFilterValue={applyFilterValue}
+          selectedObject={editor?.canvas.getActiveObject()}
         />
 
       </div>

@@ -14,7 +14,8 @@ const RightSideBar = ({
     groupClick,
     unGroupClick,
     applyFilter,
-    applyFilterValue }) => {
+    applyFilterValue,
+    selectedObject }) => {
 
     const [brushStateSize, setBrushStateSize] = useState(brushData.brushSize);
     const [brushStateColor, setBrushStateColor] = useState(brushData.brushColor);
@@ -28,19 +29,33 @@ const RightSideBar = ({
 
 
 
-    // console.log(brushData)
+    // console.log(selectedObject?.type)
 
     return (
         <div className='w-1/6 min-h-screen flex flex-col items-center p-2 border-l-2 border-purple-900'>
             {
                 canvasData.width > 0 &&
                 <>
-                    <p className='sidebar-item-title'>
+                    <p className='sidebar-item-title' onClick={() => {
+                                let ac = document.getElementById('drawing-actions-container');
+                                ac.classList.toggle('hidden');
+                                let ac_up = document.getElementById('drawing-chevron-up');
+                                let ac_down = document.getElementById('drawing-chevron-down');
+                                ac_up.classList.toggle('hidden');
+                                ac_down.classList.toggle('hidden');
+                            }}>
                         Drawing
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </p>                    <button onClick={toggleDrawingClick} className={canvasData?.mode === 'drawing' ? 'w-2/3 bg-purple-700 opacity-60 m-2 border-green-500 outline-none' : 'w-2/3 bg-purple-700 m-2 active:border-green-500 outline-none'}>Toggle drawing</button>
+                        <svg id='drawing-chevron-up' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg id='drawing-chevron-down' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 hidden">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                    </p>   
+                    <div className='w-full text-center hidden' id='drawing-actions-container'>
+                        <button onClick={toggleDrawingClick} className={canvasData?.mode === 'drawing' ? 'w-2/3 bg-purple-700 opacity-60 m-2 border-green-500 outline-none' : 'w-2/3 bg-purple-700 m-2 active:border-green-500 outline-none'}>Toggle drawing</button>
+
+                    </div>                 
 
                     {
                         canvasData?.mode === 'drawing' &&
@@ -74,296 +89,361 @@ const RightSideBar = ({
                             </svg>
                         </button>
                     </div> */}
-                    <p className='sidebar-item-title'>
-                        Actions with selected
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </p>
-                    <button onClick={groupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-2/3 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-2/3 bg-purple-700 m-2 active:border-green-500 outline-none'}>Group</button>
-                    <button onClick={unGroupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-2/3 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-2/3 bg-purple-700 m-2 active:border-green-500 outline-none'}>Ungroup</button>
-                    <button onClick={removeSelectedClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-1 border-red-500 outline-none' : 'w-3/4 bg-purple-700 m-1 active:border-green-500 outline-none'}>Remove selected object(s)</button>
                     {
-                        <>
-                            <p className='sidebar-item-title'>
+                        selectedObject &&
+                        <div className='w-full'>
+                            <p className='sidebar-item-title' onClick={() => {
+                                let ac = document.getElementById('selected-actions-container');
+                                ac.classList.toggle('hidden');
+                                let ac_up = document.getElementById('actions-chevron-up');
+                                let ac_down = document.getElementById('actions-chevron-down');
+                                ac_up.classList.toggle('hidden');
+                                ac_down.classList.toggle('hidden');
+                            }}>
+                                Actions with selected
+                                <svg id='actions-chevron-up' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg id='actions-chevron-down' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 hidden">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </p>
+                            <div className='w-full text-center hidden' id='selected-actions-container'>
+                                <button onClick={groupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Group</button>
+                                <button onClick={unGroupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Ungroup</button>
+                                <button onClick={removeSelectedClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-1 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Remove selected object(s)</button>
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        selectedObject?.type === 'image' &&
+                        //className='h-80 overflow-y-auto'
+                        <div className='w-full'>
+                            <p className='sidebar-item-title' onClick={() => {
+                                let fc = document.getElementById('filters-container');
+                                fc.classList.toggle('hidden');
+                                let fc_up = document.getElementById('filters-chevron-up');
+                                let fc_down = document.getElementById('filters-chevron-down');
+                                fc_up.classList.toggle('hidden');
+                                fc_down.classList.toggle('hidden');
+                            }}>
                                 Filters
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                                <svg id='filters-chevron-up' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
+                                <svg id='filters-chevron-down' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 hidden">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
                             </p>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(0, e.target.checked && new fabric.Image.filters.Grayscale()) }} />
-                                    <p className='pl-2 text-lg'>Grayscale</p>
+                            <div className='w-full hidden' id='filters-container'>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[0]}
+                                            onClick={(e) => { applyFilter(0, e.target.checked && new fabric.Image.filters.Grayscale()) }} />
+                                        <p className='pl-2 text-lg'>Grayscale</p>
+                                    </div>
+                                </div>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[1]}
+                                            onClick={(e) => { applyFilter(1, e.target.checked && new fabric.Image.filters.Invert()) }} />
+                                        <p className='pl-2 text-lg'>Invert</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(1, e.target.checked && new fabric.Image.filters.Invert()) }} />
-                                    <p className='pl-2 text-lg'>Invert</p>
-                                </div>
-                            </div>
-                            <p className='sidebar-item-title'>
+
+                            <p className='sidebar-item-title' onClick={() => {
+                                let clmfc = document.getElementById('colormatrix-filters-container');
+                                clmfc.classList.toggle('hidden');
+                                let clmfc_up = document.getElementById('colormatrix-filters-chevron-up');
+                                let clmfc_down = document.getElementById('colormatrix-filters-chevron-down');
+                                clmfc_up.classList.toggle('hidden');
+                                clmfc_down.classList.toggle('hidden');
+                            }}>
                                 Colormatrix filters
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                                <svg id='colormatrix-filters-chevron-up' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                 </svg>
+                                <svg id='colormatrix-filters-chevron-down' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 hidden">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
                             </p>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(3, e.target.checked && new fabric.Image.filters.Sepia()) }} />
-                                    <p className='pl-2 text-lg'>Sepia</p>
+                            <div className='w-full hidden' id='colormatrix-filters-container'>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[3]}
+                                            onClick={(e) => { applyFilter(3, e.target.checked && new fabric.Image.filters.Sepia()) }} />
+                                        <p className='pl-2 text-lg'>Sepia</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(19, e.target.checked && new fabric.Image.filters.BlackWhite()) }} />
-                                    <p className='pl-2 text-lg'>Black\White</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[19]}
+                                            onClick={(e) => { applyFilter(19, e.target.checked && new fabric.Image.filters.BlackWhite()) }} />
+                                        <p className='pl-2 text-lg'>Black\White</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(4, e.target.checked && new fabric.Image.filters.Brownie()) }} />
-                                    <p className='pl-2 text-lg'>Brownie</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[4]}
+                                            onClick={(e) => { applyFilter(4, e.target.checked && new fabric.Image.filters.Brownie()) }} />
+                                        <p className='pl-2 text-lg'>Brownie</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(9, e.target.checked && new fabric.Image.filters.Vintage()) }} />
-                                    <p className='pl-2 text-lg'>Vintage</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[9]}
+                                            onClick={(e) => { applyFilter(9, e.target.checked && new fabric.Image.filters.Vintage()) }} />
+                                        <p className='pl-2 text-lg'>Vintage</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(18, e.target.checked && new fabric.Image.filters.Kodachrome()) }} />
-                                    <p className='pl-2 text-lg'>Kodachrome</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[18]}
+                                            onClick={(e) => { applyFilter(18, e.target.checked && new fabric.Image.filters.Kodachrome()) }} />
+                                        <p className='pl-2 text-lg'>Kodachrome</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { applyFilter(14, e.target.checked && new fabric.Image.filters.Technicolor()) }} />
-                                    <p className='pl-2 text-lg'>Technicolor</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[14]}
+                                            onClick={(e) => { applyFilter(14, e.target.checked && new fabric.Image.filters.Technicolor()) }} />
+                                        <p className='pl-2 text-lg'>Technicolor</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => { applyFilter(15, e.target.checked && new fabric.Image.filters.Polaroid()) }} />
-                                    <p className='pl-2 text-lg'>Polaroid</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[15]}
+                                            onClick={(e) => { applyFilter(15, e.target.checked && new fabric.Image.filters.Polaroid()) }} />
+                                        <p className='pl-2 text-lg'>Polaroid</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => { 
-                                            applyFilter(2, e.target.checked && new fabric.Image.filters.RemoveColor({
-                                                distance: 0,
-                                                color: '#FFFFFF',
-                                            })) 
-                                        }} />
-                                    <p className='pl-2 text-lg'>Remove color</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[2]}
+                                            onClick={(e) => {
+                                                let color = document.getElementById('color').value;
+                                                let distance = document.getElementById('distance').value;
+                                                applyFilter(2, e.target.checked && new fabric.Image.filters.RemoveColor({
+                                                    distance: distance,
+                                                    color: color,
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Remove color</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <p className='pr-2 text-lg'>Color: </p>
+                                        <input type='color' className='' defaultValue={selectedObject.filters[2]?.color || '#FFFFFF'} id='color'
+                                            onChange={(e) => { applyFilterValue(2, 'color', e.target.value); }} />
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <p className='pr-2 text-lg'>Distance: </p>
+                                        <input type='range' className='' min={0} max={1} step={0.1} defaultValue={selectedObject.filters[2]?.distance || 0} id='distance'
+                                            onChange={(e) => { applyFilterValue(2, 'distance', e.target.value); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <p className='pr-2 text-lg'>Color: </p>
-                                    <input type='color' className='' defaultValue={'#FFFFFF'}
-                                        onChange={(e)=>{applyFilterValue(2, 'color', e.target.value);}} />
-                                </div>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <p className='pr-2 text-lg'>Distance: </p>
-                                    <input type='range' className='' min={0} max={1} step={0.1} defaultValue={0}
-                                        onChange={(e)=>{applyFilterValue(2, 'distance', e.target.value);}} />
-                                </div>
-                            </div>
 
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => { 
-                                            applyFilter(5, e.target.checked && new fabric.Image.filters.Brightness({
-                                                brightness: 0,
-                                            })) 
-                                        }} />
-                                    <p className='pl-2 text-lg'>Brightness</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[5]}
+                                            onClick={(e) => {
+                                                // console.log(document.getElementById('brightness').value);
+                                                applyFilter(5, e.target.checked && new fabric.Image.filters.Brightness({
+                                                    brightness: document.getElementById('brightness').value,
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Brightness</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={selectedObject.filters[5]?.brightness || 0} id='brightness'
+                                            onChange={(e) => { applyFilterValue(5, 'brightness', e.target.value); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={0}
-                                        onChange={(e)=>{applyFilterValue(5, 'brightness', e.target.value);}} />
-                                </div>
-                            </div>
 
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' disabled
-                                        onClick={(e) => {
-                                            applyFilter(17, e.target.checked && new fabric.Image.filters.Gamma({
-                                                gamma:[1,1,1]
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Gamma</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[17]}
+                                            onClick={(e) => {
+                                                let v1 = document.getElementById('gamma-v1').value;
+                                                let v2 = document.getElementById('gamma-v2').value;
+                                                let v3 = document.getElementById('gamma-v3').value;
+                                                applyFilter(17, e.target.checked && new fabric.Image.filters.Gamma({
+                                                    gamma: [v1, v2, v3]
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Gamma</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Red: </p>
+                                        <input type='range' className='' min={0.1} max={2.2} step={0.1} defaultValue={selectedObject.filters[17]?.gamma?.length && selectedObject.filters[17]?.gamma[0] || 1} id='gamma-v1'
+                                            onChange={(e) => {
+                                                let gamma = selectedObject.filters[17]?.gamma;
+                                                gamma[0] = e.target.value;
+                                                applyFilterValue(17, 'gamma', gamma);
+                                            }} />
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Green: </p>
+                                        <input type='range' className='' min={0.1} max={2.2} step={0.1} defaultValue={selectedObject.filters[17]?.gamma?.length && selectedObject.filters[17]?.gamma[1] || 1} id='gamma-v2'
+                                            onChange={(e) => {
+                                                let gamma = selectedObject.filters[17]?.gamma;
+                                                gamma[1] = e.target.value;
+                                                applyFilterValue(17, 'gamma', gamma);
+                                            }} />
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Blue: </p>
+                                        <input type='range' className='' min={0.1} max={2.2} step={0.1} defaultValue={selectedObject.filters[17]?.gamma?.length && selectedObject.filters[17]?.gamma[2] || 1} id='gamma-v3'
+                                            onChange={(e) => {
+                                                let gamma = selectedObject.filters[17]?.gamma;
+                                                gamma[2] = e.target.value;
+                                                applyFilterValue(17, 'gamma', gamma);
+                                            }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Red: </p>
-                                    <input type='range' className='' />
-                                </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Green: </p>
-                                    <input type='range' className='' />
-                                </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Blue: </p>
-                                    <input type='range' className='' />
-                                </div>
-                            </div>
 
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5' 
-                                        onClick={(e) => {
-                                            applyFilter(6, e.target.checked && new fabric.Image.filters.Contrast({
-                                                contrast: 0
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Contrast</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[6]}
+                                            onClick={(e) => {
+                                                applyFilter(6, e.target.checked && new fabric.Image.filters.Contrast({
+                                                    contrast: document.getElementById('contrast').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Contrast</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={selectedObject.filters[6]?.contrast || 0} id='contrast'
+                                            onChange={(e) => { applyFilterValue(6, 'contrast', e.target.value); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={0} 
-                                        onChange={(e)=>{applyFilterValue(6, 'contrast', e.target.value);}} />
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[7]}
+                                            onClick={(e) => {
+                                                applyFilter(7, e.target.checked && new fabric.Image.filters.Saturation({
+                                                    saturation: document.getElementById('saturation').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Saturation</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={selectedObject.filters[7]?.saturation || 0} id='saturation'
+                                            onChange={(e) => { applyFilterValue(7, 'saturation', e.target.value); }} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(7, e.target.checked && new fabric.Image.filters.Saturation({
-                                                saturation: 0
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Saturation</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[8]}
+                                            onClick={(e) => {
+                                                applyFilter(8, e.target.checked && new fabric.Image.filters.Vibrance({
+                                                    vibrance: document.getElementById('vibrance').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Vibrance</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={selectedObject.filters[8]?.vibrance || 0} id='vibrance'
+                                            onChange={(e) => { applyFilterValue(8, 'vibrance', e.target.value); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={0} 
-                                        onChange={(e)=>{applyFilterValue(7, 'saturation', e.target.value);}} />
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[21]}
+                                            onClick={(e) => {
+                                                applyFilter(21, e.target.checked && new fabric.Image.filters.HueRotation({
+                                                    rotation: document.getElementById('rotation').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Hue</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={selectedObject.filters[21]?.rotation || 0} id='rotation'
+                                            onChange={(e) => { applyFilterValue(21, 'rotation', e.target.value); }} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(8, e.target.checked && new fabric.Image.filters.Vibrance({
-                                                vibrance: 0
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Vibrance</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[9]}
+                                            onClick={(e) => {
+                                                applyFilter(9, e.target.checked && new fabric.Image.filters.Noise({
+                                                    noise: document.getElementById('noise').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Noise</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={0} max={1000} step={10} defaultValue={selectedObject.filters[9]?.noise || 100} id='noise'
+                                            onChange={(e) => { applyFilterValue(9, 'noise', parseInt(e.target.value, 10)); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={0} 
-                                        onChange={(e)=>{applyFilterValue(8, 'saturation', e.target.value);}} />
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[10]}
+                                            onClick={(e) => {
+                                                applyFilter(10, e.target.checked && new fabric.Image.filters.Pixelate({
+                                                    blocksize: document.getElementById('blocksize').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Pixelate</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={2} max={20} step={1} defaultValue={selectedObject.filters[10]?.blocksize || 4} id='blocksize'
+                                            onChange={(e) => { applyFilterValue(10, 'blocksize', parseInt(e.target.value, 10)); }} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(21, e.target.checked && new fabric.Image.filters.HueRotation({
-                                                rotation: 0
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Hue</p>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[11]}
+                                            onClick={(e) => {
+                                                applyFilter(11, e.target.checked && new fabric.Image.filters.Blur({
+                                                    blur: document.getElementById('blur').value
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Blur</p>
+                                    </div>
+                                    <div className='w-full flex items-center justify-center p-1'>
+                                        <p className='pr-2 text-lg'>Value: </p>
+                                        <input type='range' className='' min={0} max={1} step={0.1} defaultValue={selectedObject.filters[11]?.blur || 0} id='blur'
+                                            onChange={(e) => { applyFilterValue(11, 'blur', parseFloat(e.target.value)); }} />
+                                    </div>
                                 </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={-1} max={1} step={0.1} defaultValue={0} 
-                                        onChange={(e)=>{applyFilterValue(21, 'rotation', e.target.value);}} />
-                                </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(9, e.target.checked && new fabric.Image.filters.Noise({
-                                                noise: 100
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Noise</p>
-                                </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={0} max={1000} step={10} defaultValue={100} 
-                                        onChange={(e)=>{applyFilterValue(9, 'noise', parseInt(e.target.value, 10));}} />
-                                </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(10, e.target.checked && new fabric.Image.filters.Pixelate({
-                                                blocksize: 4
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Pixelate</p>
-                                </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={2} max={20} step={1} defaultValue={4} 
-                                        onChange={(e)=>{applyFilterValue(10, 'blocksize', parseInt(e.target.value, 10));}} />
-                                </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(11, e.target.checked && new fabric.Image.filters.Blur({
-                                                blur: 0
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Blur</p>
-                                </div>
-                                <div className='w-full flex items-center justify-center p-1'>
-                                    <p className='pr-2 text-lg'>Value: </p>
-                                    <input type='range' className='' min={0} max={1} step={0.1} defaultValue={0} 
-                                        onChange={(e)=>{applyFilterValue(11, 'blur', parseFloat(e.target.value));}} />
-                                </div>
-                            </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                    <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(12, e.target.checked && new fabric.Image.filters.Convolute({
-                                                matrix: [0, -1, 0,
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[12]}
+                                            onClick={(e) => {
+                                                applyFilter(12, e.target.checked && new fabric.Image.filters.Convolute({
+                                                    matrix: [0, -1, 0,
                                                         -1, 5, -1,
                                                         0, -1, 0]
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Sharpen</p>
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Sharpen</p>
+                                    </div>
+                                </div>
+                                <div className='sidebar-item-container'>
+                                    <div className='w-full flex items-center justify-center p-2'>
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={selectedObject.filters[13]}
+                                            onClick={(e) => {
+                                                applyFilter(13, e.target.checked && new fabric.Image.filters.Convolute({
+                                                    matrix: [1, 1, 1,
+                                                        1, 0.7, -1,
+                                                        -1, -1, -1]
+                                                }))
+                                            }} />
+                                        <p className='pl-2 text-lg'>Emboss</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='sidebar-item-container'>
-                                <div className='w-full flex items-center justify-center p-2'>
-                                <input type='checkbox' className='w-5 h-5'
-                                        onClick={(e) => {
-                                            applyFilter(13, e.target.checked && new fabric.Image.filters.Convolute({
-                                                matrix: [ 1,   1,  1,
-                                                    1, 0.7, -1,
-                                                   -1,  -1, -1 ]
-                                            }))
-                                        }} />
-                                    <p className='pl-2 text-lg'>Emboss</p>
-                                </div>
-                            </div>
-
-                        </>
+                        </div>
                     }
 
                 </>
