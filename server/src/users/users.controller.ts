@@ -10,7 +10,9 @@ import {
   Req,
   UnauthorizedException,
   UseGuards,
-  UsePipes
+  UsePipes, 
+  Delete, 
+  Patch
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -403,6 +405,26 @@ export class UsersController {
     }
   }
 
+  // edit my profile
+  @Patch('/edit')
+  @UseGuards(JwtAuthGuard)
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto) {
+    return {
+      user: await this.usersService.edit_profile(request.user.id, userDto),
+      message: 'Changes are saved. If you have changed your email, check the it'
+    }
+  }
+
+  // get me and my posts
+  @Delete('/delete')
+  @UseGuards(JwtAuthGuard)
+  async delete_profile(@Req() request: RequestDto) {
+    return {
+      user: await this.usersService.delete_profile(request.user.id),
+      message: 'Success'
+    }
+  }
+
   @ApiOperation({ summary: 'User profile by id' })
   @ApiOkResponse({
     description: 'Response user profile info', schema: {
@@ -436,6 +458,7 @@ export class UsersController {
       example: new NotFoundException('User undefined')
     }
   })
+
   // get another user by id and his posts
   @Get('/:id')
   async getUserById(@Param('id') id: number) {
