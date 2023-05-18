@@ -33,13 +33,15 @@ export class AuthController {
           "username": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           },
           "password": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           }
         }
@@ -79,27 +81,31 @@ export class AuthController {
           "login": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "email": {
             "value": "undefined",
             "constraints": [
               "The e-mail address is invalid",
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "password": {
             "value": "undefined",
             "constraints": [
               "Тo more than 8 and no more than 32",
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "passwordComfirm": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           }
         }
