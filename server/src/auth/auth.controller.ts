@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UseGuards, UsePipes } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpException, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -33,13 +33,15 @@ export class AuthController {
           "username": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           },
           "password": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           }
         }
@@ -63,6 +65,7 @@ export class AuthController {
 
 
   @ApiOperation({ summary: 'Registration user' })
+  @UsePipes(ValidationPipe)
   @ApiCreatedResponse({
     description: 'The user is registration', schema: {
       example: {
@@ -78,27 +81,31 @@ export class AuthController {
           "login": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "email": {
             "value": "undefined",
             "constraints": [
               "The e-mail address is invalid",
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "password": {
             "value": "undefined",
             "constraints": [
               "Тo more than 8 and no more than 32",
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
           "passwordComfirm": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           }
         }
@@ -130,7 +137,7 @@ export class AuthController {
       })
     }
   })
-  @Post('/forgot_password')
+  @Post('/forgot-password')
   async forgotPassword(@Body() userDto: CreateUserDto) {
     await this.authService.forgotPassword(userDto);
     return {
