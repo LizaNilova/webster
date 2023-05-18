@@ -8,12 +8,7 @@ const initialState = {
   status: null,
   userId: null,
   eventId: null,
-  regErrorTexts: {
-    login: null,
-    email: null,
-    password: null,
-    passwordComfirm: null
-  }
+  regErrorTexts: null
 }
 
 export const registerUser = createAsyncThunk(
@@ -28,16 +23,16 @@ export const registerUser = createAsyncThunk(
       }, { withCredentials: true })
       return {data}
     } catch (error) {
-      console.log(error.response)
+      console.log(error.response.data)
       if(error.response.status === 400){
-        return {errors: {
-          login: error.response.data?.login.constraints[0],
-          email: error.response.data?.email.constraints[0],
-          password: error.response.data?.password.constraints[0],
-          passwordConfirm: error.response.data?.passwordComfirm.constraints[0]
-        }}
+        return ({errors: {
+          login: error.response.data?.login?.constraints[0],
+          email: error.response.data?.email?.constraints[0],
+          password: error.response.data?.password?.constraints[0],
+          passwordConfirm: error.response.data?.passwordComfirm?.constraints[0]
+        }})
       }
-      return {message: error.message}
+      return {errors: error.message}
     }
   },
 )
@@ -133,6 +128,10 @@ export const authSlice = createSlice({
   reducers: {
     setUserData(state, action) {
       state.user = action.payload;
+    },
+
+    setRegErrorTexts(state) {
+      state.regErrorTexts = null
     }
   },
   extraReducers: {
@@ -146,11 +145,13 @@ export const authSlice = createSlice({
       state.isLoading = false
       state.status = action.payload?.message
       state.eventId = action.payload?.eventId
-      state.regErrorTexts = null
+      state.regErrorTexts = action.payload?.errors
+      console.log(action.payload)
     },
     [registerUser.rejected]: (state, action) => {
-      console.log(action)
+      // console.log(action)
       state.regErrorTexts = action.payload?.errors
+      console.log(action)
       state.isLoading = false
     },
 
@@ -161,8 +162,8 @@ export const authSlice = createSlice({
     },
     [confirmRegistration.fulfilled]: (state, action) => {
       state.isLoading = false
-      // state.status = action.payload?.message
-      state.regErrorTexts = action.response.errors
+      state.status = action.payload?.message
+      // state.regErrorTexts = action.response.errors
       
     },
     [confirmRegistration.rejected]: (state, action) => {
@@ -235,4 +236,4 @@ export const authSlice = createSlice({
 })
 
 export default authSlice.reducer
-export const { setUserData } = authSlice.actions;
+export const { setUserData, setRegErrorTexts } = authSlice.actions;
