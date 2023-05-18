@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, HttpException, NotFoundException, Param, ParseUUIDPipe, Post, Req, Res, UnauthorizedException, UseGuards, UsePipes } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiCookieAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiHeaders, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiSecurity, ApiTags, ApiUnauthorizedResponse, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
@@ -33,13 +33,15 @@ export class AuthController {
           "username": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           },
           "password": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              "Is not empty!"
             ]
           }
         }
@@ -63,6 +65,7 @@ export class AuthController {
 
 
   @ApiOperation({ summary: 'Registration user' })
+  @UsePipes(ValidationPipe)
   @ApiCreatedResponse({
     description: 'The user is registration', schema: {
       example: {
@@ -78,9 +81,51 @@ export class AuthController {
           "login": {
             "value": "undefined",
             "constraints": [
-              "Should be a string"
+              "Should be a string",
+              'Is not empty!'
             ]
           },
+          "email": {
+            "value": "undefined",
+            "constraints": [
+              "The e-mail address is invalid",
+              "Should be a string",
+              'Is not empty!'
+            ]
+          },
+          "password": {
+            "value": "undefined",
+            "constraints": [
+              "Тo more than 8 and no more than 32",
+              "Should be a string",
+              'Is not empty!'
+            ]
+          },
+          "passwordComfirm": {
+            "value": "undefined",
+            "constraints": [
+              "Should be a string",
+              'Is not empty!'
+            ]
+          }
+        }
+      })
+    }
+  })
+  @UseGuards(ValidationPipe)
+  @Post('/registration')
+  async registration(@Body() userDto: CreateUserDto) {
+    return {
+      eventId: await this.authService.registration(userDto),
+      message: 'Send mail'
+    };
+  }
+
+  @ApiOperation({ summary: 'Forgot password' })
+  @ApiBadRequestResponse({
+    description: 'Bad request', schema: {
+      example: new BadRequestException({
+        massage: {
           "email": {
             "value": "undefined",
             "constraints": [
@@ -88,6 +133,23 @@ export class AuthController {
               "Should be a string"
             ]
           },
+        }
+      })
+    }
+  })
+  @Post('/forgot-password')
+  async forgotPassword(@Body() userDto: CreateUserDto) {
+    await this.authService.forgotPassword(userDto);
+    return {
+      message: 'Send mail'
+    };
+  }
+
+  @ApiOperation({ summary: 'Reset password' })
+  @ApiBadRequestResponse({
+    description: 'Bad request', schema: {
+      example: new BadRequestException({
+        massage: {
           "password": {
             "value": "undefined",
             "constraints": [
@@ -105,12 +167,11 @@ export class AuthController {
       })
     }
   })
-  @UsePipes(ValidationPipe)
-  @Post('/registration')
-  async registration(@Body() userDto: CreateUserDto) {
+  @Post('/reset/:id')
+  async resetPassword(@Body() userDto: CreateUserDto, @Param('id') id: string) {
     return {
-      eventId: await this.authService.registration(userDto),
-      message: 'Send mail'
+      user: await this.authService.resetPassword(userDto, id),
+      message: 'Password is changed'
     };
   }
 
@@ -146,6 +207,13 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Corfirm user account' })
+  @ApiBody({
+    schema: {
+      example: {
+        code: '1234',
+      }
+    }
+  })
   @ApiCreatedResponse({
     description: 'Confirm', schema: {
       example: {

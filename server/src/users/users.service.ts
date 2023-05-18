@@ -9,7 +9,12 @@ import { UserBanned } from './models/user-banned.model';
 import { UserEvents } from './models/user-event.model';
 import { UserEventDto } from './dto/user-event.dto';
 import * as bcrypt from 'bcryptjs'
-import { AuthService } from 'src/auth/auth.service';
+import { MailService } from '../mail/mail.service';
+import generateCode from '../utils/generate-code.util';
+import { Like } from 'src/likes/likes.model';
+import { Subscriptions } from 'src/subscriptions/subscriptions.model';
+import { hasSubscribers } from 'diagnostics_channel';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +22,10 @@ export class UsersService {
     @InjectModel(User) private userRepository: typeof User,
     @InjectModel(UserBanned) private userBennedRepository: typeof UserBanned,
     @InjectModel(UserEvents) private userEventRepository: typeof UserEvents,
+    @InjectModel(Like) private likeRepository: typeof Like,
+    @InjectModel(Subscriptions) private subscriptionsRepository: typeof Subscriptions,
     private roleService: RolesService,
+    private mailService: MailService
   ) { }
 
   async createUser(dto: CreateUserDto) {
@@ -35,28 +43,90 @@ export class UsersService {
   }
 
   async createEvent(data: UserEventDto) {
+    if (!data) {
+      throw new HttpException(`No content`, HttpStatus.NOT_FOUND);
+    }
     const event = await this.userEventRepository.create(data);
     return event;
   }
 
-  async getAllUsers() {
-    const users = await this.userRepository.findAll({ include: { all: true } });
-    return users;
+  // добавить сортировку по рейтингу 
+  async getAllUsers(search) {
+
+    const users = (search) ? await this.userRepository.findAll({ where: {
+        login: {
+          [Op.iLike]: `%${search}%`
+        }
+      },
+      include: { all: true }}) :
+       await this.userRepository.findAll({ include: { all: true } });
+  
+
+    const usersWithRating = [];
+
+    for (const user of users) {
+      const postIds = user.posts.map((post) => post.id);
+
+      const likes = await this.likeRepository.findAll({ where: { postId: postIds } });
+      let rating = likes.length;
+
+      const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: user.id } });
+      rating += subscribers.length;
+
+      const subscriberIds = subscribers.map((subscriber) => subscriber.subscriberId);
+      const subscribersWithLogin = await this.userRepository.findAll({
+        where: { id: subscriberIds },
+        attributes: ['id', 'login']
+      });
+
+      const userWithRating = {
+        id: user.id,
+        login: user.login,
+        email: user.email,
+        role: user.roles[0].value,
+        rating: rating,
+        posts: user.posts,
+        ban: user.ban,
+        subscriptions: user.subscriptions,
+        subscribers: subscribersWithLogin
+      };
+
+      usersWithRating.push(userWithRating);
+    }
+    return usersWithRating.sort((a, b) => b.rating - a.rating);
   }
 
+  // добавить рейтинг
   async getUserById(id: number) {
     const user = await this.userRepository.findByPk(id, { include: { all: true } });
     if (!user) {
       throw new NotFoundException('User undefined');
     }
+
+    const postIds = user.posts.map((post) => post.id);
+
+    const likes = await this.likeRepository.findAll({where: { postId: postIds,}})
+    let rating = likes.length
+    const subscribers = await this.subscriptionsRepository.findAll({where: {userId: id}})
+    rating += subscribers.length   
+
+    let usersSubscriber  = []
+      for (const subscriber of subscribers)  {
+        usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
+          attributes: ['id', 'login']
+        }));
+      };
+
     return {
       id: user.id,
       login: user.login,
       email: user.email,
       role: user.roles[0].value,
+      rating: rating,
       posts: user.posts,
       ban: user.ban,
-      subscriptions: user.subscriptions
+      subscriptions: user.subscriptions,
+      subscribers: usersSubscriber
     };
   }
 
@@ -111,10 +181,58 @@ export class UsersService {
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
   }
 
+  async edit_profile(id: number, dto: CreateUserDto){
+    let user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+    if (!user) {
+      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+
+    if (dto.login) {
+      user.login = dto.login;
+    }
+
+    if (dto.password) {
+      if (dto.password !== dto.passwordComfirm) {
+        throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
+      }
+      const salt = 5;
+      const hash = await bcrypt.hash(dto.password, salt);
+      user.password = hash; // Update the password
+    }
+
+    if (dto.email) {
+      user.email = dto.email; 
+      user.is_active = false;
+      await user.save();
+      return await this.sendCode(user);
+    }
+    await user.save();
+    return user;
+  }
+
+  async sendCode(user: User) {
+    const code = generateCode();
+    const event = await this.createEvent({
+      userId: user.id,
+      event_content: code.join('')
+    });
+    await this.mailService.sendUserConfirmation(user, code);
+    const id = event.id
+    return {event_id: id}
+  }
+
+  async delete_profile(id: number){
+    const user = await this.userRepository.findByPk(id);
+    if (!user) {
+      throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    await user.destroy();
+    return "User was deleted";
+}
+
   async isExistsUser(login: string, email: string): Promise<boolean> {
     const condidateEmail = await this.getUserByEmail(email);
     const condidateLogin = await this.getUserByLogin(login);
-
     return Boolean(condidateEmail || condidateLogin);
   }
 }

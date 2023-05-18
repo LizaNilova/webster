@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  Query,
   Controller,
   ForbiddenException,
   Get,
@@ -10,7 +11,9 @@ import {
   Req,
   UnauthorizedException,
   UseGuards,
-  UsePipes
+  UsePipes, 
+  Delete, 
+  Patch
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -211,12 +214,11 @@ export class UsersController {
     }
   })
   @UseGuards(JwtAuthGuard)
-  @Roles('ADMIN')
-  @UseGuards(RolesAuthGuard)
+  // get all users and their rating
   @Get()
-  async getAll() {
+  async getAll(@Query('search') search: string) {
     return {
-      users: await this.usersService.getAllUsers(),
+      users: await this.usersService.getAllUsers(search),
       message: 'Success'
     }
   }
@@ -393,12 +395,32 @@ export class UsersController {
       example: new UnauthorizedException('User unauthorized')
     }
   })
-  // get me and my posts
+  // get me, my rating and my posts
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
   async profile(@Req() request: RequestDto) {
     return {
       user: await this.usersService.getUserById(request.user.id),
+      message: 'Success'
+    }
+  }
+
+  // edit my profile
+  @Patch('/edit')
+  @UseGuards(JwtAuthGuard)
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto) {
+    return {
+      user: await this.usersService.edit_profile(request.user.id, userDto),
+      message: 'Changes are saved. If you have changed your email, check the it'
+    }
+  }
+
+  // get me and my posts
+  @Delete('/delete')
+  @UseGuards(JwtAuthGuard)
+  async delete_profile(@Req() request: RequestDto) {
+    return {
+      user: await this.usersService.delete_profile(request.user.id),
       message: 'Success'
     }
   }
@@ -436,7 +458,7 @@ export class UsersController {
       example: new NotFoundException('User undefined')
     }
   })
-  // get another user by id and his posts
+  // get another user by id, his rating and his posts
   @Get('/:id')
   async getUserById(@Param('id') id: number) {
     return {

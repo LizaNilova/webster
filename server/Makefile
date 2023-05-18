@@ -1,5 +1,5 @@
 install: 
-	@npm install
+	@npm ci
 	echo "Complete :)"
 
 start-dev:
