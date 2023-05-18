@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-// import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
+import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
 import {MainPage} from '../pages/mainPage';
 import { RegistrationPage } from '../pages/registerPage';
 // import { VerifyEmailPage } from '../pages/VerifyEmailPage';
@@ -51,7 +51,7 @@ export const useRoutes = (isAuthenticated) => {
 
                 
                 {/* <Route path="/auth" element={<LoginPage />} /> */}
-                {/* <Route path="/auth/resetPassword" element={<RecoverPasswordPage />} /> */}
+                <Route path="/auth/resetPassword" element={<RecoverPasswordPage />} />
                 <Route path="/registration" element={<RegistrationPage />} />
                 {/* <Route path='recover/:token' element={<ResetPasswordPage />} /> */}
                 {/* <Route path='verify/:token' element={<VerifyEmailPage />} /> */}

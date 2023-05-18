@@ -3,7 +3,6 @@ import { useState } from "react";
 import { registerUser } from '../redux/authSlice.js';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-// import '../styles/registerPage.css'
 import { useEffect } from "react";
 import '../styles/registerPage.scss'
 
@@ -17,6 +16,7 @@ export const RegistrationPage = () => {
     const [repeatPassword, setRepeatPassword] = useState('')
 
     const { status } = useSelector((state) => state.auth)
+    const { regErrorTexts } = useSelector((state) => state.auth)
     const { eventId } = useSelector((state) => state.auth)
 
     useEffect(() => {
@@ -46,7 +46,12 @@ export const RegistrationPage = () => {
             <h3 className="card_title">sign up</h3>
             <div className="separator"></div>
             <div className="flex flex-col my-3 w-full">
-                <span className="">Login</span>
+                <div className="flex flex-row justify-between">
+                    <span className="">Login</span>
+                    {/* <p className="text-red-600">{regErrorTexts?.email}</p> */}
+                    <p className="text-red-600">АЩИБКА</p>
+
+                </div>
                 <input
                     type="text"
                     required="required"
@@ -56,7 +61,12 @@ export const RegistrationPage = () => {
             </div>
 
             <div className="flex flex-col my-3 w-full">
-                <span className="">Email</span>
+                <div className="flex flex-row justify-between">
+                    <span className="">Email</span>
+                    {/* <p className="text-red-600">{regErrorTexts?.email}</p> */}
+                    <p className="text-red-600">АЩИБКА</p>
+
+                </div>
                 <input
                     type="text"
                     required="required"
@@ -66,7 +76,13 @@ export const RegistrationPage = () => {
             </div>
 
             <div className="flex flex-col my-3 w-full">
-                <span>Password</span>
+
+                <div className="flex flex-row justify-between">
+                    <span className="">Password</span>
+                    {/* <p className="text-red-600">{regErrorTexts?.email}</p> */}
+                    <p className="text-red-600">АЩИБКА</p>
+
+                </div>
                 <input
                     type="password"
                     required="required"
@@ -76,7 +92,12 @@ export const RegistrationPage = () => {
 
             </div>
             <div className="flex flex-col my-3 w-full">
-                <span>Confirm password</span>
+                <div className="flex flex-row justify-between">
+                    <span className="">Confirm password</span>
+                    {/* <p className="text-red-600">{regErrorTexts?.email}</p> */}
+                    <p className="text-red-600">АЩИБКА</p>
+
+                </div>
                 <input
                     type="password"
                     required="required"

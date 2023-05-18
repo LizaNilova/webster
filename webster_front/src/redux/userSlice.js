@@ -14,7 +14,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async (sub
         const { data } = await axios.patch(`http://localhost:8080/api/users`, submitData, { withCredentials: true })
         console.log(data.user)
         dispatch(setUserData(data.user))
-        return { data }
+        return (data)
     } catch (error) {
         console.log(error)
     }
@@ -22,9 +22,9 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async (sub
 
 export const userProfile = createAsyncThunk('user/profile', async () => {
     try {
-        const { data } = await $api.get(`http://localhost:8080/api/users/profile`)
+        const { data } = await $api.get(`http://localhost:8080/api/users/profile`, {withCredentials: true})
         console.log(data.user)
-        return { data }
+        return (data)
     } catch (error) {
         console.log(error)
     }
@@ -35,7 +35,7 @@ export const uploadUserAvatar = createAsyncThunk('user/uploadUserAvatar', async 
         const { data } = await $api.patch(`http://localhost:8080/api/users/pic-load`, req, { withCredentials: true })
         console.log(data)
         if (data.user) dispatch(setUserData(data.user))
-        return { data }
+        return (data)
     } catch (error) {
         console.log(error)
     }
@@ -45,7 +45,7 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     try {
         const { data } = await axios.delete(`http://localhost:8080/api/users`, { withCredentials: true })
         console.log(data.message)
-        return data
+        return (data)
     } catch (error) {
         console.log(error)
     }
@@ -70,6 +70,7 @@ export const userSlice = createSlice({
         [userProfile.fulfilled]: (state, action) => {
             state.loading = false
             state.user = action.payload?.user
+            console.log(action.payload?.user)
             state.status = action.payload?.message
         },
         [userProfile.rejected]: (state, action) => {

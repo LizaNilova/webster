@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 // Проверим в самом начале, есть ли токен в хранилище
-const JWTToken = localStorage.getItem('jwt');
 const BASE_URL = 'http://localhost:8080';
 // Создать инстанс axios
 const $api = axios.create({

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../redux/authSlice.js'
 import '../styles/loginPage.scss'
+import { userProfile } from "../redux/userSlice.js"
 
 export const LoginPage = () => {
     const [login, setLogin] = useState('')
@@ -16,8 +17,9 @@ export const LoginPage = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        dispatch(userProfile())
         if (status === 'You are signed in') {
-            navigate('/home-page')
+            navigate('/')
         }
         console.log(status)
         setErrorText(status)
@@ -26,7 +28,7 @@ export const LoginPage = () => {
         } else {
             setErrorVisible(false)
         }
-    }, [status, navigate])
+    }, [status, dispatch, navigate])
 
     const handleSubmit = () => {
         try {
@@ -86,8 +88,23 @@ export const LoginPage = () => {
                         </div>
                     }
 
+                    {
+                        !errorVisible &&
+                        <div className="flex flex-col p-2 pt-1 opacity-0 border-0">
+                            <div className="flex justify-end">
+                                <Link
+                                    className="flex text-center justify-center w-fit h-fit rounded-sm pr-1 pl-1 text-xs text-beige"
+                                    onClick={closeError}
+                                >x</Link>
+                            </div>
 
-                    <div className="flex flex-col gap-2 items-center justify-center">
+                            <p className="items-center text-sm mb-2 text-yellow-500"><b>{errorText}</b></p>
+
+                        </div>
+                    }
+
+
+                    <div className="flex flex-col gap-2 mt-3 items-center justify-center">
                         <Link
                             to='/auth/resetPassword'
                             className="flex justify-center items-center text-xs text-beige hover:text-light-beige hover:transition-[1s]"
@@ -97,7 +114,7 @@ export const LoginPage = () => {
                         </div>
                         <Link
                             to='/registration'
-                            className="flex justify-center items-center text-xs m-5 text-beige hover:text-light-beige hover:transition-[1s]"
+                            className="flex justify-center items-center text-xs m-3 text-beige hover:text-light-beige hover:transition-[1s]"
                         >Create an account</Link>
                     </div>
                 </div>
