@@ -11,6 +11,10 @@ import { UserEventDto } from './dto/user-event.dto';
 import * as bcrypt from 'bcryptjs'
 import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
+import { Like } from 'src/likes/likes.model';
+import { Subscriptions } from 'src/subscriptions/subscriptions.model';
+import { hasSubscribers } from 'diagnostics_channel';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +22,8 @@ export class UsersService {
     @InjectModel(User) private userRepository: typeof User,
     @InjectModel(UserBanned) private userBennedRepository: typeof UserBanned,
     @InjectModel(UserEvents) private userEventRepository: typeof UserEvents,
+    @InjectModel(Like) private likeRepository: typeof Like,
+    @InjectModel(Subscriptions) private subscriptionsRepository: typeof Subscriptions,
     private roleService: RolesService,
     private mailService: MailService
   ) { }
@@ -44,24 +50,83 @@ export class UsersService {
     return event;
   }
 
-  async getAllUsers() {
-    const users = await this.userRepository.findAll({ include: { all: true } });
-    return users;
+  // добавить сортировку по рейтингу 
+  async getAllUsers(search) {
+
+    const users = (search) ? await this.userRepository.findAll({ where: {
+        login: {
+          [Op.iLike]: `%${search}%`
+        }
+      },
+      include: { all: true }}) :
+       await this.userRepository.findAll({ include: { all: true } });
+  
+
+    const usersWithRating = [];
+
+    for (const user of users) {
+      const postIds = user.posts.map((post) => post.id);
+
+      const likes = await this.likeRepository.findAll({ where: { postId: postIds } });
+      let rating = likes.length;
+
+      const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: user.id } });
+      rating += subscribers.length;
+
+      const subscriberIds = subscribers.map((subscriber) => subscriber.subscriberId);
+      const subscribersWithLogin = await this.userRepository.findAll({
+        where: { id: subscriberIds },
+        attributes: ['id', 'login']
+      });
+
+      const userWithRating = {
+        id: user.id,
+        login: user.login,
+        email: user.email,
+        role: user.roles[0].value,
+        rating: rating,
+        posts: user.posts,
+        ban: user.ban,
+        subscriptions: user.subscriptions,
+        subscribers: subscribersWithLogin
+      };
+
+      usersWithRating.push(userWithRating);
+    }
+    return usersWithRating.sort((a, b) => b.rating - a.rating);
   }
 
+  // добавить рейтинг
   async getUserById(id: number) {
     const user = await this.userRepository.findByPk(id, { include: { all: true } });
     if (!user) {
       throw new NotFoundException('User undefined');
     }
+
+    const postIds = user.posts.map((post) => post.id);
+
+    const likes = await this.likeRepository.findAll({where: { postId: postIds,}})
+    let rating = likes.length
+    const subscribers = await this.subscriptionsRepository.findAll({where: {userId: id}})
+    rating += subscribers.length   
+
+    let usersSubscriber  = []
+      for (const subscriber of subscribers)  {
+        usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
+          attributes: ['id', 'login']
+        }));
+      };
+
     return {
       id: user.id,
       login: user.login,
       email: user.email,
       role: user.roles[0].value,
+      rating: rating,
       posts: user.posts,
       ban: user.ban,
-      subscriptions: user.subscriptions
+      subscriptions: user.subscriptions,
+      subscribers: usersSubscriber
     };
   }
 
