@@ -56,6 +56,10 @@ export const useRoutes = (isAuthenticated) => {
                 {/* <Route path='recover/:token' element={<ResetPasswordPage />} /> */}
                 {/* <Route path='verify/:token' element={<VerifyEmailPage />} /> */}
                 <Route path='/confirm/:id' element={<ConfirmPage/>} />
+
+
+
+                <Route path='/confirm' element={<ConfirmPage/>} />
                 
                 {/* <Route path="companies/:id/add-new-member" element={<VerifyInvite />} /> */}
                 {/* <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} /> */}

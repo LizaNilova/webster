@@ -3,10 +3,8 @@ import axios from 'axios'
 import $api from "../utils/api" // типо мы импортируем инстанс чтоб потом его юхать в запросах
 import authRouter from "../routes/auth-router"
 const initialState = {
-  user: null,
   isLoading: false,
   status: null,
-  userId: null,
   eventId: null,
   regErrorTexts: null
 }
@@ -111,7 +109,7 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/auth/logout', { withCredentials: true })
+      const { data } = await axios.get(authRouter.logoutPath(), { withCredentials: true })
       console.log(data)
       return data
     }
@@ -151,7 +149,8 @@ export const authSlice = createSlice({
     [registerUser.rejected]: (state, action) => {
       // console.log(action)
       state.regErrorTexts = action.payload?.errors
-      console.log(action)
+      state.eventId = null
+      // console.log(action)
       state.isLoading = false
     },
 

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { confirmRegistration } from '../redux/authSlice.js'
 import '../styles/loginPage.scss'
+import '../styles/inputCodeStyles.scss'
 
 export const ConfirmPage = () => {
     const [code, setCode] = useState('')
@@ -47,15 +48,17 @@ export const ConfirmPage = () => {
             onSubmit={e => e.preventDefault()}
             className="main-container">
             <div className="login-card diagonal-gridlines card-border bb-login">
-                <h3 className="card_title">sign in</h3>
+                <h3 className="card_title">confirmation</h3>
                 <div className="separator"></div>
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="flex flex-col my-3 w-2/3">
-                        <span className="">Code</span>
+                        <span className="">Enter here confirmation code which you recieved by email.</span>
                         <input
                             type="text"
                             required="required"
                             value={code}
+                            maxlength="4"
+                            className="code-input"
                             onChange={e => setCode(e.target.value)} />
                     </div>
 
