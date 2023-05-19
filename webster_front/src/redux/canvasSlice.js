@@ -20,6 +20,10 @@ const canvasSlice = createSlice({
         setMode(state, action)
         {
             state.mode = action.payload;
+        },
+        setName(state, action) 
+        {
+            state.name = action.payload;
         }
     },
     extraReducers: {
@@ -28,5 +32,5 @@ const canvasSlice = createSlice({
 })
 
 export default canvasSlice.reducer;
-export const { setData, setMode, } = canvasSlice.actions;
+export const { setData, setMode, setName} = canvasSlice.actions;
 

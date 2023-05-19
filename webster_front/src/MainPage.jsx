@@ -271,10 +271,10 @@ const MainPage = () => {
     editor.setStrokeColor(color);
   }
 
-  const onUploadImage = (e) => {
+  const addImageToCanvas = (file) => {
     // console.log(e.target.files[0]);
     const reader = new FileReader();
-    const file = e.target.files[0];
+    // const file = e.target.files[0];
     reader.onload = (function (f) {
       return function (e) {
         // Here you can use `e.target.result` or `this.result`
@@ -289,19 +289,32 @@ const MainPage = () => {
     })(file);
     reader.readAsDataURL(file);
   }
-
-  const uploadBackgroundImage = () => {
-
+  
+  const setBackgroundImage = (file) => {
+    const reader = new FileReader();
+    reader.onload = (function (f) {
+      return function (e) {
+        console.log(e.target.result);
+        fabric.Image.fromURL(e.target.result, (img) => {
+          console.log(img)
+          // editor.canvas.add(img);
+          // editor.canvas.viewportCenterObject(img);
+          editor.canvas.setBackgroundImage(img);
+          editor.canvas.requestRenderAll();
+        })
+      };
+    })(file);
+    reader.readAsDataURL(file);
   }
 
-  const saveAsPNG = () => {
+  const exportAsImage = (type) => {
     var vpt = editor.canvas.viewportTransform;
     vpt[4] = 0;
     vpt[5] = 0;
     editor.canvas.setViewportTransform(vpt);
     editor.canvas.renderAll();
-    let canvasUrl = editor.canvas.toDataURL();
-    download(canvasUrl, canvasData.name + '.png');
+    let canvasUrl = editor.canvas.toDataURL(`image/${type}`);
+    download(canvasUrl, canvasData.name + `.${type}`);
     console.log(canvasUrl);
   }
 
@@ -355,7 +368,27 @@ const MainPage = () => {
     }
   }
 
+  const rotate = (direction) => {
+    let obj = editor.canvas.getActiveObject();
+    let angle = obj.angle;
+    if(direction === 'right')
+    {
+      if(angle >= 360) angle = 0;
+      obj.rotate(angle + 90);
+      editor.canvas.requestRenderAll();
+    } else {
+      if(angle <= 0) angle = 360;
+      obj.rotate(angle - 90);
+      editor.canvas.requestRenderAll();
+    }
+  }
 
+  const onChangeBGColor = (e) => {
+    editor.canvas.setBackgroundColor(e.target.value);
+    editor.canvas.requestRenderAll();
+  }
+  
+  // editor.canvas.getActiveObject().rotate()
   // console.log(history);
   // console.log(editor?.canvas.freeDrawingBrush);
 
@@ -370,10 +403,12 @@ const MainPage = () => {
           clearCanvasClick={clearCanvasClick}
           redoClick={redoClick}
           undoClick={undoClick}
-          onUploadImage={onUploadImage}
-          saveAsPNG={saveAsPNG}
+          addImageToCanvas={addImageToCanvas}
+          setBackgroundImage={setBackgroundImage}
+          exportAsImage={exportAsImage}
           saveCanvasState={saveCanvasState}
           restoreCanvasState={restoreCanvasState}
+          onChangeBGColor={onChangeBGColor}
         />
 
         <CanvasContainer name={canvasData?.name} onReady={onReady} />
@@ -395,6 +430,7 @@ const MainPage = () => {
           applyFilter={applyFilter}
           applyFilterValue={applyFilterValue}
           selectedObject={editor?.canvas.getActiveObject()}
+          rotate={rotate}
         />
 
       </div>
