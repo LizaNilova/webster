@@ -250,7 +250,7 @@ export class AuthController {
     }
   })
   @UseGuards(JwtAuthGuard)
-  @Post('/logout')
+  @Get('/logout')
   async logout(@Res() response: Response) {
     response.clearCookie('refreshToken');
     response.clearCookie('accessToken');
