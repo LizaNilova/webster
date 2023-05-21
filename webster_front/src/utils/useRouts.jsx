@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
 import {MainPage} from '../pages/mainPage';
 import { RegistrationPage } from '../pages/registerPage';
-// import { VerifyEmailPage } from '../pages/VerifyEmailPage';
 import { LoginPage } from '../pages/loginPage';
 // import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 // import EventView from '../components/EventView';
@@ -24,19 +23,18 @@ export const useRoutes = (isAuthenticated) => {
                 <Header />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    {/* <Route path="/checkout-success/:cartItems" element={<CheckOutSuccess />} />
-                    <Route path="/events/:id" element={<EventView />} />
-                    <Route path="/calendar" element={<CalendarPage />} />
-                    <Route path="/events/:event_id/company/:company_id" element={<CompanyPage />} />
-
-                    <Route path='verify/:token' element={<VerifyEmailPage />} />
-                    <Route path="companies/:id/add-new-member" element={<VerifyInvite />} />
-                    <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} />
-                    <Route path="/events/:event_id/companies/:company_id" element={<CompanyPage/>}/>
-                    <Route path="companies/:company_id" element={<CompanyPage/>}/>
+                    {/* <Route path="/checkout-success/:cartItems" element={<CheckOutSuccess />} /> */}
+                    {/* <Route path="/events/:id" element={<EventView />} /> */}
+                    {/* <Route path="/calendar" element={<CalendarPage />} /> */}
+                    {/* <Route path="/events/:event_id/company/:company_id" element={<CompanyPage />} /> */}
+                    <Route path='/confirm/:id' element={<ConfirmPage/>} />
+                    {/* <Route path="companies/:id/add-new-member" element={<VerifyInvite />} /> */}
+                    {/* <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} /> */}
+                    {/* <Route path="/events/:event_id/companies/:company_id" element={<CompanyPage/>}/> */}
+                    {/* <Route path="companies/:company_id" element={<CompanyPage/>}/> */}
                     <Route path='/profile' element={<Profile />} />
 
-                    <Route path="*" element={<Navigate to="/" />} /> */}
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </>
         )
@@ -54,7 +52,6 @@ export const useRoutes = (isAuthenticated) => {
                 <Route path="/auth/resetPassword" element={<RecoverPasswordPage />} />
                 <Route path="/registration" element={<RegistrationPage />} />
                 {/* <Route path='recover/:token' element={<ResetPasswordPage />} /> */}
-                {/* <Route path='verify/:token' element={<VerifyEmailPage />} /> */}
                 <Route path='/confirm/:id' element={<ConfirmPage/>} />
 
 

@@ -30,7 +30,7 @@ export const RecoverPasswordPage = () => {
 
     const handleSubmit = () => {
         try {
-            dispatch(confirmRegistration({code, id : params.id}))
+            dispatch(confirmRegistration({ code, id: params.id }))
             setErrorText(status)
 
         } catch (error) {
@@ -47,15 +47,16 @@ export const RecoverPasswordPage = () => {
             onSubmit={e => e.preventDefault()}
             className="main-container">
             <div className="login-card diagonal-gridlines card-border bb-login">
-                <h3 className="card_title">sign in</h3>
+                <h3 className="card_title">don't remember password?</h3>
                 <div className="separator"></div>
                 <div className="flex flex-col justify-center items-center w-full">
-                    <div className="flex flex-col my-3 w-2/3">
-                        <span className="">Email</span>
+                    <div className="flex flex-col my-3 w-full justify-center items-center">
+                        <span className="text-[15px] mb-4">Enter here your email with which you registered. <br />We will send you the necessary instructions to reset your password.</span>
                         <input
                             type="email"
                             required="required"
                             value={code}
+                            className="w-2/3"
                             onChange={e => setCode(e.target.value)} />
                     </div>
 
@@ -74,15 +75,30 @@ export const RecoverPasswordPage = () => {
                         </div>
                     }
 
+                    {
+                        !errorVisible &&
+                        <div className="flex flex-col rounded-lg bg-purple-400 opacity-0 p-2 pt-1 bg-opacity-20 border-0">
+                            <div className="flex justify-end">
+                                <div
+                                    className="flex cursor-default text-center justify-center w-fit h-fit rounded-sm pr-1 pl-1 text-xs text-beige"
+                                    onClick={closeError}
+                                >x</div>
+                            </div>
 
-                    <div className="flex flex-col gap-2 items-center justify-center">
-                        
+                            <p className="items-center text-sm mb-2 text-yellow-500 cursor-default  "><b>Email is not registrated</b></p>
+
+                        </div>
+                    }
+
+
+                    <div className="flex flex-col gap-2 mt-2 items-center justify-center">
+
                         <div className="w-fit">
                             <button className="button btn-skew" type='submit' onClick={handleSubmit} >SEND EMAIL</button>
                         </div>
                         <Link
                             to='/'
-                            className="flex justify-center items-center text-xs m-5 text-beige hover:text-light-beige hover:transition-[1s]"
+                            className="flex justify-center items-center text-xs mx-4 my-2 text-beige hover:text-light-beige hover:transition-[1s]"
                         >I remember password</Link>
                     </div>
                 </div>
