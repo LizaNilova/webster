@@ -16,7 +16,8 @@ const RightSideBar = ({
     applyFilter,
     applyFilterValue,
     selectedObject,
-    rotate }) => {
+    rotate,
+    changeBrushShadow }) => {
 
     const [brushStateSize, setBrushStateSize] = useState(brushData.brushSize);
     const [brushStateColor, setBrushStateColor] = useState(brushData.brushColor);
@@ -65,12 +66,31 @@ const RightSideBar = ({
                             <input type="range" min="1" max="15" defaultValue="1" step='1' onChange={(e) => { setBrushSize(Number(e.target.value)); setBrushStateSize(e.target.value) }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
                             <label className='mt-3 mb-1 text-lg'>Brush color: {brushStateColor} </label>
                             <input className='w-1/3 rounded-sm' type='color' name='brushColor' value={brushStateColor} onChange={(e) => { setBrushColor(e.target.value); setBrushStateColor(e.target.value) }} defaultValue={"#000"} />
+                            
                             <label className='mt-2 mb-1 text-lg'>Shadow color: {brushShadow?.color} </label>
-                            <input className='w-1/3 rounded-sm' type='color' name='brushColor' value={brushStateColor} onChange={(e) => { setBrushColor(e.target.value); setBrushStateColor(e.target.value) }} defaultValue={"#000"} />
+                            <input className='w-1/3 rounded-sm' type='color' name='shadowColor' value={brushShadow?.color} onChange={(e) => { 
+                                setBrushShadow(prevState => ({
+                                    ...prevState,
+                                    color: e.target.value,
+                                }));
+                                changeBrushShadow(e.target.value, brushShadow.blur, brushShadow.offset); 
+                            }} defaultValue={"#000"} />
                             <label className='mt-2 mb-1 text-lg'>Shadow blur: {brushShadow?.blur} </label>
-                            <input type="range" min="1" max="15" defaultValue="0" step='1' onChange={(e) => { setBrushSize(Number(e.target.value)); setBrushStateSize(e.target.value) }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
+                            <input type="range" min="1" max="15" defaultValue={brushShadow?.blur} step='1' onChange={(e) => { 
+                                setBrushShadow(prevState => ({
+                                    ...prevState,
+                                    blur: e.target.value,
+                                }));
+                                changeBrushShadow(brushShadow.color, e.target.value, brushShadow.offset); 
+                            }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
                             <label className='mt-2 mb-1 text-lg'>Shadow offset: {brushShadow?.offset} </label>
-                            <input type="range" min="1" max="15" defaultValue="0" step='1' onChange={(e) => { setBrushSize(Number(e.target.value)); setBrushStateSize(e.target.value) }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
+                            <input type="range" min="1" max="15" defaultValue={brushShadow?.offset} step='1' onChange={(e) => { 
+                                setBrushShadow(prevState => ({
+                                    ...prevState,
+                                    offset: e.target.value,
+                                }));
+                                changeBrushShadow(brushShadow.color, brushShadow.blur, e.target.value); 
+                            }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
                         </>
                     }
                     {/* <div className='w-full flex justify-center m-2 mb-4'>

@@ -348,8 +348,14 @@ const MainPage = () => {
     editor.canvas.loadFromJSON(savedCanvasState);
   }
 
-  const changeShadow = (color, blur, offset) => {
-
+  const changeBrushShadow = (color, blur, offset) => {
+    // console.log(editor.canvas.freeDrawingBrush.shadow)
+    // console.log(color, blur, offset)
+    editor.canvas.freeDrawingBrush.shadow.color = color;
+    editor.canvas.freeDrawingBrush.shadow.blur = blur;
+    editor.canvas.freeDrawingBrush.shadow.offsetX = offset;
+    editor.canvas.freeDrawingBrush.shadow.offsetY = offset;
+    editor.canvas.requestRenderAll();
   }
 
   const applyFilter = (index, filter) => {
@@ -395,7 +401,7 @@ const MainPage = () => {
   return (
     <>
       {openedForm && <CreateCanvasForm closeForm={closeForm} />}
-      <Header />
+      
       <div className='w-full h-full min-h-screen flex bg-dark-purple'>
         <SideBar
           canvasData={canvasData}
@@ -431,6 +437,7 @@ const MainPage = () => {
           applyFilterValue={applyFilterValue}
           selectedObject={editor?.canvas.getActiveObject()}
           rotate={rotate}
+          changeBrushShadow={changeBrushShadow}
         />
 
       </div>

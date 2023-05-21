@@ -9,17 +9,16 @@ const Header = () => {
     }
 
     return (
-        <>
-            <div className='px-8 py-3 border-b-2 border-slate-700 flex w-full bg-dark-purple justify-between ' >
+            <div className='px-8 py-3 border-b-2 border-slate-700 flex w-full bg-dark-purple justify-between sticky top-0 z-10' >
                 <div className='w-1/6 flex flex-row justify-between'>
                     <div className='h-14 w-28'>
                         <img src="logo.png" alt='logo' className='rounded-full hover:cursor-pointer' onClick={() => { navigate('/') }} />
                     </div>
                 </div>
                 <div className='w-1/4 flex flex-row justify-between items-center'>
-                    <Link to='/' className='flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse'>Main page</Link>
+                    <Link to='/' className='flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse'>Editor</Link>
+                    <Link to='/' className='flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse'>Posts</Link>
                     <Link to='/' className='flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse'>Profile</Link>
-                    <Link to='/' className='flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse'>Calendar</Link>
                 </div>
                 <div className='w-1/4 flex flex-row justify-end'>
                     <div className='w-1/2 flex flex-col items-end justify-center'>
@@ -36,7 +35,6 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-        </>
     );
 }
 
