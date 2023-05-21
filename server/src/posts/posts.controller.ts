@@ -6,6 +6,9 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
+import { Roles } from '../auth/roles-auth.decorator';
+import { RolesAuthGuard } from '../auth/roles-auth.guard';
+
 @ApiTags('Posts')
 @Controller('api/posts')
 export class PostsController {
@@ -88,6 +91,8 @@ export class PostsController {
       example: new UnauthorizedException('User unauthorized')
     }
   })
+  @Roles('USER')
+  @UseGuards(RolesAuthGuard)
   @Post()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
@@ -384,6 +389,41 @@ export class PostsController {
   async deletePost(@Param('id') id: number, @Request() req: RequestDto) {
     return {
       message: await this.postServer.deletePost(id, req.user.id,)
+    };
+  }
+
+  @ApiOperation({ summary: 'Ban post' })
+  @ApiOkResponse({
+    description: 'Ban post by id', schema: {
+      example: {
+        "message": "Post was banned"
+    }
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found post',
+    schema: {
+      example: new NotFoundException('Undefined post')
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden.', schema: {
+      example: new ForbiddenException('User no create this post')
+    }
+  })
+  @Roles('ADMIN')
+  @UseGuards(RolesAuthGuard)
+  @Get('/ban/:id')
+  @UseGuards(JwtAuthGuard)
+  async banPost(@Param('id') id: number) {
+    return {
+      message: await this.postServer.banPost(id)
     };
   }
 

@@ -13,7 +13,8 @@ import { PostCategory } from '../categories/post-category.model';
 export class PostsService {
 
   constructor(@InjectModel(Post) private postsRepository: typeof Post, private categoriesService: CategoriesService,
-    private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
+    private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category,
+    @InjectModel(User) private userRepository: typeof User) { }
 
   async create(dto: CreatePostDto) {
     const filename = await this.filesService.createFile(dto.image);
@@ -105,12 +106,22 @@ export class PostsService {
   }
 
   async deletePost(id: number, userId: number,) {
-    const post = await this.postsRepository.findOne({ where: { id, userId } });
+    let post = await this.postsRepository.findOne({ where: { id, userId } });
     if (!post) {
       throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
     await post.destroy();
     return "Post was deleted";
+  }
+
+  async banPost(id: number) {
+    let post = await this.postsRepository.findOne({ where: { id } });
+    if (!post) {
+      throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    const imagePath = 'images/ban-images.jpg'; 
+    await post.update({ image: imagePath }); // вот тут заменить фотографию на фотографию ban-images.jpg из папки images
+    return "Post was banned";
   }
 
   private async isTitleExists(title: string): Promise<boolean> {
