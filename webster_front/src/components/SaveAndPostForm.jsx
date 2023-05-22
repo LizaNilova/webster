@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setData } from './redux/CanvasSlice';
 
-const CreateCanvasForm = ({ closeForm }) => {
-
-    const dispatch = useDispatch();
+const SaveAndPostForm = ({ closeForm }) => {
 
     const [state, setState] = useState({
         name: 'Unnamed',
@@ -14,30 +10,12 @@ const CreateCanvasForm = ({ closeForm }) => {
         errMessage: null
     })
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        console.log(name, value);
-        setState(prevState => ({
-            ...prevState,
-            [name]: value,
-            errMessage: ''
-        }));
+    const handleChange = () => {
+
     }
 
-    const handleSubmit = () => {
-        if(state.width < 100 || state.height < 100)
-        {
-            setState(prevState => ({
-                ...prevState,
-                errMessage: 'Width and height can`t be less then 100 px'
-            }));
-        }
-        if(state.width && state.height && state.name)
-        {
-            dispatch(setData({width: state.width, height: state.height, color: state.color, name: state.name}));
-            closeForm();
-        }
-    }
+    
+
     return (
         <div className="text-white justify-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-slate-600 bg-opacity-50">
             <div className="relative my-2 mx-auto w-1/2 flex flex-col justify-center">
@@ -46,7 +24,7 @@ const CreateCanvasForm = ({ closeForm }) => {
                     {/*header*/}
                     <div className="flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t">
                         <h3 className="text-3xl pl-4 font-semibold text-light-grey-pastel font-serif">
-                            Project creation
+                            Post creation
                         </h3>
                         <button
                             className="p-1 ml-auto bg-transparent border-0 text-black opacity-3 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -60,15 +38,37 @@ const CreateCanvasForm = ({ closeForm }) => {
                     {/*body*/}
                     <div className="relative px-8 py-3 flex flex-col m-1">
                         <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
-                            <label>Name of the project:</label>
+                            <label className='text-center w-1/4'>Name of the post:</label>
                             <input type={"text"}
                                 className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-2/3 rounded-full outline-none text-black p-2 bg-light-beige"
                                 name='name' onChange={handleChange}
-                                placeholder='name ... '
-                                defaultValue={'Unnamed'}
+                                placeholder='Name of the post ... '
                             />
                         </div>
-                        <div className='pb-1 my-1 flex items-center justify-center w-full text-xl text-beige'>
+                        <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
+                            <label className='text-center w-1/4'>Description:</label>
+                            <textarea
+                                className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-2/3 rounded-lg outline-none text-black p-2 bg-light-beige"
+                                name='name' onChange={handleChange}
+                                placeholder='Post description ... '
+                            />
+                        </div>
+                        <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
+                            <label className='text-center w-1/4'>Choose your work to post:</label>
+                            <div className='w-2/3 flex flex-wrap'>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                                <img src='logo.png' className='w-1/6 h-16 mx-1 my-1.5 rounded-lg cursor-pointer'/>
+                            </div>
+                        </div>
+                        <div className='pb-1 my-1 flex items-center w-full text-xl text-beige'>
+                            <label className='text-center w-1/4'>Comments:</label>
+                            <input type='checkbox' className='ml-5 w-6 h-6'/>
+                        </div>
+                        {/* <div className='pb-1 my-1 flex items-center justify-center w-full text-xl text-beige'>
                             Choose the width and height of canvas.
                         </div>
                         <div className='p-1 my-1 flex items-center w-full justify-around'>
@@ -84,11 +84,11 @@ const CreateCanvasForm = ({ closeForm }) => {
                                 name='height' onChange={handleChange}
                                 placeholder='height'
                             />
-                        </div>
-                        <div className='w-full flex items-center justify-around text-xl text-beige'>
+                        </div> */}
+                        {/* <div className='w-full flex items-center justify-around text-xl text-beige'>
                             <label>Choose background color: </label>
                             <input className='w-1/3 rounded-sm' type='color' name='color' onChange={handleChange} defaultValue={"#FFFFFF"}/>
-                        </div>
+                        </div> */}
                         <div className='text-red-500 text-2xl font-semibold underline underline-offset-4 text-center w-full m-1 p-1'>
                             {state.errMessage}
                         </div>
@@ -104,8 +104,8 @@ const CreateCanvasForm = ({ closeForm }) => {
                         <button
                             className="bg-emerald-600 text-light-beige active:bg-emerald-600 font-bold uppercase text-sm px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 hover:bg-emerald-500 transition duration-500 hover:ease-in"
                             type="button"
-                            onClick={handleSubmit}
-                        >Create
+                            // onClick={handleSubmit}
+                        >Publish
                         </button>
                     </div>
                 </div>
@@ -114,4 +114,4 @@ const CreateCanvasForm = ({ closeForm }) => {
     );
 }
 
-export default CreateCanvasForm;
+export default SaveAndPostForm;

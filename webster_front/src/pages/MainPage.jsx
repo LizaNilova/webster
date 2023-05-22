@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Header from './Header';
-import SideBar from './SideBar';
-import CanvasContainer from './CanvasContainer';
-import CreateCanvasForm from './createCanvasForm';
+import Header from '../components/Header';
+import SideBar from '../components/SideBar';
+import CanvasContainer from '../components/CanvasContainer';
+import CreateCanvasForm from '../components/CreateCanvasForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFabricJSEditor } from 'fabricjs-react';
-import { setMode } from './redux/CanvasSlice';
-import RightSideBar from './RightSideBar';
-import { download } from './functions/download';
+import { setMode } from '../redux/CanvasSlice';
+import RightSideBar from '../components/RightSideBar';
+import { download } from '../functions/download';
+import SaveAndPostForm from '../components/SaveAndPostForm';
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -401,7 +402,7 @@ const MainPage = () => {
   return (
     <>
       {openedForm && <CreateCanvasForm closeForm={closeForm} />}
-      
+      <SaveAndPostForm />
       <div className='w-full h-full min-h-screen flex bg-dark-purple'>
         <SideBar
           canvasData={canvasData}

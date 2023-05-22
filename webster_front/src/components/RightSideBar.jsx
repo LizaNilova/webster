@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './styles/SideBars.css'
+import '../styles/SideBars.css'
 const RightSideBar = ({
     canvasData,
     brushData = {

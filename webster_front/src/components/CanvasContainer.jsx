@@ -1,7 +1,7 @@
 import { FabricJSCanvas } from 'fabricjs-react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setName } from './redux/CanvasSlice';
+import { setName } from '../redux/CanvasSlice';
 
 const CanvasContainer = ({ name, onReady }) => {
     const dispatch = useDispatch();
