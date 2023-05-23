@@ -14,6 +14,7 @@ import { Category } from 'src/categories/categories.model';
 import { PostCategory } from 'src/categories/post-category.model';
 import { Comment } from 'src/comments/comments.model';
 import { Like } from 'src/likes/likes.model';
+import { PostReport } from './post-complaints.model';
 
 interface PostCreationAttrs {
   title: string;
@@ -64,4 +65,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 
   @HasMany(() => Like)
   likes: Like[];
+
+  // @HasMany(() => PostReport)
+  // reports: PostReport[];
 }

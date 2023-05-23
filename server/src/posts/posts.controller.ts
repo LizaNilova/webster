@@ -8,6 +8,7 @@ import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
 import { Roles } from '../auth/roles-auth.decorator';
 import { RolesAuthGuard } from '../auth/roles-auth.guard';
+import { ReportPostDto } from './dto/report-to-post.dto';
 
 @ApiTags('Posts')
 @Controller('api/posts')
@@ -200,6 +201,15 @@ export class PostsController {
   async getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
     return {
       posts: await this.postServer.getAll(sort, filter, search),
+      message: 'Success'
+    };
+  }
+
+  @ApiOperation({ summary: 'All reported posts' })
+  @Get('/post-reported')
+  async getAllReportedPosts() {
+    return {
+      posts: await this.postServer.getAllReportedPosts(),
       message: 'Success'
     };
   }
@@ -427,4 +437,36 @@ export class PostsController {
     };
   }
 
+   @ApiOperation({ summary: 'Complaint post' })
+  @ApiOkResponse({
+    description: 'Complaint post by id', schema: {
+      example: {
+        "message": "Post was reported"
+    }
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found post',
+    schema: {
+      example: new NotFoundException('Undefined post')
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @ApiForbiddenResponse({
+    description: 'Forbidden.', schema: {
+      example: new ForbiddenException('User no create this post')
+    }
+  })
+  @Post('/report/:id')
+  @UseGuards(JwtAuthGuard)
+  async reportPost(@Param('id') id: number, @Request() req: RequestDto, @Body() dto: ReportPostDto,) {
+    return {
+      message: await this.postServer.reportPost({...dto, postId: id, userId: req.user.id})
+    };
+  }
 }

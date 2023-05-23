@@ -18,17 +18,20 @@ import { UserEvents } from './models/user-event.model';
 import { Subscriptions } from 'src/subscriptions/subscriptions.model';
 import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 import { MailModule } from 'src/mail/mail.module';
+import { FilesModule } from 'src/files/files.module';
+import { PostReport } from 'src/posts/post-complaints.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents, Subscriptions]),
+    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents, Subscriptions, PostReport]),
     RolesModule,
     AuthModule,
     PostsModule, 
     CommentsModule,
     LikesModule, 
     SubscriptionsModule,
-    MailModule
+    MailModule,
+    FilesModule
   ],
   controllers: [UsersController],
   providers: [UsersService],
