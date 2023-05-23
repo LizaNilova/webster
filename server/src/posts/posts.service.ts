@@ -127,6 +127,7 @@ export class PostsService {
     const fileBuffer = await fsp.readFile(filePath);
     const fileName = await this.filesService.createAvatar(fileBuffer);
     await post.update({ image: fileName }); // вот тут заменить фотографию на фотографию ban-images.jpg из папки images
+    await this.postReportRepository.destroy({where:{postId: id}})
     return "Post was banned";
   }
 
