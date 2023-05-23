@@ -206,6 +206,8 @@ const MainPage = () => {
     if (canvasData.mode !== 'drawing') {
       editor.canvas.isDrawingMode = true;
       editor.canvas.selection = false;
+      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas); 
+      editor.canvas.freeDrawingBrush.width = 1;
       editor.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
         blur: 0,
         offsetX: 0,
@@ -219,6 +221,26 @@ const MainPage = () => {
       editor.canvas.selection = true;
       dispatch(setMode('default'));
     }
+  }
+
+  const toggleEraser = () => {
+    if(canvasData.mode !== 'eraser')
+    {    
+      dispatch(setMode('eraser'));
+      editor.canvas.isDrawingMode = true;
+      editor.canvas.selection = false;
+      editor.canvas.freeDrawingBrush = new fabric.EraserBrush(editor.canvas);
+      editor.canvas.freeDrawingBrush.width = 10;
+      editor.canvas.freeDrawingBrush.shadow = null;
+      // editor.canvas.requestRenderAll()
+    } else {
+      dispatch(setMode('default'));
+      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas); 
+      editor.canvas.freeDrawingBrush.width = 1;
+      editor.canvas.isDrawingMode = false;
+      editor.canvas.selection = true;
+    }
+
   }
 
   const clearCanvasClick = () => {
@@ -283,6 +305,15 @@ const MainPage = () => {
         console.log(e.target.result);
         fabric.Image.fromURL(e.target.result, (img) => {
           console.log(img)
+          let imageTextureSize = img.width > img.height ? img.width : img.height;
+
+          if (imageTextureSize > fabric.textureSize) {
+            fabric.textureSize = imageTextureSize;
+          }
+          if(img.width >= canvasData.width)
+            img.scaleToWidth(canvasData.width - 10, false)
+          if(img.height >= canvasData.height)
+            img.scaleToHeight(canvasData.height - 10, false)
           editor.canvas.add(img);
           editor.canvas.viewportCenterObject(img);
         })
@@ -300,6 +331,10 @@ const MainPage = () => {
           console.log(img)
           // editor.canvas.add(img);
           // editor.canvas.viewportCenterObject(img);
+          // if(img.width != canvasData.width)
+          //   img.scaleToWidth(canvasData.width, false)
+          // if(img.height != canvasData.height)
+          //   img.scaleToHeight(canvasData.height, false)
           editor.canvas.setBackgroundImage(img);
           editor.canvas.requestRenderAll();
         })
@@ -394,7 +429,23 @@ const MainPage = () => {
     editor.canvas.setBackgroundColor(e.target.value);
     editor.canvas.requestRenderAll();
   }
-  
+
+  const onChangeHeight = (value) => {
+    editor.canvas.getActiveObject().scaleToHeight(value, false);
+    editor.canvas.requestRenderAll()
+  }
+
+  const onChangeWidth= (value) => {
+    editor.canvas.getActiveObject().scaleToWidth(value, false);
+    editor.canvas.requestRenderAll()
+  }
+
+  const addText = (value) =>{
+    let text = new fabric.IText(value, {fontFamily: 'Send Flowers'});
+    editor.canvas.add(text);
+    editor.canvas.viewportCenterObject(text);
+    editor.canvas.requestRenderAll()
+  }
   // editor.canvas.getActiveObject().rotate()
   // console.log(history);
   // console.log(editor?.canvas.freeDrawingBrush);
@@ -402,7 +453,7 @@ const MainPage = () => {
   return (
     <>
       {openedForm && <CreateCanvasForm closeForm={closeForm} />}
-      <SaveAndPostForm />
+      {/* <SaveAndPostForm /> */}
       <div className='w-full h-full min-h-screen flex bg-dark-purple'>
         <SideBar
           canvasData={canvasData}
@@ -416,6 +467,7 @@ const MainPage = () => {
           saveCanvasState={saveCanvasState}
           restoreCanvasState={restoreCanvasState}
           onChangeBGColor={onChangeBGColor}
+          addText={addText}
         />
 
         <CanvasContainer name={canvasData?.name} onReady={onReady} />
@@ -439,6 +491,9 @@ const MainPage = () => {
           selectedObject={editor?.canvas.getActiveObject()}
           rotate={rotate}
           changeBrushShadow={changeBrushShadow}
+          toggleEraser={toggleEraser}
+          onChangeHeight={onChangeHeight}
+          onChangeWidth={onChangeWidth}
         />
 
       </div>
