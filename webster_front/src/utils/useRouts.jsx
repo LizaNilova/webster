@@ -6,7 +6,7 @@ import { RegistrationPage } from '../pages/registerPage';
 import { LoginPage } from '../pages/loginPage';
 // import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 // import EventView from '../components/EventView';
-// import { Profile } from '../pages/Profile';
+import { Profile } from '../pages/Profile.jsx';
 // import CheckOutSuccess from '../pages/CheckOutSuccess';
 // import CalendarPage from '../pages/CalendarPage';
 import Header from '../components/Header';
