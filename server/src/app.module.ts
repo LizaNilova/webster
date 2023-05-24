@@ -30,6 +30,7 @@ import * as path from 'path';
 import { UserEvents } from './users/models/user-event.model';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { Subscriptions } from './subscriptions/subscriptions.model';
+import { ProjectModule } from './project/project.module';
 @Module({
   controllers: [],
   providers: [],
@@ -60,7 +61,8 @@ import { Subscriptions } from './subscriptions/subscriptions.model';
     CommentsModule,
     LikesModule,
     MailModule,
-    SubscriptionsModule
+    SubscriptionsModule,
+    ProjectModule
   ],
 })
 export class AppModule {}
