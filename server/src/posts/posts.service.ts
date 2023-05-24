@@ -7,15 +7,20 @@ import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
 import { Op, FindOptions } from 'sequelize';
 import { User } from '../users/models/users.model';
-import { PostCategory } from '../categories/post-category.model';
+import { PostReport } from 'src/posts/post-complaints.model';
+import { ReportPostDto } from './dto/report-to-post.dto';
+import * as fsp from 'fs/promises';
+import * as path from 'path';
+import * as uuid from 'uuid';
 
 @Injectable()
 export class PostsService {
 
-  constructor(@InjectModel(Post) private postsRepository: typeof Post, private categoriesService: CategoriesService,
+  constructor(@InjectModel(Post) private postsRepository: typeof Post, @InjectModel(PostReport) private postReportRepository: typeof PostReport,
     private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
 
   async create(dto: CreatePostDto) {
+    console.log(dto.image)
     const filename = await this.filesService.createFile(dto.image);
 
     const existPost = await this.postsRepository.findOne({ where: { title: dto.title } });
@@ -105,7 +110,7 @@ export class PostsService {
   }
 
   async deletePost(id: number, userId: number,) {
-    const post = await this.postsRepository.findOne({ where: { id, userId } });
+    let post = await this.postsRepository.findOne({ where: { id, userId } });
     if (!post) {
       throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
@@ -113,8 +118,42 @@ export class PostsService {
     return "Post was deleted";
   }
 
+  async banPost(id: number) {
+    let post = await this.postsRepository.findOne({ where: { id } });
+    if (!post) {
+      throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    const filePath = 'images/ban-images.jpg';
+    const fileBuffer = await fsp.readFile(filePath);
+    const fileName = await this.filesService.createAvatar(fileBuffer);
+    await post.update({ image: fileName }); // вот тут заменить фотографию на фотографию ban-images.jpg из папки images
+    await this.postReportRepository.destroy({where:{postId: id}})
+    return "Post was banned";
+  }
+
   private async isTitleExists(title: string): Promise<boolean> {
     const post = this.postsRepository.findOne({ where: { title } });
     return Boolean(post);
+  }
+
+  async reportPost(dto: ReportPostDto) {
+    let post = await this.postsRepository.findOne({ where: {id: dto.postId} });
+    if (!post) {
+      throw new HttpException(`Post with ID ${dto.postId} not found`, HttpStatus.NOT_FOUND);
+    }
+    if(await this.postReportRepository.findOne({where:{userId: dto.userId, postId:dto.postId}})){
+      throw new HttpException('You already reported about this post', HttpStatus.BAD_REQUEST);
+    }
+    const report = await this.postReportRepository.create({
+      userId: dto.userId,
+      postId: dto.postId,
+      reportReason: dto.reportReason,
+    });
+    return report;
+  }
+
+  async getAllReportedPosts(){
+    const reports = await this.postReportRepository.findAll({include:{ all: true }, order: [['createdAt', 'ASC']]})
+    return reports;
   }
 }

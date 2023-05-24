@@ -15,6 +15,10 @@ import { Like } from 'src/likes/likes.model';
 import { Subscriptions } from 'src/subscriptions/subscriptions.model';
 import { hasSubscribers } from 'diagnostics_channel';
 import { Op } from 'sequelize';
+import { FilesService } from 'src/files/files.service';
+import * as fsp from 'fs/promises';
+import * as path from 'path';
+import * as uuid from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +29,8 @@ export class UsersService {
     @InjectModel(Like) private likeRepository: typeof Like,
     @InjectModel(Subscriptions) private subscriptionsRepository: typeof Subscriptions,
     private roleService: RolesService,
-    private mailService: MailService
+    private mailService: MailService,
+    private filesService: FilesService,
   ) { }
 
   async createUser(dto: CreateUserDto) {
@@ -39,6 +44,13 @@ export class UsersService {
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role.id]);
     user.roles = [role];
+
+    const filePath = 'images/avatar.jpg';
+    const fileBuffer = await fsp.readFile(filePath);
+    const fileName = await this.filesService.createAvatar(fileBuffer);
+    user.avatar = fileName;
+    
+    user.save()
     return user;
   }
 
@@ -121,12 +133,13 @@ export class UsersService {
       id: user.id,
       login: user.login,
       email: user.email,
+      avatar: user.avatar,
       role: user.roles[0].value,
       rating: rating,
       posts: user.posts,
       ban: user.ban,
       subscriptions: user.subscriptions,
-      subscribers: usersSubscriber
+      subscribers: usersSubscriber, 
     };
   }
 
@@ -181,7 +194,7 @@ export class UsersService {
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
   }
 
-  async edit_profile(id: number, dto: CreateUserDto){
+  async edit_profile(id: number, dto: CreateUserDto, avatar?: any){
     let user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
     if (!user) {
       throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
@@ -200,12 +213,18 @@ export class UsersService {
       user.password = hash; // Update the password
     }
 
+    if (avatar) {
+      user.avatar = await this.filesService.createFile(avatar);
+    }
+
     if (dto.email) {
       user.email = dto.email; 
       user.is_active = false;
       await user.save();
       return await this.sendCode(user);
     }
+
+
     await user.save();
     return user;
   }

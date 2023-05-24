@@ -25,4 +25,16 @@ export class FilesService {
             throw new HttpException('error :(', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+     async createAvatar(file: Buffer): Promise<string> {
+        try {
+            const filename = uuid.v4() + '.jpg';
+            const filePath = path.resolve(__dirname, '..', 'static');
+            await this.isDirectoryExists(filePath);
+            await fsp.writeFile(path.join(filePath, filename), file);
+            return filename;
+        } catch (_err) {
+            throw new HttpException('error :(', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }

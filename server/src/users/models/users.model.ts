@@ -17,11 +17,14 @@ import { Comment } from 'src/comments/comments.model';
 import { Like } from 'src/likes/likes.model';
 import { UserEvents } from './user-event.model';
 import { Subscriptions } from 'src/subscriptions/subscriptions.model';
+import { PostReport } from 'src/posts/post-complaints.model';
+import fs from 'fs'
 
 interface UserCreationAttrs {
   login: string;
   email: string;
   password: string;
+  avatar: string;
 }
 
 @Table({ tableName: 'users' })
@@ -51,6 +54,10 @@ export class User extends Model<User, UserCreationAttrs> {
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   is_active: boolean
 
+  @ApiProperty({ example: ':3', description: "User's avatar" })
+  @Column({ type: DataType.STRING })
+  avatar: string;
+
   @ApiProperty({ enum: ['ADMIN', 'MODERATOR', 'USER'] })
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
@@ -61,8 +68,8 @@ export class User extends Model<User, UserCreationAttrs> {
   @HasMany(() => Comment)
   comments: Comment[];
 
-   @HasMany(() => Like)
-    likes: Like[];
+  @HasMany(() => Like)
+  likes: Like[];
 
   @HasOne(() => UserBanned)
   ban: UserBanned;
@@ -72,4 +79,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @HasMany(() => UserEvents)
   events: UserEvents[];
+
+  // @HasMany(() => PostReport)
+  // reports: PostReport[];
 }

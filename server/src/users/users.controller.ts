@@ -1,19 +1,8 @@
 import {
-  BadRequestException,
-  Body,
-  Query,
-  Controller,
-  ForbiddenException,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Req,
-  UnauthorizedException,
-  UseGuards,
-  UsePipes, 
-  Delete, 
-  Patch
+  BadRequestException, Body, Query, Controller, ForbiddenException,
+  Get, NotFoundException, Param, Post, Req, UnauthorizedException,
+  UseGuards, UsePipes,  Delete,  Patch, UseInterceptors, UploadedFile,
+  ParseFilePipe
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -34,6 +23,7 @@ import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { RequestDto } from '../auth/dto/request.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -408,9 +398,11 @@ export class UsersController {
   // edit my profile
   @Patch('/edit')
   @UseGuards(JwtAuthGuard)
-  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto) {
-    return {
-      user: await this.usersService.edit_profile(request.user.id, userDto),
+  @UseInterceptors(FileInterceptor('avatar'))
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto, 
+    @UploadedFile(new ParseFilePipe()) avatar: Express.Multer.File) {
+      return {
+      user: await this.usersService.edit_profile(request.user.id, userDto, avatar),
       message: 'Changes are saved. If you have changed your email, check the it'
     }
   }

@@ -11,16 +11,17 @@ import { PostCategory } from 'src/categories/post-category.model';
 import { CategoriesModule } from 'src/categories/categories.module';
 import { Like } from 'src/likes/likes.model';
 import { LikesModule } from 'src/likes/likes.module';
+import { PostReport } from 'src/posts/post-complaints.model'
 
 @Module({
   providers: [PostsService],
   controllers: [PostsController],
   imports: [
-    SequelizeModule.forFeature([User, Post, Category, PostCategory, Like]),
+    SequelizeModule.forFeature([User, Post, Category, PostCategory, Like, PostReport]),
     AuthModule,
     FilesModule,
     CategoriesModule,
-    LikesModule
+    LikesModule,
   ],
   exports: [PostsService]
 })
