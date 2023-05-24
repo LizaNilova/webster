@@ -96,20 +96,14 @@ const SideBar = ({ canvasData, createCanvasClick, clearCanvasClick,
                         </svg>
                     </p>
                     <div className='w-full text-center hidden' id='text-actions-container'>
-                        <div className='sidebar-item-container'>
+                        {/* <div className='sidebar-item-container'>
                             <div className='w-full flex items-center justify-center p-2'>
                                 <p className='pr-2 text-lg'>Text:</p>
                                 <input type='text' className='w-2/3 border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' 
                                     id='text' />
                             </div>
-                            {/* <div className='w-full flex items-center justify-center p-2'>
-                                <p className='pr-2 text-lg'>Text:</p>
-                                <input type='text' className='w-2/3 border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' 
-                                    onClick={(e) => {  }} />
-                            </div> */}
-                        </div>
-                        <button onClick={() => {
-                            addText(document.getElementById('text').value); }} className='w-2/3 bg-purple-700 m-2'>Add text</button>
+                        </div> */}
+                        <button onClick={addText} className='w-2/3 bg-purple-700 m-2'>Add text</button>
                     </div>
                     {/* <button onClick={undoClick} className='w-2/3 bg-purple-700 m-2'>Undo</button>
                     <button onClick={redoClick} className='w-2/3 bg-purple-700 m-2'>Redo</button> */}

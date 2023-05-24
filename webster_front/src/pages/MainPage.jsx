@@ -10,6 +10,8 @@ import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import SaveAndPostForm from '../components/SaveAndPostForm';
 
+// import 'fabric-history';
+
 const MainPage = () => {
   const dispatch = useDispatch();
   let canvasData = useSelector(state => state.canvas);
@@ -35,6 +37,7 @@ const MainPage = () => {
     editor.canvas.setHeight(canvasData.height);
     editor.canvas.setBackgroundColor(canvasData.color);
     editor.canvas.svgViewportTransformation = false;
+    // editor.canvas._historyInit();
     // editor.canvas.setBackgroundImage('https://c8.alamy.com/comp/B12HTK/a-gold-coloured-picture-frame-with-beige-canvas-border-isolated-on-B12HTK.jpg')
 
     // if (!editor.canvas.__eventListeners["mouse:wheel"]) {
@@ -267,12 +270,15 @@ const MainPage = () => {
   };
 
   const undoClick = () => {
-    if (editor.canvas._objects.length > 0) {
-      let newHistory = history;
-      newHistory.push(editor.canvas._objects.pop());
-      setHistory(newHistory);
-    }
-    editor.canvas.renderAll();
+    console.log('undo')
+    editor.canvas.undo();
+    // if (editor.canvas._objects.length > 0) {
+    //   let newHistory = history;
+    //   newHistory.push(editor.canvas._objects.pop());
+    //   setHistory(newHistory);
+    // }
+    // editor.canvas.renderAll();
+    
   }
 
   const redoClick = () => {
@@ -440,12 +446,21 @@ const MainPage = () => {
     editor.canvas.requestRenderAll()
   }
 
-  const addText = (value) =>{
-    let text = new fabric.IText(value, {fontFamily: 'Send Flowers'});
+  const addText = () =>{
+    let text = new fabric.IText('Text ...');
     editor.canvas.add(text);
     editor.canvas.viewportCenterObject(text);
     editor.canvas.requestRenderAll()
   }
+
+  const applyTextFilter = (filterName, value) =>{
+    console.log(filterName, value);
+    let text = editor.canvas.getActiveObject();
+    // text[filterName] = value;
+    text.set(filterName, value);
+    editor.canvas.requestRenderAll();
+  }
+
   // editor.canvas.getActiveObject().rotate()
   // console.log(history);
   // console.log(editor?.canvas.freeDrawingBrush);
@@ -494,6 +509,7 @@ const MainPage = () => {
           toggleEraser={toggleEraser}
           onChangeHeight={onChangeHeight}
           onChangeWidth={onChangeWidth}
+          applyTextFilter={applyTextFilter}
         />
 
       </div>

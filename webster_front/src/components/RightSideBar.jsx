@@ -20,7 +20,8 @@ const RightSideBar = ({
     changeBrushShadow,
     toggleEraser,
     onChangeHeight,
-    onChangeWidth }) => {
+    onChangeWidth,
+    applyTextFilter }) => {
 
     const [brushStateSize, setBrushStateSize] = useState(brushData.brushSize);
     const [brushStateColor, setBrushStateColor] = useState(brushData.brushColor);
@@ -154,11 +155,11 @@ const RightSideBar = ({
                                 <div className='w-full flex justify-center items-center mb-1'>
                                     <div className='w-1/3 flex flex-col mx-2'>
                                         <label>Height:</label>
-                                        <input onChange={(e) => { onChangeHeight(e.target.value) } } type='number' min='1' defaultValue={Math.ceil(selectedObject.height)} className='border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige'/>
+                                        <input onChange={(e) => { onChangeHeight(e.target.value) }} type='number' min='1' defaultValue={Math.ceil(selectedObject.height)} className='border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' />
                                     </div>
                                     <div className='w-1/3 flex flex-col mx-2'>
                                         <label>Width:</label>
-                                        <input onChange={(e) => { onChangeWidth(e.target.value) } } type='number' min='1' defaultValue={Math.ceil(selectedObject.width)} className='border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige'/>
+                                        <input onChange={(e) => { onChangeWidth(e.target.value) }} type='number' min='1' defaultValue={Math.ceil(selectedObject.width)} className='border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' />
                                     </div>
                                 </div>
                                 <button onClick={groupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Group</button>
@@ -494,6 +495,139 @@ const RightSideBar = ({
                                         <p className='pl-2 text-lg'>Emboss</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    }
+                    {
+                        selectedObject?.type === 'i-text' &&
+                        <div className='w-full'>
+                            <p className='sidebar-item-title' onClick={() => {
+                                let ac = document.getElementById('selected-text-container');
+                                ac.classList.toggle('hidden');
+                                let ac_up = document.getElementById('selected-text-chevron-up');
+                                let ac_down = document.getElementById('selected-text-chevron-down');
+                                ac_up.classList.toggle('hidden');
+                                ac_down.classList.toggle('hidden');
+                            }}>
+                                Selected text
+                                <svg id='selected-text-chevron-up' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg id='selected-text-chevron-down' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 hidden">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </p>
+                            <div className='w-full text-center my-2 hidden' id='selected-text-container'>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl'>Font family:</label>
+                                    <select className='p-1.5'
+                                        onChange={(e) => {
+                                            applyTextFilter('fontFamily', e.target.value);
+                                        }} defaultValue={selectedObject?.fontFamily}>
+                                        <option value='Times New Roman'>Times new roman</option>
+                                        <option value='Send Flowers'>Send Flowers</option>
+                                    </select>
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl'>Font size: {selectedObject?.fontSize}</label>
+                                    <input className='py-1.5' type='range' min='10' max='99' step='1' defaultValue={selectedObject?.fontSize} onChange={(e) => {
+                                        applyTextFilter('fontSize', e.target.value);
+                                    }} />
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl'>Font weight:</label>
+                                    <select className='p-1.5' onChange={(e) => {
+                                        applyTextFilter('fontWeight', e.target.value);
+                                    }} defaultValue={selectedObject?.fontWeight}>
+                                        <option value='normal'>Normal</option>
+                                        <option value='bold'>Bold</option>
+                                    </select>
+                                </div>
+
+                                <div className='w-full flex justify-center items-center mb-1'>
+                                    <label className='w-1/2 my-2 text-xl'>Underline:</label>
+                                    <input className='p-1.5 w-5 h-5' type='checkbox' defaultChecked={selectedObject?.underline} onClick={(e) => {
+                                        applyTextFilter('underline', e.target.checked && true);
+                                    }} />
+                                </div>
+                                <div className='w-full flex justify-center items-center mb-1'>
+                                    <label className='w-1/2 my-2 text-xl'>Overline:</label>
+                                    <input className='p-1.5 w-5 h-5' type='checkbox' defaultChecked={selectedObject?.overline} onClick={(e) => {
+                                        applyTextFilter('overline', e.target.checked && true);
+                                    }} />
+                                </div>
+                                <div className='w-full flex justify-center items-center mb-1'>
+                                    <label className='w-1/2 my-2 text-xl'>Line through:</label>
+                                    <input className='p-1.5 w-5 h-5' type='checkbox' defaultChecked={selectedObject?.overline} onClick={(e) => {
+                                        applyTextFilter('linethrough', e.target.checked && true);
+                                    }} />
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <p className='w-full my-2 text-xl'>Font style: </p>
+                                    <select className='p-1.5' onChange={(e) => {
+                                        applyTextFilter('fontStyle', e.target.value);
+                                    }} defaultValue={selectedObject?.fontStyle || 'normal'}>
+                                        <option value='normal'>Normal</option>
+                                        <option value='italic'>Italic</option>
+                                    </select>
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <div className='w-full flex flex-col my-2'>
+                                        <div className='w-full'>
+                                            <label className='my-1 text-lg'>Stroke color and width:</label>
+                                        </div>
+                                    </div>
+                                    <div className='w-full flex justify-around'>
+                                        <div className='w-1/2 flex flex-col items-center'>
+                                            {/* <label className='my-1 text-xl'>Colo</label> */}
+                                            <input className='w-3/4 h-6' type='color' onChange={(e) => {
+                                                applyTextFilter('stroke', e.target.value);
+                                            }} defaultValue={selectedObject?.stroke || '#fff'} />
+                                        </div>
+                                        <div className='w-1/2 flex flex-col items-center'>
+                                            {/* <label className='my-1 text-xl'>Stroke width:</label> */}
+                                            <input className='w-3/4 h-6' type='range' min='0' max='4' step='1' onChange={(e) => {
+                                                applyTextFilter('strokeWidth', e.target.value);
+                                            }} defaultValue={selectedObject?.strokeWidth || '1'} />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl'>Text align:</label>
+                                    <select className='p-1.5' onChange={(e) => {
+                                        applyTextFilter('textAlign', e.target.value);
+                                    }} defaultValue={selectedObject?.textAlign || 'left'}>
+                                        <option value='left'>Left</option>
+                                        <option value='center'>Center</option>
+                                        <option vlaue='right'>Right</option>
+                                        <option vlaue='justify'>Justify</option>
+                                        <option value='justify-left'>Justify-left</option>
+                                        <option value='justify-center'>Justify-center</option>
+                                        <option value='justify-right'>Justify-right</option>
+                                    </select>
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl' >Line height: {selectedObject?.lineHeight}</label>
+                                    <input className='py-1.5' type='range' min='1' max='5' step='1' onChange={(e) => {
+                                        applyTextFilter('lineHeight', e.target.value);
+                                    }} defaultValue={selectedObject?.lineHeight || 1} />
+                                </div>
+
+                                <div className='w-full flex flex-col justify-center items-center mb-1'>
+                                    <label className='w-full my-2 text-xl' >Text background color:</label>
+                                    <input className='w-1/2' type='color' onChange={(e) => {
+                                        applyTextFilter('textBackgroundColor', e.target.value);
+                                    }} defaultValue={selectedObject?.textBackgroundColor} />
+                                </div>
+                                
                             </div>
                         </div>
                     }
