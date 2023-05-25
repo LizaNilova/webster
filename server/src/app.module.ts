@@ -31,6 +31,7 @@ import { UserEvents } from './users/models/user-event.model';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { Subscriptions } from './subscriptions/subscriptions.model';
 import { ProjectModule } from './project/project.module';
+import { Project } from './project/project.model';
 @Module({
   controllers: [],
   providers: [],
@@ -48,7 +49,7 @@ import { ProjectModule } from './project/project.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like, UserEvents, Subscriptions],
+      models: [User, Role, UserRoles, UserBanned, Post, PostCategory, Category, Comment, Like, UserEvents, Subscriptions, Project],
       autoLoadModels: true,
     }),
     UsersModule,

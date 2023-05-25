@@ -98,6 +98,7 @@ export class UsersService {
         role: user.roles[0].value,
         rating: rating,
         posts: user.posts,
+        projects: user.projects,
         ban: user.ban,
         subscriptions: user.subscriptions,
         subscribers: subscribersWithLogin
