@@ -20,7 +20,6 @@ export class PostsService {
     private filesService: FilesService, @InjectModel(Category) private categoryRepository: typeof Category) { }
 
   async create(dto: CreatePostDto) {
-    console.log(dto.image)
     const filename = await this.filesService.createFile(dto.image);
 
     const existPost = await this.postsRepository.findOne({ where: { title: dto.title } });
