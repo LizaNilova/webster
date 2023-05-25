@@ -19,6 +19,7 @@ import { UserEvents } from './user-event.model';
 import { Subscriptions } from 'src/subscriptions/subscriptions.model';
 import { PostReport } from 'src/posts/post-complaints.model';
 import fs from 'fs'
+import { Project } from 'src/project/project.model';
 
 interface UserCreationAttrs {
   login: string;
@@ -76,6 +77,9 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @HasMany(() => Subscriptions)
   subscriptions: Subscriptions[];
+
+  @HasMany(() => Project)
+  projects: Project[];
 
   @HasMany(() => UserEvents)
   events: UserEvents[];

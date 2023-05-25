@@ -20,10 +20,11 @@ import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 import { MailModule } from 'src/mail/mail.module';
 import { FilesModule } from 'src/files/files.module';
 import { PostReport } from 'src/posts/post-complaints.model';
+import { Project } from '../project/project.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents, Subscriptions, PostReport]),
+    SequelizeModule.forFeature([User, Role, UserRoles, UserBanned, Post, Comment, Like, UserEvents, Subscriptions, PostReport, Project]),
     RolesModule,
     AuthModule,
     PostsModule, 
