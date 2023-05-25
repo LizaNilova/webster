@@ -27,4 +27,6 @@ export class UserEvents extends Model<UserEvents> {
     @Column({ type: DataType.STRING, allowNull: true })
     event_content: string;
 
+    @BelongsTo(()=> User)
+    event: User;
 }
