@@ -13,6 +13,7 @@ import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import SaveAndPostForm from '../components/SaveAndPostForm';
 import { dataURItoBlob } from '../functions/toBlob';
+import ChooseProject from '../components/ChooseProject';
 
 
 // fabric.Canvas.prototype.historyInit = function () {
@@ -61,10 +62,6 @@ const MainPage = () => {
 
   const [history, setHistory] = useState([]);
 
-  const [listeners, setListeners] = useState([]);
-
-  const [savedCanvasState, setCanvasState] = useState(null);
-
   const [openedForm, changeFormState] = useState(null);
 
   // const [selectedObject, setSelectedObject] = useState(null);
@@ -75,7 +72,7 @@ const MainPage = () => {
       return;
     }
 
-    editor.canvas.loadFromJSON(canvasData?.json);
+    // editor.canvas.loadFromJSON(canvasData?.json);
     editor.canvas.setWidth(canvasData.width);
     editor.canvas.setHeight(canvasData.height);
     editor.canvas.setBackgroundColor(canvasData.color);
@@ -246,8 +243,8 @@ const MainPage = () => {
     changeFormState(null);
   }
 
-  const createCanvasClick = () => {
-    changeFormState('Create');
+  const openForm = (form) => {
+    changeFormState(form);
   }
 
   const toggleDrawingClick = () => {
@@ -544,19 +541,15 @@ const MainPage = () => {
     editor.canvas.requestRenderAll();
   }
 
-  // editor.canvas.getActiveObject().rotate()
-  // console.log(history);
-  // console.log(editor?.canvas.freeDrawingBrush);
-  console.log('rerender');
-
   return (
     <>
-      {openedForm && <CreateCanvasForm closeForm={closeForm} />}
+      {openedForm === 'Create' && <CreateCanvasForm closeForm={closeForm} />}
+      {openedForm === 'Select project' && <ChooseProject closeForm={closeForm}/> }
       {/* <SaveAndPostForm /> */}
       <div className='w-full h-full min-h-screen flex bg-dark-purple text-white'>
         <SideBar
           canvasData={canvasData}
-          createCanvasClick={createCanvasClick}
+          openForm={openForm}
           clearCanvasClick={clearCanvasClick}
           redoClick={redoClick}
           undoClick={undoClick}
