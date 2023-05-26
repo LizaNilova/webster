@@ -51,7 +51,6 @@ export class PostsService {
 
   async getAll(sort, filter, search) {
     filter = filter ? JSON.parse(filter) : [];
-
     const filterOptions: FindOptions<Post> = {
       include: [
         { all: true },
@@ -66,7 +65,8 @@ export class PostsService {
     }
 
     if (filter.length > 0) {
-      filterOptions.include[0].where = { value: { [Op.in]: filter } };
+      filterOptions.include[1].where = { value: { [Op.in]: filter } };
+      console.log(filterOptions.include)
     }
 
     return await this.postsRepository.findAll(filterOptions);
