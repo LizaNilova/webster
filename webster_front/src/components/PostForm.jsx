@@ -4,11 +4,12 @@ import { getAllProjects } from '../redux/CanvasSlice';
 import { getAllCategories } from '../redux/categoriesSlice';
 import axios from 'axios';
 import { dataURItoBlob } from '../functions/toBlob';
-import { createPost } from '../redux/postsSlice';
+import { createPost, updatePost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
 const PostForm = ({ data, closeForm }) => {
+    console.log(data)
     const dispatch = useDispatch();
     const projects = useSelector(state => state.canvas.projects);
     const categories = useSelector(state => state.categories.categories);
@@ -43,9 +44,21 @@ const PostForm = ({ data, closeForm }) => {
                     // fd.append('category_value', );
                     dispatch(createPost(fd));
                 })
-
         } else {
-
+            axios.get(apiPath + '/static/' + state.image,{ responseType: 'blob' })
+                .then(response =>{ 
+                    console.log('Title:', state.title, 'Content:', state.content, 'image:', response.data, 'categories:', state.categories);
+                    let fd = new FormData();
+                    fd.append('title', state.title);
+                    fd.append('content', state.content);
+                    fd.append('image', response.data);
+                    state.categories.forEach((item, i) => {
+                        fd.append(`category_value[${i}]`, item);
+                        return;
+                    });
+                    // fd.append('category_value', );
+                    dispatch(updatePost(fd));
+                })
         }
     }
 
@@ -94,6 +107,7 @@ const PostForm = ({ data, closeForm }) => {
                                 className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-2/3 rounded-lg outline-none text-black p-2 bg-light-beige"
                                 name='content' onChange={handleChange}
                                 placeholder='Post description ... '
+                                defaultValue={state.content}
                             />
                         </div>
                         <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>

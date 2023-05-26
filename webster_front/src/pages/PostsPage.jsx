@@ -14,6 +14,7 @@ const PostsPage = () => {
     const [search, setSearch] = useState('');
     const [sort, setSort] = useState('date')
     const [filter, setFilter] = useState([])
+    
     useEffect(() => {
         dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search}));
         dispatch(getAllCategories());
@@ -24,7 +25,7 @@ const PostsPage = () => {
         <>
             {form && <PostForm data={form} closeForm={() => { openForm(null) }} />}
             <div className='w-full h-full min-h-screen flex bg-dark-purple justify-around text-white'>
-                <div className='w-1/6 h-fit flex flex-col justify-center items-center sticky top-28 z-10'>
+                <div className='w-1/5 h-fit flex flex-col justify-center items-center sticky top-28 z-10'>
                     <button onClick={() => { openForm('Create') }} className='w-2/3 bg-purple-700 m-3'>Create</button>
                     <div className='text-xl mb-3'>Search post:</div>
                     <div className='w-full m-1'>
@@ -65,7 +66,7 @@ const PostsPage = () => {
                         Sort by:
                     </div>
                     <div className='w-full flex flex-wrap justify-around m-1'>
-                        <select className='w-1/2 text-black text-lg p-2 m-1 rounded-lg' onChange={(e)=>{
+                        <select className='w-full text-black text-lg p-2 m-1 rounded-lg' onChange={(e)=>{
                             setSort(e.target.value);
                         }}>
                             <option value='date'>Date</option>
@@ -77,7 +78,7 @@ const PostsPage = () => {
                 <div className='w-3/5 flex flex-col items-center border-l border-purple-800'>
                     {posts && posts.map(post => {
                         return (
-                            <Post data={post} />
+                            <Post data={post} openForm={openForm}/>
                         )
                     })}
                 </div>
