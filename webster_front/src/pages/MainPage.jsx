@@ -4,13 +4,53 @@ import SideBar from '../components/SideBar';
 import CanvasContainer from '../components/CanvasContainer';
 import CreateCanvasForm from '../components/CreateCanvasForm';
 import { useDispatch, useSelector } from 'react-redux';
+
+// import 'fabric-history';
 import { useFabricJSEditor } from 'fabricjs-react';
-import { setMode } from '../redux/CanvasSlice';
+
+import { setData, setMode } from '../redux/CanvasSlice';
 import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import SaveAndPostForm from '../components/SaveAndPostForm';
 
-// import 'fabric-history';
+
+// fabric.Canvas.prototype.historyInit = function () {
+//   this.historyUndo = [];
+//   this.historyNextState = this.historyNext();
+
+//   this.on({
+//     "object:added": this.historySaveAction,
+//     "object:removed": this.historySaveAction,
+//     "object:modified": this.historySaveAction
+//   })
+// }
+
+// fabric.Canvas.prototype.historyNext = function () {
+//   return JSON.stringify(this.toDatalessJSON(this.extraProps));
+// }
+
+// fabric.Canvas.prototype.historySaveAction = function () {
+//   if (this.historyProcessing)
+//     return;
+
+//   const json = this.historyNextState;
+//   this.historyUndo.push(json);
+//   this.historyNextState = this.historyNext();
+// }
+
+// fabric.Canvas.prototype.undo = function () {
+//   // The undo process will render the new states of the objects
+//   // Therefore, object:added and object:modified events will triggered again
+//   // To ignore those events, we are setting a flag.
+//   this.historyProcessing = true;
+
+//   const history = this.historyUndo.pop();
+//   if (history) {
+//     this.loadFromJSON(history).renderAll();
+//   }
+
+//   this.historyProcessing = false;
+// }
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -32,11 +72,12 @@ const MainPage = () => {
     if (!editor || !fabric) {
       return;
     }
-
     editor.canvas.setWidth(canvasData.width);
     editor.canvas.setHeight(canvasData.height);
     editor.canvas.setBackgroundColor(canvasData.color);
     editor.canvas.svgViewportTransformation = false;
+
+    // console.log('history init')
     // editor.canvas._historyInit();
     // editor.canvas.setBackgroundImage('https://c8.alamy.com/comp/B12HTK/a-gold-coloured-picture-frame-with-beige-canvas-border-isolated-on-B12HTK.jpg')
 
@@ -270,8 +311,8 @@ const MainPage = () => {
   };
 
   const undoClick = () => {
-    console.log('undo')
-    editor.canvas.undo();
+    // console.log('undo')
+    // editor.canvas.undo();
     // if (editor.canvas._objects.length > 0) {
     //   let newHistory = history;
     //   newHistory.push(editor.canvas._objects.pop());
@@ -283,9 +324,9 @@ const MainPage = () => {
 
   const redoClick = () => {
     // console.log('Redo: ', history, editor.canvas._objects);
-    if (history.length > 0) {
-      editor.canvas.add(history.pop());
-    }
+    // if (history.length > 0) {
+    //   editor.canvas.add(history.pop());
+    // }
     // editor.canvas.renderAll();
   }
 
@@ -383,11 +424,36 @@ const MainPage = () => {
   }
 
   const saveCanvasState = () => {
-    setCanvasState(editor.canvas.toJSON());
+    let jsonState = editor.canvas.toJSON();
+    jsonState.width = canvasData.width;
+    jsonState.height = canvasData.height;
+    jsonState.name = canvasData.name;
+    jsonState.color = canvasData.color;
+    console.log(jsonState);
+    localStorage.setItem('savedState', JSON.stringify(jsonState));
+    // setCanvasState(editor.canvas.toJSON());
   }
 
   const restoreCanvasState = () => { 
-    editor.canvas.loadFromJSON(savedCanvasState);
+    let jsonState = localStorage.getItem('savedState');
+    let str = JSON.parse(jsonState);
+    dispatch(setData({width: str?.width, height: str?.height, color: str?.color, name: str?.name}))
+    // console.log(jsonState);
+    if(jsonState){
+      editor.canvas.loadFromJSON(jsonState);
+    }
+      
+    // editor.canvas.loadFromJSON(savedCanvasState);
+  }
+
+  const saveCanvasToDB = () => {
+    let jsonState = editor.canvas.toJSON();
+    jsonState.width = canvasData.width;
+    jsonState.height = canvasData.height;
+    jsonState.name = canvasData.name;
+    jsonState.color = canvasData.color;
+    console.log(jsonState);
+    dispatch();
   }
 
   const changeBrushShadow = (color, blur, offset) => {
@@ -464,6 +530,7 @@ const MainPage = () => {
   // editor.canvas.getActiveObject().rotate()
   // console.log(history);
   // console.log(editor?.canvas.freeDrawingBrush);
+  console.log('rerender');
 
   return (
     <>
