@@ -77,7 +77,6 @@ export class ProjectController {
   @ApiCreatedResponse({
     description: 'The record has been successfully created.', schema: {
       example: {
-        "massage": {
             "project": {
                 "id": 5,
                 "name": "Project1",
@@ -88,7 +87,6 @@ export class ProjectController {
                 "createdAt": "2023-05-26T12:05:44.215Z"
             },
             "message": "Create project"
-        }
     }
     }
   })
