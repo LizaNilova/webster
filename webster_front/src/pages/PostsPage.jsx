@@ -15,7 +15,7 @@ const PostsPage = () => {
     const [sort, setSort] = useState('date')
     const [filter, setFilter] = useState([])
     useEffect(() => {
-        dispatch(getAllPosts({sort: sort, filter: filter, search: search}));
+        dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search}));
         dispatch(getAllCategories());
     }, [dispatch, search, sort, filter]);
 
@@ -43,8 +43,6 @@ const PostsPage = () => {
                                 return (
                                     <div className='flex items-center justify-center p-2'>
                                         <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(filter.findIndex(f_category => f_category === category.value))} onChange={(e)=>{
-                                            console.log(e.target.checked)
-                                            
                                             let idx = filter.findIndex(f_category => f_category === category.value);
                                             if(idx < 0)
                                             {

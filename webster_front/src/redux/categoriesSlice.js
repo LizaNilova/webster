@@ -16,6 +16,7 @@ export const getAllCategories = createAsyncThunk(
     }
 )
 
+
 const categoriesSlice = createSlice({
     name: 'canvas',
     initialState: {

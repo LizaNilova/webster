@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProjects } from '../redux/CanvasSlice';
 import { getAllCategories } from '../redux/categoriesSlice';
+import axios from 'axios';
+import { dataURItoBlob } from '../functions/toBlob';
+import { createPost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
@@ -25,10 +28,29 @@ const PostForm = ({ data, closeForm }) => {
     const handleUpdateOrCreateClick = () => {
         if(data === 'Create')
         {
+            console.log(state);
+            axios.get(apiPath + '/static/' + state.image,{ responseType: 'blob' })
+                .then(response =>{ 
+                    console.log('Title:', state.title, 'Content:', state.content, 'image:', response.data, 'categories:', state.categories);
+                    let fd = new FormData();
+                    fd.append('title', state.title);
+                    fd.append('content', state.content);
+                    fd.append('image', response.data);
+                    fd.append('category_value', JSON.stringify(state.categories));
+                    dispatch(createPost(fd));
+                })
 
         } else {
 
         }
+    }
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setState(prevState => ({
+            ...prevState,
+            [name]: value,
+        }))
     }
 
 
