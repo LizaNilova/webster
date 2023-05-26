@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 // import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
-import {MainPage} from '../pages/mainPage';
+// import {MainPage} from '../pages/MainPage';
 import { RegistrationPage } from '../pages/registerPage';
 // import { VerifyEmailPage } from '../pages/VerifyEmailPage';
 import { LoginPage } from '../pages/loginPage';
@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/loginPage';
 // import CheckOutSuccess from '../pages/CheckOutSuccess';
 // import CalendarPage from '../pages/CalendarPage';
 import Header from '../components/Header';
+import MainPage from '../pages/MainPage';
 // import { VerifyCompanyEmailPage } from '../pages/VerifyCompanyEmailPage';
 // import { CompanyPage } from '../pages/CompanyPage';
 // import { VerifyInvite } from '../pages/VerifyInvite';
