@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     MailerModule.forRoot({
       transport: {
         host: process.env.MAIL_HOST,
+        // port: 465,
         secure: false,
         auth: {
           user: process.env.MAIL_USER,
