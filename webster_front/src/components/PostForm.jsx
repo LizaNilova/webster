@@ -36,7 +36,11 @@ const PostForm = ({ data, closeForm }) => {
                     fd.append('title', state.title);
                     fd.append('content', state.content);
                     fd.append('image', response.data);
-                    fd.append('category_value', JSON.stringify(state.categories));
+                    state.categories.forEach((item, i) => {
+                        fd.append(`value[${i}]`, item);
+                        return;
+                    });
+                    // fd.append('category_value', );
                     dispatch(createPost(fd));
                 })
 
