@@ -77,8 +77,19 @@ export class ProjectController {
   @ApiCreatedResponse({
     description: 'The record has been successfully created.', schema: {
       example: {
-        message: 'Create project'
-      }
+        "massage": {
+            "project": {
+                "id": 5,
+                "name": "Project1",
+                "setting": "{\"x\":5,\"y\":6}",
+                "userId": 1,
+                "image": "f4546a71-0a09-478e-a2c3-def50d2645df.jpg",
+                "updatedAt": "2023-05-26T12:05:44.215Z",
+                "createdAt": "2023-05-26T12:05:44.215Z"
+            },
+            "message": "Create project"
+        }
+    }
     }
   })
   @ApiBadRequestResponse({
