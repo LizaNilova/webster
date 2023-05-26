@@ -37,7 +37,7 @@ const PostForm = ({ data, closeForm }) => {
                     fd.append('content', state.content);
                     fd.append('image', response.data);
                     state.categories.forEach((item, i) => {
-                        fd.append(`value[${i}]`, item);
+                        fd.append(`category_value[${i}]`, item);
                         return;
                     });
                     // fd.append('category_value', );
