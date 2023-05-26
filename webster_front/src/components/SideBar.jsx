@@ -1,14 +1,15 @@
 import React from 'react';
 
 const SideBar = ({ canvasData, openForm, clearCanvasClick,
-    undoClick, redoClick, addImageToCanvas, setBackgroundImage, exportAsImage, saveCanvasState, restoreCanvasState, onChangeBGColor, addText, createProject }) => {
+    undoClick, redoClick, addImageToCanvas, setBackgroundImage, exportAsImage, saveCanvasState, restoreCanvasState, onChangeBGColor, addText, createProject, updateProject }) => {
         return (
         <div className='w-1/6 min-h-screen flex flex-col items-center p-2 border-r-2 border-purple-900'>
             <p className='sidebar-item-title hover:cursor-default'>Create new canvas</p>
             <button onClick={()=>{openForm('Create')}} className='w-2/3 bg-purple-700 m-2'>Create new canvas</button>
             <button onClick={()=>{openForm('Select project')}} className='w-2/3 bg-purple-700 m-2'>Load project</button>
-            {localStorage.getItem('savedState') && <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2'>Load last saved project</button>}
-            {canvasData && canvasData.name && <button onClick={createProject} className='w-2/3 bg-purple-700 m-2'>Save canvas to DB</button> }
+            {localStorage.getItem('savedState') && !canvasData.curProject?.id && <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2'>Load last saved project</button>}
+            {canvasData && canvasData.name && !canvasData.curProject?.id && <button onClick={createProject} className='w-2/3 bg-purple-700 m-2'>Create project</button> }
+            {canvasData && canvasData.name && canvasData.curProject?.id && <button onClick={updateProject} className='w-2/3 bg-purple-700 m-2'>Update project</button>}
             {
                 canvasData && canvasData.width > 0 &&
                 <>

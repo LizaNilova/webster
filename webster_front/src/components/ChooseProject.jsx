@@ -37,18 +37,15 @@ const ChooseProject = ({closeForm, loadProject}) => {
                     <div className="relative px-8 py-3 flex flex-col m-1">
                         <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
                             <label className='text-center w-1/4'>Choose your project:</label>
-                            <div className='w-2/3 flex flex-wrap'>
+                            <div className='w-2/3 flex flex-wrap justify-between'>
                                 {projects.map(project => {
                                     return(
-                                        <img src={apiPath + '/static/' + project.image} className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
+                                        <img src={apiPath + '/static/' + project.image} className='w-1/4 h-32 mx-2 my-1.5 rounded-lg cursor-pointer' onClick={()=>{
+                                            loadProject(project);
+                                            closeForm()
+                                        }}/>
                                     )
                                 })}
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
-                                <img src='logo.png' className='w-1/5 h-16 mx-2 my-1.5 rounded-lg cursor-pointer'/>
                             </div>
                         </div>
                     </div>

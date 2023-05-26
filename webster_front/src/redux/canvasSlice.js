@@ -2,6 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 import projectRouter from "../routes/project-router"
 
+export const getAllProjects = createAsyncThunk(
+    'get/api/projects',
+    async () => {
+      try {
+        const { data } = await axios.get(projectRouter.allProjects(), { withCredentials: true })
+        console.log(data);
+        return (data)
+      } catch (error) {
+        console.log(error)
+        return ({ message: error.response.message })
+      }
+    }
+)
+
 export const createProject = createAsyncThunk(
     'post/api/project',
     async (formData) => {
@@ -39,11 +53,12 @@ const canvasSlice = createSlice({
         height: null,
         color: '#000',
         name: '',
-        json: {},
+
         mode: 'default',
 
-        project: null,
-        message: ''
+        curProject: null,
+        message: '',
+        projects: []
     },
     reducers: {
         setData(state, action){
@@ -60,17 +75,24 @@ const canvasSlice = createSlice({
         setName(state, action) 
         {
             state.name = action.payload;
+        },
+        setCurProject(state, action)
+        {
+            state.curProject = action.payload;
         }
     },
     extraReducers: {
         [createProject.fulfilled]: (state, action) => {
-            state.project = action.payload?.project;
+            state.curProject = action.payload?.project;
             state.message = action.payload?.message;
             // state.status = action.payload?.message
+        },
+        [getAllProjects.fulfilled]: (state, action) => {
+            state.projects = action.payload.projects
         }
     }
 })
 
 export default canvasSlice.reducer;
-export const { setData, setMode, setName} = canvasSlice.actions;
+export const { setData, setMode, setName, setCurProject} = canvasSlice.actions;
 

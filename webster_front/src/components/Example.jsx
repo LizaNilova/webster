@@ -87,6 +87,75 @@ export default function Example() {
       }
     );
   };
+    // console.log('history init')
+    // editor.canvas._historyInit();
+    // editor.canvas.setBackgroundImage('https://c8.alamy.com/comp/B12HTK/a-gold-coloured-picture-frame-with-beige-canvas-border-isolated-on-B12HTK.jpg')
+
+    // if (!editor.canvas.__eventListeners["mouse:wheel"]) {
+    //   editor.canvas.on('mouse:wheel', function (opt) {
+    //     var delta = opt.e.deltaY;
+    //     var zoom = editor.canvas.getZoom();
+    //     zoom *= 0.999 ** delta;
+    //     if (zoom > 3) zoom = 3;
+    //     if (zoom < 0.4) zoom = 0.4;
+    //     // editor.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+    //     editor.canvas.setZoom(zoom);
+    //     opt.e.preventDefault();
+    //     opt.e.stopPropagation();
+    //     var vpt = this.viewportTransform;
+    //     // console.log(vpt)
+    //     // if (zoom < 0.4) {
+    //     //   vpt[4] = 200 - 1000 * zoom / 2;
+    //     //   vpt[5] = 200 - 1000 * zoom / 2;
+    //     // } else {
+    //     //   if (vpt[4] >= 0) {
+    //     //     vpt[4] = 0;
+    //     //   } else if (vpt[4] < -(editor.canvas.getWidth() - 1000 * zoom)) {
+    //     //     vpt[4] = -(editor.canvas.getWidth() - 1000 * zoom);
+    //     //   }
+    //     //   if (vpt[5] >= 0) {
+    //     //     vpt[5] = 0;
+    //     //   } else if (vpt[5] < -(editor.canvas.getHeight() - 670 * zoom)) {
+    //     //     vpt[5] = -(editor.canvas.getHeight() - 670 * zoom);
+    //     //   }
+    //     // }
+    //   })
+    // }
+
+    // if (listeners.findIndex(name => name === "selection:created") < 0) {
+
+    //   editor.canvas.on("selection:created", (opt) => {
+
+    //     let selected_object = opt.selected;
+    //     console.log(selected_object[0].type);
+    //     // setSelectedObject(selected_object[0]);
+
+    //   })
+
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:created");
+    //   setListeners(newListeners);
+    // }
+
+
+    // if (!editor.canvas.__eventListeners["selection:updated"]) {
+    //   editor.canvas.on("selection:updated", (opt) => {
+    //     let selected_object = opt.selected;
+    //     console.log(selected_object);
+    //   })
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:updated");
+    //   setListeners(newListeners);
+    // }
+
+    // if (!editor.canvas.__eventListeners["selection:cleared"]) {
+    //   editor.canvas.on("selection:cleared", (opt) => {
+    //     // setSelectedObject(null);
+    //   })
+    //   let newListeners = listeners;
+    //   newListeners.push("selection:cleared");
+    //   setListeners(newListeners);
+    // }
 
   const fromSvg = () => {
     fabric.loadSVGFromString(
