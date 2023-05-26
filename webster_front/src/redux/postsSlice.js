@@ -4,9 +4,9 @@ import postRouter from "../routes/post-router"
 
 export const getAllPosts = createAsyncThunk(
     'get/api/posts',
-    async ( {sort, filter, search} ) => {
+    async ( {sort, filter, search, page} ) => {
       try {
-        const { data } = await axios.get(postRouter.allPostsPath(sort, filter, search), { withCredentials: true });
+        const { data } = await axios.get(postRouter.allPostsPath(sort, filter, search, page), { withCredentials: true });
         console.log(data);
         return (data)
       } catch (error) {
@@ -51,6 +51,7 @@ export const updatePost = createAsyncThunk(
 const postsSlice = createSlice({
     name: 'canvas',
     initialState: {
+        meta: {},
         posts:[],
         message: ''
     },
@@ -61,6 +62,7 @@ const postsSlice = createSlice({
       [getAllPosts.fulfilled]: (state, action) =>
       {
         state.posts = action.payload.posts;
+        state.meta = action.payload.meta
         state.message = action.payload.message;
       }
     }

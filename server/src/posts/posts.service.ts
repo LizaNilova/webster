@@ -49,8 +49,11 @@ export class PostsService {
     return post;
   }
 
-  async getAll(sort, filter, search) {
+  async getAll(sort, filter, search, page: number) {
     filter = filter ? JSON.parse(filter) : [];
+    const parsedPage = page ? page : 1;
+    const perPage = 10;
+
     const filterOptions: FindOptions<Post> = {
       include: [
         { all: true },
@@ -68,8 +71,17 @@ export class PostsService {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
       console.log(filterOptions.include)
     }
-
-    return await this.postsRepository.findAll(filterOptions);
+    const posts = await this.postsRepository.findAll(filterOptions);
+    const totalPages = Math.ceil(posts.length / perPage);
+    const postFilter = posts.slice(
+      parsedPage * perPage - perPage,
+      parsedPage * perPage
+    );
+    return {
+      meta: { page: page || 1, perPage: Number(perPage), totalPages },
+      posts: postFilter,
+      message: 'Success'
+    }
   }
 
   async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {

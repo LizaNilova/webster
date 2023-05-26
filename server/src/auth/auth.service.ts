@@ -80,7 +80,7 @@ export class AuthService {
     const refreshPayload = { login: user.login };
     return {
       accessToken: this.jwtService.sign(accessPayload, { expiresIn: '15m' }),
-      refreshToken: this.jwtService.sign(refreshPayload)
+      refreshToken: this.jwtService.sign(refreshPayload, { expiresIn: '30d' })
     };
   }
 
@@ -111,8 +111,8 @@ export class AuthService {
   }
 
   async resetPassword(userDto: CreateUserDto, id: string) {
-    if (!userDto.password || !userDto.passwordComfirm) { 
-      throw new HttpException('No content', HttpStatus.BAD_REQUEST); 
+    if (!userDto.password || !userDto.passwordComfirm) {
+      throw new HttpException('No content', HttpStatus.BAD_REQUEST);
     }
     const event = await this.userEventsRepository.findByPk(id);
     let user = await this.userRepository.findOne({ where: { id: event.userId } });

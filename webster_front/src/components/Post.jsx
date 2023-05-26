@@ -3,9 +3,6 @@ import React from 'react';
 const apiPath = 'http://localhost:8080/api';
 
 const Post = ({ data, openForm }) => {
-
-    // console.log(data);   
-
     return (
         <div className='w-5/6 flex flex-col justify-center items-center border-purple-800 border m-2 p-2 rounded-xl'>
             <div className='w-full flex px-4 p-1 justify-between'>

@@ -8,19 +8,38 @@ import { getAllCategories } from '../redux/categoriesSlice';
 const PostsPage = () => {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
+    const meta = useSelector(state => state.posts.meta)
     const categories = useSelector(state => state.categories.categories);
 
     const [form, openForm] = useState(null);
     const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('date')
-    const [filter, setFilter] = useState([])
+    const [sort, setSort] = useState('date');
+    const [filter, setFilter] = useState([]);
+    const [curPage, setCurPage] = useState(1);
     
     useEffect(() => {
-        dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search}));
+        dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search, page: curPage}));
         dispatch(getAllCategories());
-    }, [dispatch, search, sort, filter]);
+    }, [dispatch, search, sort, filter, curPage]);
 
-    // console.log(posts);
+    const getPageCount = (count) => {
+        const result = [];
+        for (let i = 1; i <= count; i += 1) {
+          result.push(
+            <li key={i}>
+              <button
+              onClick={() => setCurPage(i)}
+                class={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white': 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+              >
+                {i}
+              </button>
+            </li>
+          );
+        }
+        console.log(result)
+        return result;
+      };
+
     return (
         <>
             {form && <PostForm data={form} closeForm={() => { openForm(null) }} />}
@@ -81,6 +100,13 @@ const PostsPage = () => {
                             <Post data={post} openForm={openForm}/>
                         )
                     })}
+                    { meta.totalPages !== 1 ?
+                    <div >
+                        <ul class="inline-flex -space-x-px">
+                            {getPageCount(meta.totalPages)}
+                        </ul>
+                    </div> : ''
+                    }
                 </div>
             </div>
         </>

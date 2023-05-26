@@ -198,11 +198,12 @@ export class PostsController {
     }
   })
   @Get()
-  async getAll(@Query('sort') sort: 'dateCreated' | 'byCategories', @Query('filter') filter: string[], @Query('search') search: string) {
-    return {
-      posts: await this.postServer.getAll(sort, filter, search),
-      message: 'Success'
-    };
+  async getAll(
+    @Query('page') page: number,
+    @Query('sort') sort: 'dateCreated' | 'byCategories',
+    @Query('filter') filter: string[],
+    @Query('search') search: string) {
+    return await this.postServer.getAll(sort, filter, search, page)
   }
 
   @ApiOperation({ summary: 'All reported posts' })
@@ -361,7 +362,7 @@ export class PostsController {
   @UseInterceptors(FileInterceptor('image'))
   async editPost(@Param('id') id: number,
     @Body(ValidationPipe) dto: CreatePostDto,
-    @Request() req: RequestDto ,
+    @Request() req: RequestDto,
     @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return {
       post: await this.postServer.editPost(dto, req.user.id, id, image),
@@ -374,7 +375,7 @@ export class PostsController {
     description: 'Detele post by id', schema: {
       example: {
         "message": "Post was deleted"
-    }
+      }
     }
   })
   @ApiNotFoundResponse({
@@ -407,7 +408,7 @@ export class PostsController {
     description: 'Ban post by id', schema: {
       example: {
         "message": "Post was banned"
-    }
+      }
     }
   })
   @ApiNotFoundResponse({
@@ -437,12 +438,12 @@ export class PostsController {
     };
   }
 
-   @ApiOperation({ summary: 'Complaint post' })
+  @ApiOperation({ summary: 'Complaint post' })
   @ApiOkResponse({
     description: 'Complaint post by id', schema: {
       example: {
         "message": "Post was reported"
-    }
+      }
     }
   })
   @ApiNotFoundResponse({
@@ -466,7 +467,7 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   async reportPost(@Param('id') id: number, @Request() req: RequestDto, @Body() dto: ReportPostDto,) {
     return {
-      message: await this.postServer.reportPost({...dto, postId: id, userId: req.user.id})
+      message: await this.postServer.reportPost({ ...dto, postId: id, userId: req.user.id })
     };
   }
 }
