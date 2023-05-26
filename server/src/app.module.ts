@@ -41,6 +41,7 @@ import { Project } from './project/project.model';
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, 'static'),
+      serveRoot: '/api/static/'
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
