@@ -31,10 +31,11 @@ export const createProject = createAsyncThunk(
 )
 
 export const updateProject = createAsyncThunk(
-    'post/api/project',
-    async (formData) => {
+    'patch/api/project',
+    async ({id, formData}) => {
+      console.log(id, formData);
       try {
-        const { data } = await axios.post(projectRouter.createProject(), formData , { withCredentials: true })
+        const { data } = await axios.patch(projectRouter.updateProject(id), formData , { withCredentials: true })
         console.log(data);
         return (data)
       } catch (error) {

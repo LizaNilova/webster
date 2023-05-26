@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setData } from '../redux/CanvasSlice';
+import { setCurProject, setData } from '../redux/CanvasSlice';
 
 const CreateCanvasForm = ({ closeForm }) => {
 
@@ -35,6 +35,7 @@ const CreateCanvasForm = ({ closeForm }) => {
         if(state.width && state.height && state.name)
         {
             dispatch(setData({width: state.width, height: state.height, color: state.color, name: state.name}));
+            dispatch(setCurProject(null));
             closeForm();
         }
     }

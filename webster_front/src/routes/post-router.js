@@ -5,7 +5,7 @@ export default {
   createPostPath: () => [apiPath, 'posts'].join('/'),
 
   //GET
-  allPostsPath: () => [apiPath, 'posts'].join('/'),
+  allPostsPath: (sort, filter, search) => [apiPath, 'posts'].join('/').concat(`?sort=${sort}&filter=${filter}&search=${search}`),
   postByIdPath: (id) => [apiPath, 'posts', id].join('/'),
 
   // PATCH

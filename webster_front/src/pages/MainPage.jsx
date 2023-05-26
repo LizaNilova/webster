@@ -4,11 +4,12 @@ import CanvasContainer from '../components/CanvasContainer';
 import CreateCanvasForm from '../components/CreateCanvasForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFabricJSEditor } from 'fabricjs-react';
-import { createProject, setCurProject, setData, setMode } from '../redux/CanvasSlice';
+import { createProject, setCurProject, setData, setMode, updateProject } from '../redux/CanvasSlice';
 import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import { dataURItoBlob } from '../functions/toBlob';
 import ChooseProject from '../components/ChooseProject';
+// import fabric from 'fabric';
 
 
 const MainPage = () => {
@@ -26,8 +27,19 @@ const MainPage = () => {
     if (!editor || !fabric) {
       return;
     }
-    // if(canvasData?.curProject?.setting)
-    //   editor.canvas.loadFromJSON(canvasData?.curProject?.setting);
+
+    // if(editor.canvas.width === canvasData.width) return;
+    // editor?.canvas.dispose();
+    // editor.canvas = fabric.;
+    if(canvasData?.curProject?.setting)
+    {
+      console.log('111');
+      editor.canvas.loadFromJSON(canvasData?.curProject?.setting);
+    } else{
+      console.log('else');
+      clearCanvasClick()
+    } 
+      
     // editor.canvas.loadFromJSON(JSON.parse(canvasData?.curProject.setting));
 
     editor.canvas.setWidth(canvasData.width);
@@ -119,7 +131,7 @@ const MainPage = () => {
     }
 
     editor.canvas.renderAll();
-  }, [canvasData.curProject]);
+  }, [canvasData.curProject, editor?.canvas]);
 
   const closeForm = () => {
     changeFormState(null);
@@ -322,6 +334,7 @@ const MainPage = () => {
     dispatch(setData({ width: str?.width, height: str?.height, color: str?.color, name: str?.name, json: jsonState }))
     // console.log(jsonState);
     if (jsonState) {
+      clearCanvasClick();
       editor.canvas.loadFromJSON(jsonState);
     }
 
@@ -424,13 +437,39 @@ const MainPage = () => {
   }
 
   const loadProject = (projectData) => {
-    console.log(JSON.parse(projectData.setting));
+    // console.log(JSON.parse(projectData.setting));
     let parsed = JSON.parse(projectData.setting);
     dispatch(setCurProject(projectData));
     dispatch(setData({ width: parsed?.width, height: parsed?.height, color: parsed?.color, name: projectData.name, json: projectData.setting }))
     if (projectData.setting) {
+      clearCanvasClick()
       editor.canvas.loadFromJSON(projectData.setting);
     }
+  }
+
+
+  const updateProjectClick = () => {
+    let jsonState = editor.canvas.toJSON();
+    jsonState.width = canvasData.width;
+    jsonState.height = canvasData.height;
+    // jsonState.name = canvasData.name;
+    jsonState.color = canvasData.color;
+
+    var vpt = editor.canvas.viewportTransform;
+    vpt[4] = 0;
+    vpt[5] = 0;
+    editor.canvas.setViewportTransform(vpt);
+    editor.canvas.renderAll();
+    let canvasUrl = editor.canvas.toDataURL(`image/png`);
+    let blob = dataURItoBlob(canvasUrl);
+
+
+    console.log('json:', JSON.stringify(jsonState), 'file:', blob, 'name', canvasData.name);
+
+    let fd = new FormData();
+    fd.append('image', blob);
+    fd.append('setting', JSON.stringify(jsonState));
+    dispatch(updateProject({id: canvasData.curProject.id, formData: fd }));
   }
 
   return (
@@ -453,6 +492,7 @@ const MainPage = () => {
           onChangeBGColor={onChangeBGColor}
           addText={addText}
           createProject={createProjectClick}
+          updateProject={updateProjectClick}
         />
 
         <CanvasContainer name={canvasData?.name} onReady={onReady} />

@@ -4,9 +4,9 @@ import postRouter from "../routes/post-router"
 
 export const getAllPosts = createAsyncThunk(
     'get/api/posts',
-    async (_) => {
+    async ( {sort, filter, search} ) => {
       try {
-        const { data } = await axios.get(postRouter.allPostsPath(), { withCredentials: true });
+        const { data } = await axios.get(postRouter.allPostsPath(sort, filter, search), { withCredentials: true });
         console.log(data);
         return (data)
       } catch (error) {
@@ -18,7 +18,7 @@ export const getAllPosts = createAsyncThunk(
 
 export const createPost = createAsyncThunk(
     'post/api/posts',
-    async ({formData}) => {
+    async (formData) => {
       try {
         const { data } = await axios.post(postRouter.createPostPath(), formData, { withCredentials: true });
         console.log(data);
@@ -51,13 +51,18 @@ export const updatePost = createAsyncThunk(
 const postsSlice = createSlice({
     name: 'canvas',
     initialState: {
-        posts:[]
+        posts:[],
+        message: ''
     },
     reducers: {
 
     },
     extraReducers: {
-
+      [getAllPosts.fulfilled]: (state, action) =>
+      {
+        state.posts = action.payload.posts;
+        state.message = action.payload.message;
+      }
     }
 })
 
