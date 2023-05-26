@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
-import projectRouter from "../routes/project-router"
+import projectRouter from "../routes/canvas-router"
 
 export const getAllProjects = createAsyncThunk(
     'get/api/projects',
