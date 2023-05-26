@@ -12,5 +12,12 @@ export default function App() {
       {routes}
     </div>
   );
-}
 
+  return(
+    <>
+      <Header />
+      <MainPage />
+      {/* <PostsPage /> */}
+    </>
+  )
+}
