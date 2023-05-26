@@ -29,15 +29,18 @@ export class ProjectService {
     }
   }
 
-  async create(dto: CreateProjectDto): Promise<string> {
+  async create(dto: CreateProjectDto): Promise<Object> {
     const filename = await this.fileService.createFile(dto.image);
 
     const isExists = await this.projectRepository.findOne({ where: { name: dto.name } });
     if (isExists) {
       throw new BadRequestException('Name project is exists!');
     }
-    await this.projectRepository.create({ ...dto, image: filename });
-    return 'Create project';
+    const project = await this.projectRepository.create({ ...dto, image: filename });
+    return {
+      project,
+      message :'Create project'
+    };
   }
 
   async save(dto: ChangeProjectDto): Promise<string> {
