@@ -5,7 +5,7 @@ import { Category } from './categories.model';
 
 @Injectable()
 export class CategoriesService {
-  constructor(@InjectModel(Category) private categoryRepository: typeof Category) {}
+  constructor(@InjectModel(Category) private categoryRepository: typeof Category) { }
 
   async createCategory(dto: CreateCategoryDto) {
     if (!dto) {
@@ -32,8 +32,9 @@ export class CategoriesService {
   }
 
   async getAllCategories() {
-    const category = await this.categoryRepository.findAll({ include: { all: true } });
-    return category;
+    const category = await this.categoryRepository.findAll();
+
+    return category.map(({ value }) => value);
   }
 
   async updateCategory(id: number, dto: CreateCategoryDto) {
@@ -48,7 +49,7 @@ export class CategoriesService {
   async deleteCategory(id: number) {
     const category = await this.categoryRepository.findByPk(id);
     if (!category) {
-        throw new HttpException(`Category with ID ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Category with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
     await category.destroy();
     return "Category was deleted";
