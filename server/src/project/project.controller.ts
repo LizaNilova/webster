@@ -128,9 +128,8 @@ export class ProjectController {
   async create(@Body(ValidationPipe) dto: CreateProjectDto,
     @Request() req: RequestDto,
     @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
-    return {
-      massage: await this.projectService.create({ ...dto, userId: req.user.id, image }),
-    }
+    return await this.projectService.create({ ...dto, userId: req.user.id, image })
+    
   }
 
   @ApiOperation({ summary: 'Update project by id' })
