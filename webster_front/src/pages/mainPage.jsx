@@ -8,10 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 // import 'fabric-history';
 import { useFabricJSEditor } from 'fabricjs-react';
 
-import { setData, setMode } from '../redux/CanvasSlice';
+import { createProject, setData, setMode } from '../redux/CanvasSlice';
 import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import SaveAndPostForm from '../components/SaveAndPostForm';
+import { dataURItoBlob } from '../functions/toBlob';
 
 
 // fabric.Canvas.prototype.historyInit = function () {
@@ -69,9 +70,12 @@ const MainPage = () => {
   // const [selectedObject, setSelectedObject] = useState(null);
 
   useEffect(() => {
+
     if (!editor || !fabric) {
       return;
     }
+
+    editor.canvas.loadFromJSON(canvasData?.json);
     editor.canvas.setWidth(canvasData.width);
     editor.canvas.setHeight(canvasData.height);
     editor.canvas.setBackgroundColor(canvasData.color);
@@ -236,7 +240,7 @@ const MainPage = () => {
     editor.canvas.renderAll();
 
 
-  }, [canvasData, editor?.canvas]);
+  }, [canvasData]);
 
   const closeForm = () => {
     changeFormState(null);
@@ -250,7 +254,7 @@ const MainPage = () => {
     if (canvasData.mode !== 'drawing') {
       editor.canvas.isDrawingMode = true;
       editor.canvas.selection = false;
-      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas); 
+      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas);
       editor.canvas.freeDrawingBrush.width = 1;
       editor.canvas.freeDrawingBrush.shadow = new fabric.Shadow({
         blur: 0,
@@ -268,8 +272,7 @@ const MainPage = () => {
   }
 
   const toggleEraser = () => {
-    if(canvasData.mode !== 'eraser')
-    {    
+    if (canvasData.mode !== 'eraser') {
       dispatch(setMode('eraser'));
       editor.canvas.isDrawingMode = true;
       editor.canvas.selection = false;
@@ -279,7 +282,7 @@ const MainPage = () => {
       // editor.canvas.requestRenderAll()
     } else {
       dispatch(setMode('default'));
-      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas); 
+      editor.canvas.freeDrawingBrush = new fabric.PencilBrush(editor.canvas);
       editor.canvas.freeDrawingBrush.width = 1;
       editor.canvas.isDrawingMode = false;
       editor.canvas.selection = true;
@@ -319,7 +322,7 @@ const MainPage = () => {
     //   setHistory(newHistory);
     // }
     // editor.canvas.renderAll();
-    
+
   }
 
   const redoClick = () => {
@@ -357,9 +360,9 @@ const MainPage = () => {
           if (imageTextureSize > fabric.textureSize) {
             fabric.textureSize = imageTextureSize;
           }
-          if(img.width >= canvasData.width)
+          if (img.width >= canvasData.width)
             img.scaleToWidth(canvasData.width - 10, false)
-          if(img.height >= canvasData.height)
+          if (img.height >= canvasData.height)
             img.scaleToHeight(canvasData.height - 10, false)
           editor.canvas.add(img);
           editor.canvas.viewportCenterObject(img);
@@ -368,7 +371,7 @@ const MainPage = () => {
     })(file);
     reader.readAsDataURL(file);
   }
-  
+
   const setBackgroundImage = (file) => {
     const reader = new FileReader();
     reader.onload = (function (f) {
@@ -434,26 +437,41 @@ const MainPage = () => {
     // setCanvasState(editor.canvas.toJSON());
   }
 
-  const restoreCanvasState = () => { 
+  const restoreCanvasState = () => {
     let jsonState = localStorage.getItem('savedState');
     let str = JSON.parse(jsonState);
-    dispatch(setData({width: str?.width, height: str?.height, color: str?.color, name: str?.name}))
+    dispatch(setData({ width: str?.width, height: str?.height, color: str?.color, name: str?.name, json: jsonState }))
     // console.log(jsonState);
-    if(jsonState){
+    if (jsonState) {
       editor.canvas.loadFromJSON(jsonState);
     }
-      
+
     // editor.canvas.loadFromJSON(savedCanvasState);
   }
 
-  const saveCanvasToDB = () => {
+  const createProjectClick = () => {
     let jsonState = editor.canvas.toJSON();
     jsonState.width = canvasData.width;
     jsonState.height = canvasData.height;
     jsonState.name = canvasData.name;
     jsonState.color = canvasData.color;
-    console.log(jsonState);
-    dispatch();
+
+    var vpt = editor.canvas.viewportTransform;
+    vpt[4] = 0;
+    vpt[5] = 0;
+    editor.canvas.setViewportTransform(vpt);
+    editor.canvas.renderAll();
+    let canvasUrl = editor.canvas.toDataURL(`image/png`);
+    let blob = dataURItoBlob(canvasUrl);
+
+
+    console.log('json:', JSON.stringify(jsonState), 'file:', blob, 'name', canvasData.name);
+
+    let fd = new FormData();
+    fd.append('name', canvasData.name);
+    fd.append('image', blob);
+    fd.append('setting', JSON.stringify(jsonState));
+    dispatch(createProject(fd));
   }
 
   const changeBrushShadow = (color, blur, offset) => {
@@ -485,13 +503,12 @@ const MainPage = () => {
   const rotate = (direction) => {
     let obj = editor.canvas.getActiveObject();
     let angle = obj.angle;
-    if(direction === 'right')
-    {
-      if(angle >= 360) angle = 0;
+    if (direction === 'right') {
+      if (angle >= 360) angle = 0;
       obj.rotate(angle + 90);
       editor.canvas.requestRenderAll();
     } else {
-      if(angle <= 0) angle = 360;
+      if (angle <= 0) angle = 360;
       obj.rotate(angle - 90);
       editor.canvas.requestRenderAll();
     }
@@ -507,19 +524,19 @@ const MainPage = () => {
     editor.canvas.requestRenderAll()
   }
 
-  const onChangeWidth= (value) => {
+  const onChangeWidth = (value) => {
     editor.canvas.getActiveObject().scaleToWidth(value, false);
     editor.canvas.requestRenderAll()
   }
 
-  const addText = () =>{
+  const addText = () => {
     let text = new fabric.IText('Text ...');
     editor.canvas.add(text);
     editor.canvas.viewportCenterObject(text);
     editor.canvas.requestRenderAll()
   }
 
-  const applyTextFilter = (filterName, value) =>{
+  const applyTextFilter = (filterName, value) => {
     console.log(filterName, value);
     let text = editor.canvas.getActiveObject();
     // text[filterName] = value;
@@ -536,7 +553,7 @@ const MainPage = () => {
     <>
       {openedForm && <CreateCanvasForm closeForm={closeForm} />}
       {/* <SaveAndPostForm /> */}
-      <div className='w-full h-full min-h-screen flex bg-dark-purple'>
+      <div className='w-full h-full min-h-screen flex bg-dark-purple text-white'>
         <SideBar
           canvasData={canvasData}
           createCanvasClick={createCanvasClick}
@@ -550,6 +567,7 @@ const MainPage = () => {
           restoreCanvasState={restoreCanvasState}
           onChangeBGColor={onChangeBGColor}
           addText={addText}
+          createProject={createProjectClick}
         />
 
         <CanvasContainer name={canvasData?.name} onReady={onReady} />

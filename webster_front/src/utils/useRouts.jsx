@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { RecoverPasswordPage } from '../pages/RecoverPasswordPage';
-import {MainPage} from '../pages/mainPage';
+
 import { RegistrationPage } from '../pages/registerPage';
 import { LoginPage } from '../pages/loginPage';
 // import { ResetPasswordPage } from '../pages/ResetPasswordPage';
@@ -11,6 +11,8 @@ import { Profile } from '../pages/Profile.jsx';
 // import CalendarPage from '../pages/CalendarPage';
 import Header from '../components/Header';
 import { ConfirmPage } from '../pages/confirmPage';
+import MainPage from '../pages/MainPage';
+import PostsPage from '../pages/PostsPage';
 // import { VerifyCompanyEmailPage } from '../pages/VerifyCompanyEmailPage';
 // import { CompanyPage } from '../pages/CompanyPage';
 // import { VerifyInvite } from '../pages/VerifyInvite';
@@ -23,6 +25,7 @@ export const useRoutes = (isAuthenticated) => {
                 <Header />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
+                    <Route path="/posts" element={<PostsPage />} />
                     {/* <Route path="/checkout-success/:cartItems" element={<CheckOutSuccess />} /> */}
                     {/* <Route path="/events/:id" element={<EventView />} /> */}
                     {/* <Route path="/calendar" element={<CalendarPage />} /> */}
@@ -34,7 +37,7 @@ export const useRoutes = (isAuthenticated) => {
                     {/* <Route path="companies/:company_id" element={<CompanyPage/>}/> */}
                     <Route path='/profile' element={<Profile />} />
 
-                    <Route path="*" element={<Navigate to="/" />} />
+                    <Route path="*" element={<Navigate to="/workspace" />} />
                 </Routes>
             </>
         )

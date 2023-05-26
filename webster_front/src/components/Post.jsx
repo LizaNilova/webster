@@ -6,7 +6,7 @@ const Post = () => {
             <div className='w-full flex px-4 p-1 justify-between'>
                 <div className='w-1/3 flex'>
                     <div>
-                        <img src='logo.png' className='w-14 h-14 rounded-full' />
+                        <img src='папич.jfif' className='w-14 h-14 rounded-full' />
                     </div>
                     <div className='ml-7 flex flex-col items-center justify-center'>
                         <div className='text-lg'>Nickname</div>
@@ -17,10 +17,12 @@ const Post = () => {
                     Name of post
                 </div>
             </div>
-            <div className='p-3 text-sm text-justify'>
+            <div className='w-6/7 text-sm text-justify'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id ligula ac tellus tincidunt bibendum et id neque. Praesent sit amet ornare ante, feugiat hendrerit dui. Ut ut hendrerit dui, tempor iaculis arcu. Aenean tincidunt, elit vel semper maximus, sapien ipsum rhoncus magna, eget commodo leo neque vel diam. Aliquam tincidunt, elit a congue lacinia, augue nisi semper justo, at lobortis lectus metus quis mi. Suspendisse euismod feugiat aliquam. Maecenas eu euismod nibh. Suspendisse molestie est porttitor, lacinia lorem vel, sollicitudin neque. Nulla facilisi. Duis condimentum suscipit orci non maximus.
             </div>
-            <img src='logo.png' className='w-full m-1 p-1 rounded-xl' />
+            <div className='w-5/6 flex justify-center'>
+                <img src='logo.png' className='max-w-full m-1 p-1 rounded-xl' />
+            </div>
             {/*Likes, comments*/}
             <div className='w-full flex p-1 justify-around'>
                 <div className='p-1 mx-2 flex justify-center items-cente cursor-pointer'>

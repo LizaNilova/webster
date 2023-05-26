@@ -1,12 +1,13 @@
 import React from 'react';
 
 const SideBar = ({ canvasData, createCanvasClick, clearCanvasClick,
-    undoClick, redoClick, addImageToCanvas, setBackgroundImage, exportAsImage, saveCanvasState, restoreCanvasState, onChangeBGColor, addText }) => {
-    return (
+    undoClick, redoClick, addImageToCanvas, setBackgroundImage, exportAsImage, saveCanvasState, restoreCanvasState, onChangeBGColor, addText, createProject }) => {
+        return (
         <div className='w-1/6 min-h-screen flex flex-col items-center p-2 border-r-2 border-purple-900'>
             <p className='sidebar-item-title hover:cursor-default'>Create new canvas</p>
             <button onClick={createCanvasClick} className='w-2/3 bg-purple-700 m-2'>Create new canvas</button>
             {localStorage.getItem('savedState') && <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2'>Load last saved</button>}
+            {canvasData && canvasData.name && <button onClick={createProject} className='w-2/3 bg-purple-700 m-2'>Save canvas to DB</button> }
             {
                 canvasData && canvasData.width > 0 &&
                 <>

@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Post from '../components/Post';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPosts } from '../redux/postsSlice';
 
 const PostsPage = () => {
+    const posts = useSelector(state => state.posts);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllPosts());
+    }, [dispatch]);
+
+    console.log(posts);
     return (
-        <div className='w-full h-full min-h-screen flex bg-dark-purple justify-around'>
+        <div className='w-full h-full min-h-screen flex bg-dark-purple justify-around text-white'>
             <div className='w-1/6 h-fit flex flex-col justify-center items-center sticky top-28 z-10'>
                 <div className='text-xl mb-3'>Search post:</div>
                 <div className='w-full m-1'>
