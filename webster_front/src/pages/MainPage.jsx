@@ -1,58 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
 import SideBar from '../components/SideBar';
 import CanvasContainer from '../components/CanvasContainer';
 import CreateCanvasForm from '../components/CreateCanvasForm';
 import { useDispatch, useSelector } from 'react-redux';
-
-// import 'fabric-history';
 import { useFabricJSEditor } from 'fabricjs-react';
-
-import { createProject, setData, setMode } from '../redux/CanvasSlice';
+import { createProject, setCurProject, setData, setMode } from '../redux/CanvasSlice';
 import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
-import SaveAndPostForm from '../components/SaveAndPostForm';
 import { dataURItoBlob } from '../functions/toBlob';
 import ChooseProject from '../components/ChooseProject';
 
-
-// fabric.Canvas.prototype.historyInit = function () {
-//   this.historyUndo = [];
-//   this.historyNextState = this.historyNext();
-
-//   this.on({
-//     "object:added": this.historySaveAction,
-//     "object:removed": this.historySaveAction,
-//     "object:modified": this.historySaveAction
-//   })
-// }
-
-// fabric.Canvas.prototype.historyNext = function () {
-//   return JSON.stringify(this.toDatalessJSON(this.extraProps));
-// }
-
-// fabric.Canvas.prototype.historySaveAction = function () {
-//   if (this.historyProcessing)
-//     return;
-
-//   const json = this.historyNextState;
-//   this.historyUndo.push(json);
-//   this.historyNextState = this.historyNext();
-// }
-
-// fabric.Canvas.prototype.undo = function () {
-//   // The undo process will render the new states of the objects
-//   // Therefore, object:added and object:modified events will triggered again
-//   // To ignore those events, we are setting a flag.
-//   this.historyProcessing = true;
-
-//   const history = this.historyUndo.pop();
-//   if (history) {
-//     this.loadFromJSON(history).renderAll();
-//   }
-
-//   this.historyProcessing = false;
-// }
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -64,90 +21,19 @@ const MainPage = () => {
 
   const [openedForm, changeFormState] = useState(null);
 
-  // const [selectedObject, setSelectedObject] = useState(null);
-
   useEffect(() => {
 
     if (!editor || !fabric) {
       return;
     }
+    // if(canvasData?.curProject?.setting)
+    //   editor.canvas.loadFromJSON(canvasData?.curProject?.setting);
+    // editor.canvas.loadFromJSON(JSON.parse(canvasData?.curProject.setting));
 
-    // editor.canvas.loadFromJSON(canvasData?.json);
     editor.canvas.setWidth(canvasData.width);
     editor.canvas.setHeight(canvasData.height);
     editor.canvas.setBackgroundColor(canvasData.color);
     editor.canvas.svgViewportTransformation = false;
-
-    // console.log('history init')
-    // editor.canvas._historyInit();
-    // editor.canvas.setBackgroundImage('https://c8.alamy.com/comp/B12HTK/a-gold-coloured-picture-frame-with-beige-canvas-border-isolated-on-B12HTK.jpg')
-
-    // if (!editor.canvas.__eventListeners["mouse:wheel"]) {
-    //   editor.canvas.on('mouse:wheel', function (opt) {
-    //     var delta = opt.e.deltaY;
-    //     var zoom = editor.canvas.getZoom();
-    //     zoom *= 0.999 ** delta;
-    //     if (zoom > 3) zoom = 3;
-    //     if (zoom < 0.4) zoom = 0.4;
-    //     // editor.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-    //     editor.canvas.setZoom(zoom);
-    //     opt.e.preventDefault();
-    //     opt.e.stopPropagation();
-    //     var vpt = this.viewportTransform;
-    //     // console.log(vpt)
-    //     // if (zoom < 0.4) {
-    //     //   vpt[4] = 200 - 1000 * zoom / 2;
-    //     //   vpt[5] = 200 - 1000 * zoom / 2;
-    //     // } else {
-    //     //   if (vpt[4] >= 0) {
-    //     //     vpt[4] = 0;
-    //     //   } else if (vpt[4] < -(editor.canvas.getWidth() - 1000 * zoom)) {
-    //     //     vpt[4] = -(editor.canvas.getWidth() - 1000 * zoom);
-    //     //   }
-    //     //   if (vpt[5] >= 0) {
-    //     //     vpt[5] = 0;
-    //     //   } else if (vpt[5] < -(editor.canvas.getHeight() - 670 * zoom)) {
-    //     //     vpt[5] = -(editor.canvas.getHeight() - 670 * zoom);
-    //     //   }
-    //     // }
-    //   })
-    // }
-
-    // if (listeners.findIndex(name => name === "selection:created") < 0) {
-
-    //   editor.canvas.on("selection:created", (opt) => {
-
-    //     let selected_object = opt.selected;
-    //     console.log(selected_object[0].type);
-    //     // setSelectedObject(selected_object[0]);
-
-    //   })
-
-    //   let newListeners = listeners;
-    //   newListeners.push("selection:created");
-    //   setListeners(newListeners);
-    // }
-
-
-    // if (!editor.canvas.__eventListeners["selection:updated"]) {
-    //   editor.canvas.on("selection:updated", (opt) => {
-    //     let selected_object = opt.selected;
-    //     console.log(selected_object);
-    //   })
-    //   let newListeners = listeners;
-    //   newListeners.push("selection:updated");
-    //   setListeners(newListeners);
-    // }
-
-    // if (!editor.canvas.__eventListeners["selection:cleared"]) {
-    //   editor.canvas.on("selection:cleared", (opt) => {
-    //     // setSelectedObject(null);
-    //   })
-    //   let newListeners = listeners;
-    //   newListeners.push("selection:cleared");
-    //   setListeners(newListeners);
-    // }
-
 
     if (!editor.canvas.__eventListeners["mouse:down"]) {
       editor.canvas.on("mouse:down", function (opt) {
@@ -221,8 +107,6 @@ const MainPage = () => {
       });
     }
 
-
-
     if (!editor.canvas.__eventListeners["mouse:up"]) {
       editor.canvas.on("mouse:up", function (opt) {
         // on mouse up we want to recalculate new interaction
@@ -235,9 +119,7 @@ const MainPage = () => {
     }
 
     editor.canvas.renderAll();
-
-
-  }, [canvasData]);
+  }, [canvasData.curProject]);
 
   const closeForm = () => {
     changeFormState(null);
@@ -450,7 +332,7 @@ const MainPage = () => {
     let jsonState = editor.canvas.toJSON();
     jsonState.width = canvasData.width;
     jsonState.height = canvasData.height;
-    jsonState.name = canvasData.name;
+    // jsonState.name = canvasData.name;
     jsonState.color = canvasData.color;
 
     var vpt = editor.canvas.viewportTransform;
@@ -541,10 +423,20 @@ const MainPage = () => {
     editor.canvas.requestRenderAll();
   }
 
+  const loadProject = (projectData) => {
+    console.log(JSON.parse(projectData.setting));
+    let parsed = JSON.parse(projectData.setting);
+    dispatch(setCurProject(projectData));
+    dispatch(setData({ width: parsed?.width, height: parsed?.height, color: parsed?.color, name: projectData.name, json: projectData.setting }))
+    if (projectData.setting) {
+      editor.canvas.loadFromJSON(projectData.setting);
+    }
+  }
+
   return (
     <>
       {openedForm === 'Create' && <CreateCanvasForm closeForm={closeForm} />}
-      {openedForm === 'Select project' && <ChooseProject closeForm={closeForm}/> }
+      {openedForm === 'Select project' && <ChooseProject closeForm={closeForm} loadProject={loadProject}/> }
       {/* <SaveAndPostForm /> */}
       <div className='w-full h-full min-h-screen flex bg-dark-purple text-white'>
         <SideBar
