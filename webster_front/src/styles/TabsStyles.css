@@ -1,0 +1,111 @@
+/* Tab Navigation */
+  ul.nav {
+    width: 20%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #C9ADA7;
+    border-radius: 2rem;
+    padding-left: 0px;
+  }
+   
+  ul.nav li {
+    width: stretch;
+    padding: 1rem;
+    list-style: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.7s;
+  }
+   
+  ul.nav li:first-child {
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+  }
+   
+  ul.nav li:last-child {
+    border-bottom-right-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+  }
+   
+  ul.nav li:hover {
+    background: #4A4E69;
+  }
+   
+  ul.nav li.active {
+    background: #C9ADA7;
+    color: #22223B
+  }
+   
+  /* Tab Content Styles */
+  .TabContent {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+/* Tab Container */
+.HorizontalTabs {
+  width: 66.6666666666666%;
+  height: auto;
+  min-height: 400px;
+  /* background: #053742; */
+  /* margin: 1rem auto 1rem; */
+  padding: 1rem 1rem;
+  font-size: 14px;
+  color: #C9ADA7;
+  border-radius: 1rem;
+  border: 1px solid #C9ADA7
+}
+ 
+/* Tab Navigation */
+ul.Horizontalnav {
+  /* width: 60%; */
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #C9ADA7;
+  border-radius: 2rem;
+  padding-left: 0px;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+}
+ 
+ul.Horizontalnav li {
+  width: 50%;
+  padding: 1rem;
+  list-style: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.7s;
+  font-weight: 500;
+  font-size: 18px;
+}
+ 
+ul.Horizontalnav li:first-child {
+  border-bottom-left-radius: 2rem;
+  border-top-left-radius: 2rem;
+}
+ 
+ul.Horizontalnav li:last-child {
+  border-bottom-right-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+ 
+ul.Horizontalnav li:hover {
+  background: #4A4E69;
+}
+ 
+ul.Horizontalnav li.active {
+  background: #C9ADA7;
+  color: #22223B;
+  
+}
+ 
+/* Tab Content Styles */
+.HorizontalTabContent {
+  font-size: 2rem;
+  text-align: center;
+}
