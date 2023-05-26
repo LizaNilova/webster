@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, ForbiddenException, NotFoundException, Param, ParseFilePipe, Patch, Post, Request, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, ParseFilePipe, Patch, Post, Request, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles-auth.decorator';
@@ -8,12 +8,71 @@ import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ValidationPipe } from '../pipes/validation.pipe';
 import { ChangeProjectDto } from './dto/change-project.dto';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { retry } from 'rxjs';
 
 @ApiTags('project')
 @Controller('/api/project')
 export class ProjectController {
   constructor(private projectService: ProjectService) { }
+
+
+  @ApiOperation({ summary: 'Get projects' })
+  @ApiOkResponse({
+    description: 'The record has been successfully created.', schema: {
+      example: {
+        message: 'Create project'
+      }
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found user',
+    schema: {
+      example: new NotFoundException('User undefined')
+    }
+  })
+  @Roles('USER')
+  @UseGuards(RolesAuthGuard)
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getProjects(@Request() req: RequestDto) {
+    return await this.projectService.getAll(req.user.id);
+  }
+
+  @ApiOperation({ summary: 'Get project by id' })
+  @ApiOkResponse({
+    description: 'The record has been successfully created.', schema: {
+      example: {
+        message: 'Create project'
+      }
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found user',
+    schema: {
+      example: new NotFoundException('User undefined')
+    }
+  })
+  @Roles('USER')
+  @UseGuards(RolesAuthGuard)
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async getProjectById(@Param('id') id: number, @Request() req: RequestDto) {
+    return await this.projectService.getById(id, req.user.id);
+  }
+
   @ApiOperation({ summary: 'Create project' })
   @ApiCreatedResponse({
     description: 'The record has been successfully created.', schema: {
@@ -62,6 +121,7 @@ export class ProjectController {
       massage: await this.projectService.create({ ...dto, userId: req.user.id, image }),
     }
   }
+
   @ApiOperation({ summary: 'Update project by id' })
   @ApiCreatedResponse({
     description: 'Update project', schema: {
@@ -110,8 +170,32 @@ export class ProjectController {
     }
   }
 
+  @ApiOperation({ summary: 'Delete project by id' })
+  @ApiOkResponse({
+    description: 'delete project', schema: {
+      example: {
+        message: 'delete project'
+      }
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found user',
+    schema: {
+      example: new NotFoundException('User undefined')
+    }
+  })
+  @Roles('USER')
+  @UseGuards(RolesAuthGuard)
   @Delete('/:id')
-  async delete() {
-
+  @UseGuards(JwtAuthGuard)
+  async delete(@Param('id') id: number, @Request() req: RequestDto) {
+    return await this.projectService.delete(id, req.user.id);
   }
 }
+

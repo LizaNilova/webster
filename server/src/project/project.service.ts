@@ -7,28 +7,58 @@ import { ChangeProjectDto } from './dto/change-project.dto';
 
 @Injectable()
 export class ProjectService {
-    constructor(@InjectModel(Project) private projectRepository: typeof Project,
-    private fileService: FilesService) {}
-    async create(dto: CreateProjectDto): Promise<string> {
-         const filename = await this.fileService.createFile(dto.image);
+  constructor(@InjectModel(Project) private projectRepository: typeof Project,
+    private fileService: FilesService) { }
 
-         const isExists = await this.projectRepository.findOne({where: {name: dto.name}});
-         if (isExists) {
-            throw new BadRequestException('Name project is exists!');
-         }
-        await this.projectRepository.create({...dto, image: filename});
-        return 'Create project';
+  async getById(id: number, userId: number) {
+    const project = await this.projectRepository.findOne({ where: { userId, id } });
+    if (!project) {
+      throw new NotFoundException('project not found');
     }
+    return {
+      project,
+      message: 'complete'
+    }
+  }
 
-    async save(dto: ChangeProjectDto): Promise<string> {
-        const project = await this.projectRepository.findByPk(dto.id);
-        if (!project) {
-            throw new NotFoundException('project not found')
-        }
-        const filename = await this.fileService.createFile(dto.image);
-        project.setting = dto.setting;
-        project.image = filename;
-        project.save();
-       return 'update project';
-   }
+  async getAll(userId: number) {
+    const projects = await this.projectRepository.findAll({ where: { userId } })
+    return {
+      projects,
+      message: 'complete'
+    }
+  }
+
+  async create(dto: CreateProjectDto): Promise<string> {
+    const filename = await this.fileService.createFile(dto.image);
+
+    const isExists = await this.projectRepository.findOne({ where: { name: dto.name } });
+    if (isExists) {
+      throw new BadRequestException('Name project is exists!');
+    }
+    await this.projectRepository.create({ ...dto, image: filename });
+    return 'Create project';
+  }
+
+  async save(dto: ChangeProjectDto): Promise<string> {
+    const project = await this.projectRepository.findByPk(dto.id);
+    if (!project) {
+      throw new NotFoundException('Project not found')
+    }
+    const filename = await this.fileService.createFile(dto.image);
+    project.setting = dto.setting;
+    project.image = filename;
+    project.save();
+    return 'update project';
+  }
+  async delete(id: number, userId: number) {
+    const project = await this.projectRepository.findOne({ where: { id, userId } });
+    if (!project) {
+      throw new NotFoundException('project not found');
+    }
+    project.destroy();
+    return {
+      message: 'Delete project',
+    }
+  }
 }
