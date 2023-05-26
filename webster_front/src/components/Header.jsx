@@ -11,11 +11,11 @@ const Header = () => {
     // const [cartOpened, setCartOpened] = useState(false);
     // const cartItems = useSelector(state => state.cart.cartItems);
     const user = useSelector(state => state.user);
-
     // const cartItems = useSelector(state => state.cart.cartItems);
     // const [isBouncing, setBouncing] = useState(false);
     const logoutClick = () => {
       dispatch(logout())
+      location.reload()
     }
 
     // const ticketsCartOpen = () => {
@@ -33,11 +33,7 @@ const Header = () => {
     //     }
     //     setTimeout(()=>{setBouncing(false)}, 2500);
     // }, [cartItems.length]);
-    
-
-    if(user)
-    {
-        return (
+        return user.user ? (
             <>
             <div className='px-8 py-3 border-b-2 border-slate-700 flex w-full bg-dark-purple justify-between ' >
                 <div className='w-1/6 flex flex-row justify-between'>
@@ -66,9 +62,7 @@ const Header = () => {
                 </div>
             </div>
             </>
-        );
-    } else {
-        return (
+        ) : (
             <>
             <div className='px-8 py-3 border-b-2 border-slate-700 flex w-full bg-dark-purple justify-between'>
                 <div className='w-1/6 flex flex-row justify-between'>
@@ -93,7 +87,7 @@ const Header = () => {
             </div>
             </>
         );
-    }
+        
 
 }
 
