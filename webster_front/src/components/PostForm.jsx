@@ -60,9 +60,9 @@ const PostForm = ({ data, closeForm }) => {
                         return;
                     });
                     // fd.append('category_value', );
-                    // dispatch(updatePost({id: data.id, formData: fd}));
+                    dispatch(updatePost({id: data.id, formData: fd}));
                     // dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search, page: curPage}));
-                    // closeForm();
+                    closeForm();
                 })
         }
     }

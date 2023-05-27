@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .posts-page-container{
+        @apply w-full h-full min-h-screen flex bg-dark-purple justify-around text-white;
+    }
+    .posts-page-filters-container{
+        @apply w-1/5 h-fit flex flex-col justify-center items-center sticky top-28 z-10;
+    }
+    .posts-page-filters-text-input{
+        @apply w-full text-base p-3 border-2 border-beige focus:border-purple-600 rounded-lg h-full outline-none bg-light-beige text-black;
+    }
+    .posts-page-filters-header{
+        @apply text-xl my-3;
+    }
+    .posts-page-filters-categories-container{
+        @apply w-full flex flex-wrap justify-around m-1;
+    }
+    .posts-page-filters-select-container{
+        @apply w-full flex flex-wrap justify-around m-1
+    }
+    .posts-page-filters-select{
+        @apply w-full text-black text-lg p-2 m-1 rounded-lg;
+    }
+    .posts-page-filters-category{
+        @apply flex items-center justify-center p-2
+    }
+    .posts-page-posts-container{
+        @apply w-3/5 flex flex-col items-center border-l border-purple-800 py-3;
+    }
+    .posts-page-filters-button{
+        @apply w-2/3 bg-purple-700 m-3;
+    }
+}
