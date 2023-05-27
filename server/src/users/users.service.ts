@@ -250,9 +250,12 @@ export class UsersService {
     return "User was deleted";
 }
 
-  async isExistsUser(login: string, email: string): Promise<boolean> {
+  async isExistsUser(login: string, email: string): Promise<{ email: boolean, login: boolean }> {
     const condidateEmail = await this.getUserByEmail(email);
     const condidateLogin = await this.getUserByLogin(login);
-    return Boolean(condidateEmail || condidateLogin);
+    return {
+      email: Boolean(condidateEmail),
+      login: Boolean(condidateLogin)
+    };
   }
 }
