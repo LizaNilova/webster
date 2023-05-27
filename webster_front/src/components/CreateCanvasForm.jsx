@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurProject, setData } from '../redux/CanvasSlice';
+import '../styles/Forms.css'
 
 const CreateCanvasForm = ({ closeForm }) => {
 
@@ -40,13 +41,13 @@ const CreateCanvasForm = ({ closeForm }) => {
         }
     }
     return (
-        <div className="text-white justify-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-slate-600 bg-opacity-50">
-            <div className="relative my-2 mx-auto w-1/2 flex flex-col justify-center">
+        <div className="form-background">
+            <div className="form-container">
                 {/*content*/}
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-dark-blue-pastel outline-none focus:outline-none">
+                <div className="form-content-container">
                     {/*header*/}
-                    <div className="flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t">
-                        <h3 className="text-3xl pl-4 font-semibold text-light-grey-pastel font-serif">
+                    <div className="form-header-container">
+                        <h3 className="form-header-title">
                             Project creation
                         </h3>
                         <button
@@ -59,43 +60,47 @@ const CreateCanvasForm = ({ closeForm }) => {
                         </button>
                     </div>
                     {/*body*/}
-                    <div className="relative px-8 py-3 flex flex-col m-1">
-                        <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
-                            <label>Name of the project:</label>
+                    <div className="form-body-container">
+                        <div className='form-body-item-container'>
+                            <label className=''>Name of the project:</label>
                             <input type={"text"}
-                                className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-2/3 rounded-full outline-none text-black p-2 bg-light-beige"
+                                className="w-2/3 form-body-item-input"
                                 name='name' onChange={handleChange}
                                 placeholder='name ... '
                                 defaultValue={'Unnamed'}
                             />
                         </div>
-                        <div className='pb-1 my-1 flex items-center justify-center w-full text-xl text-beige'>
+                        <div className='form-body-item-container'>
                             Choose the width and height of canvas.
                         </div>
-                        <div className='p-1 my-1 flex items-center w-full justify-around'>
+                        <div className='form-body-item-container'>
                             <label className='text-beige'>Width: </label>
                             <input type={"number"}
-                                className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-1/3 rounded-full outline-none text-black p-2 bg-light-beige"
+                                className="w-1/3 form-body-item-input"
                                 name='width' onChange={handleChange}
                                 placeholder='width'
                             />
                             <label className='text-beige'>Height: </label>
                             <input type={"number"}
-                                className="border-2 border-purple-500 focus:border-emerald-600 focus:border-2 w-1/3 rounded-full outline-none text-black p-2 bg-light-beige"
+                                className="w-1/3 form-body-item-input"
                                 name='height' onChange={handleChange}
                                 placeholder='height'
                             />
                         </div>
-                        <div className='w-full flex items-center justify-around text-xl text-beige'>
+                        <div className='form-body-item-container'>
                             <label>Choose background color: </label>
-                            <input className='w-1/3 rounded-sm' type='color' name='color' onChange={handleChange} defaultValue={"#FFFFFF"}/>
+                            <input className='form-body-item-input-color' 
+                                type='color' 
+                                name='color' 
+                                onChange={handleChange} 
+                                defaultValue={"#FFFFFF"}/>
                         </div>
-                        <div className='text-red-500 text-2xl font-semibold underline underline-offset-4 text-center w-full m-1 p-1'>
+                        <div className='form-error-message'>
                             {state.errMessage}
                         </div>
                     </div>
                     {/*footer*/}
-                    <div className="flex items-center justify-end p-3 border-t border-solid border-slate-200 rounded-b">
+                    <div className="form-footer-container">
                         <button
                             className="text-pink-700 hover:text-pink-600 background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-350"
                             type="button"

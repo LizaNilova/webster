@@ -32,7 +32,7 @@ const Header = () => {
                 <div className='header-logout-container'>
                     <div className='header-logout-div'>
                         <button
-                            className='header-logout-button'
+                            className='header-log-button'
                             onClick={logoutClick}
                         >
                             <div>Logout</div>
@@ -53,10 +53,10 @@ const Header = () => {
                         <img src="logo.png" alt='logo' className='header-logo' onClick={() => { navigate('/') }} />
                     </div>
                 </div>
-                <div className='w-1/4 flex flex-row items-end justify-end'>
-                    <div className='w-1/2 flex flex-row items-end justify-center'>
+                <div className='header-logout-container'>
+                    <div className='header-logout-div'>
                         <button
-                            className='header-logout-button'
+                            className='header-log-button'
                             onClick={() => { navigate('/') }}
                         >
                             <div>Log in</div>

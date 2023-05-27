@@ -477,7 +477,7 @@ const MainPage = () => {
       {openedForm === 'Create' && <CreateCanvasForm closeForm={closeForm} />}
       {openedForm === 'Select project' && <ChooseProject closeForm={closeForm} loadProject={loadProject}/> }
       {/* <SaveAndPostForm /> */}
-      <div className='w-full h-full min-h-screen flex bg-dark-purple text-white'>
+      <div className='main-page-container'>
         <SideBar
           canvasData={canvasData}
           openForm={openForm}
