@@ -62,7 +62,7 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     const payload = await this.validateToken(refreshToken);
-    const user = await this.userService.getUserByLogin(payload.login)
+    const user = await this.userService.getUserByIdInToken(payload.id)
     return await this.generateToken(user);
   }
 
@@ -76,8 +76,8 @@ export class AuthService {
   }
 
   private async generateToken(user: User) {
-    const accessPayload = { id: user.id, login: user.login, role: user.roles[0].value, isBanned: Boolean(user.ban) };
-    const refreshPayload = { login: user.login };
+    const accessPayload = { id: user.id, role: user.roles[0].value, isBanned: Boolean(user.ban) };
+    const refreshPayload = { id: user.id };
     return {
       accessToken: this.jwtService.sign(accessPayload, { expiresIn: '15m' }),
       refreshToken: this.jwtService.sign(refreshPayload)
