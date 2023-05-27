@@ -35,8 +35,8 @@ export class AuthService {
 
   async registration(userDto: CreateUserDto) {
     const isTruth = await this.userService.isExistsUser(userDto.login, userDto.email);
-    if (isTruth) {
-      throw new HttpException('User exists', HttpStatus.BAD_REQUEST);
+    if (isTruth.email || isTruth.login) {
+      throw new HttpException(`${isTruth.email ? 'Email is exists' : ''}${isTruth.email && isTruth.login ? ', ' : ''}${isTruth.login ? 'Login is exists' : ''}`, HttpStatus.BAD_REQUEST);
     }
     if (userDto.password !== userDto.passwordComfirm) {
       throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
