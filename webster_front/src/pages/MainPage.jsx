@@ -131,7 +131,7 @@ const MainPage = () => {
     }
 
     editor.canvas.renderAll();
-  }, [canvasData.curProject, editor?.canvas]);
+  }, [canvasData.curProject, canvasData.width, canvasData.height, editor?.canvas]);
 
   const closeForm = () => {
     changeFormState(null);
