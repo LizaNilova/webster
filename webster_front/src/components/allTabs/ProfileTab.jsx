@@ -17,6 +17,7 @@ import '../../styles/ScrollbarStyles.css'
 
 // import { updateUserData, uploadUserAvatar, deleteUser } from "../../redux/userSlice"
 import { logout } from "../../redux/authSlice";
+import EditProfile from "./EditProfile";
 
 // import EventInFavourite from "../EventInFavourite";
 
@@ -199,8 +200,12 @@ const ProfileTab = () => {
   return (
     <div className="flex flex-col bg-opacity-30 bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
       <div className="flex flex-row space-x-4 w-full">
+        {
+          editBoxOpen &&
+          <EditProfile setEditBoxOpen={setEditBoxOpen} />
+        }
 
-        <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
+        {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
           {!updateImage && <>
             <div className="justify-center w-40 mt-5 ">
@@ -257,10 +262,10 @@ const ProfileTab = () => {
 
 
           {/* Full name */}
-          <div className="text-[25px]">Full name</div>
+          <div className="text-[25px]">{user.login}</div>
 
           {/* Login */}
-          <p className="text-xl" >{user.login}</p>
+          <p className="text-xl" >{user.email}</p>
 
 
           <div
@@ -269,159 +274,13 @@ const ProfileTab = () => {
             <img className="w-6" src='editing_icon.png' alt='edit info' />
             Edit profile
           </div>
-        </div>
+        </div>}
+
 
 
         <div className="w-1/2 ">
 
           <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
-            {
-              editBoxOpen &&
-              <div className="bg-dark-purple w-full rounded-3xl">
-                <img
-                  src='http://localhost:3000/back_icon_beige.png'
-                  alt=''
-                  onClick={cancelHandler}
-                  className="justify-center cursor-pointer absolute items-center w-24 rounded-sm py-2 px-4">
-                </img>
-                <form
-                  className="w-1/2 mx-auto pb-6"
-                  onSubmit={(e) => e.preventDefault()}
-                >
-                  <label className="text-sm text-beige">
-                    Username (login) <span className="text-2xl text-red-500"> *</span>
-                    <input type="text"
-                      placeholder="Username"
-                      value={state.login}
-                      name='username'
-                      onChange={changeHandler}
-
-                      className={`text-black w-full rounded-lg bg-${loginColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
-                  </label>
-
-                  <label className="mb-0 text-sm text-beige">
-                    Email <span className="text-red-500 text-2xl"> *</span>
-                    <input type="email"
-                      placeholder="email"
-                      name='email'
-                      value={state.email}
-
-                      onChange={changeHandler}
-                      className={`text-black w-full rounded-lg bg-${emailColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
-                  </label>
-
-                  <label className="text-sm text-beige">
-                    Full name
-                    <input type="text"
-                      placeholder="Fullname"
-                      name='full_name'
-                      // value={state.full_name}
-                      // onChange={changeHandler}
-                      className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                  </label>
-
-                  {/* <div className="rounded-2xl border-[2px] border-beige bg-lilovii bg-opacity-50 mt-8 mb-6 p-4">
-                    <div className="text-[18px] uppercase">social nets</div>
-
-                    <label className="text-sm text-beige">
-                      facebook
-                      <input type="text"
-                        placeholder="link to your facebook"
-                        name='facebook'
-                        value={socialNet?.facebook}
-                        onChange={changeHandler}
-                        className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                    </label>
-                    <label className="text-sm text-beige">
-                      instagram
-                      <input type="text"
-                        placeholder="link to your instagram"
-                        name='instagram'
-                        value={socialNet?.instagram}
-                        onChange={changeHandler}
-                        className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                    </label>
-                    <label className="text-sm text-beige">
-                      whatsapp
-                      <input type="text"
-                        placeholder="link to your whatsapp"
-                        name='whatsapp'
-                        value={socialNet?.whatsapp}
-                        onChange={changeHandler}
-                        className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                    </label>
-                    <label className="text-sm text-beige">
-                      telegram
-                      <input type="text"
-                        placeholder="link to your telegram"
-                        name='telegram'
-                        value={socialNet?.telegram}
-                        onChange={changeHandler}
-                        className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                    </label>
-                    <label className="text-sm text-beige">
-                      viber
-                      <input type="text"
-                        placeholder="link to your viber"
-                        name='viber'
-                        value={socialNet?.viber}
-                        onChange={changeHandler}
-                        className="text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none resize-none placeholder:text-gray-700" />
-                    </label>
-                  </div> */}
-
-                  <div className="rounded-2xl border-[2px] border-beige bg-lilovii bg-opacity-50 mt-8 mb-6 p-4">
-                    <div className="text-[18px] uppercase">Change password</div>
-
-                    <label className="text-xs text-gray-400">
-                      New password
-                      <input
-                        type="password"
-                        value={state.password}
-                        name='password'
-                        onChange={changeHandler}
-                        placeholder="new password"
-                        className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
-                      />
-                    </label>
-                    <label className="text-xs text-gray-400">
-                      Confirm new password
-                      <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                        placeholder="repeat new password"
-                        className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
-                      />
-                    </label>
-                  </div>
-                  <label className="text-sm text-beige mt-6">
-                    Current password <span className="text-2xl text-red-700"> *</span>
-                    <input
-                      type="password"
-                      value={state.oldPassword}
-                      name='oldPassword'
-                      onChange={changeHandler}
-                      placeholder="current password"
-                      className={` text-black w-full rounded-lg bg-${passwordColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`}
-                    />
-                  </label>
-
-                  <div className="flex gap-8 items-center justify-center mt-4">
-                    <button
-                      onClick={submitHandler}
-                      className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">
-                      Save changes
-                    </button>
-                    <button
-                      onClick={cancelHandler}
-                      className="flex justify-center items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4">
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
-            }
 
             {!editBoxOpen && <>
               <ul className="Horizontalnav">
@@ -431,10 +290,10 @@ const ProfileTab = () => {
 
               <div>
                 <TabContent id="following_companies" activeTab={activeTabCompanies}>
-                 
-                    <div className="text-beige m-auto text-md h-full w-full">
-                      You don't follow any company yet...
-                    </div>
+
+                  <div className="text-beige m-auto text-md h-full w-full">
+                    You don't follow any company yet...
+                  </div>
                   {/* {user.subscriptions_companies.length > 0 &&
                     <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                       {

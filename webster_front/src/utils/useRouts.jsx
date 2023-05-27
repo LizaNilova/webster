@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import { ConfirmPage } from '../pages/confirmPage';
 import MainPage from '../pages/MainPage';
 import PostsPage from '../pages/PostsPage';
+import EditProfile from '../components/allTabs/EditProfile';
 // import { VerifyCompanyEmailPage } from '../pages/VerifyCompanyEmailPage';
 // import { CompanyPage } from '../pages/CompanyPage';
 // import { VerifyInvite } from '../pages/VerifyInvite';
@@ -36,6 +37,7 @@ export const useRoutes = (isAuthenticated) => {
                     {/* <Route path="/events/:event_id/companies/:company_id" element={<CompanyPage/>}/> */}
                     {/* <Route path="companies/:company_id" element={<CompanyPage/>}/> */}
                     <Route path='/profile' element={<Profile />} />
+                    <Route path='/profile/edit' element={<EditProfile/>} />
 
                     <Route path="*" element={<Navigate to="/workspace" />} />
                 </Routes>
