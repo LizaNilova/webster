@@ -141,8 +141,8 @@ export const authSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, action) => {
       state.isLoading = false
-      state.status = action.payload?.message
-      state.eventId = action.payload?.eventId
+      state.status = action.payload?.data.message
+      state.eventId = action.payload?.data.eventId
       state.regErrorTexts = action.payload?.errors
       console.log(action.payload)
     },

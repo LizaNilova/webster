@@ -41,7 +41,11 @@ export const RegistrationPage = () => {
                 email,
                 passwordComfirm: repeatPassword
             }))
+            if (eventId) {
+                navigate(`/confirm/${eventId}`)
+            }
             checkPasswords() 
+            
         } catch (error) {
             console.log(error)
         }

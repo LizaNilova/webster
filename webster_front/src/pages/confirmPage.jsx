@@ -57,7 +57,7 @@ export const ConfirmPage = () => {
                             type="text"
                             required="required"
                             value={code}
-                            maxlength="4"
+                            maxLength="4"
                             className="code-input"
                             onChange={e => setCode(e.target.value)} />
                     </div>
