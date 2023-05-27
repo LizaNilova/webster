@@ -17,8 +17,7 @@ import { hasSubscribers } from 'diagnostics_channel';
 import { Op } from 'sequelize';
 import { FilesService } from 'src/files/files.service';
 import * as fsp from 'fs/promises';
-import * as path from 'path';
-import * as uuid from 'uuid';
+import { EditUserDto } from './dto/edit-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -195,8 +194,8 @@ export class UsersService {
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
   }
 
-  async edit_profile(id: number, dto: CreateUserDto, avatar?: any){
-    let user = await this.userRepository.findOne({ where: { id }, include: { all: true } });
+  async edit_profile(id: number, dto: EditUserDto, avatar?: any){
+    let user = await this.userRepository.findOne({ where: { id }});
     if (!user) {
       throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
@@ -205,7 +204,11 @@ export class UsersService {
       user.login = dto.login;
     }
 
+    console.log(user.password, dto.oldPassword)
     if (dto.password) {
+      if (!(await bcrypt.compare(dto.oldPassword, user.password))) {
+        throw new HttpException("old password and your password don't matched", HttpStatus.BAD_REQUEST);
+      }
       if (dto.password !== dto.passwordComfirm) {
         throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
       }
@@ -224,7 +227,6 @@ export class UsersService {
       await user.save();
       return await this.sendCode(user);
     }
-
 
     await user.save();
     return user;

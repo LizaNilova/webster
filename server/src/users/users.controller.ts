@@ -5,6 +5,7 @@ import {
   ParseFilePipe
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { EditUserDto } from './dto/edit-user.dto';
 import { UsersService } from './users.service';
 import {
   ApiBadRequestResponse,
@@ -39,6 +40,7 @@ export class UsersController {
           "login": "user",
           "email": "user@gmail.com",
           "password": "$2a$05$tEn9cPZRb5SkTtRy7FJNa.9w2Dq8rrGqO3Sapcxrv7o1lrWCvtkGK",
+          "avatar":"0cae4e09-eb11-450a-a3b5-0b52b7fb7d8c.jpg",
           "is_active": true,
           "updatedAt": new Date(),
           "createdAt": new Date()
@@ -397,9 +399,26 @@ export class UsersController {
 
   // edit my profile
   @Patch('/edit')
+  @ApiCreatedResponse({
+    description: 'The record has been successfully edited.', schema: {
+      example: {
+        "user": {
+          "id": 1,
+          "login": "user",
+          "email": "user@gmail.com",
+          "password": "$2a$05$tEn9cPZRb5SkTtRy7FJNa.9w2Dq8rrGqO3Sapcxrv7o1lrWCvtkGK",
+          "avatar":"0cae4e09-eb11-450a-a3b5-0b52b7fb7d8c.jpg",
+          "is_active": true,
+          "updatedAt": new Date(),
+          "createdAt": new Date()
+        },
+        "message": "Changes are saved. If you have changed your email, check the it"
+      }
+    }
+  })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('avatar'))
-  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto, 
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: EditUserDto, 
     @UploadedFile(new ParseFilePipe()) avatar: Express.Multer.File) {
       return {
       user: await this.usersService.edit_profile(request.user.id, userDto, avatar),
