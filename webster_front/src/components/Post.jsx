@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { likePost } from '../redux/postsSlice';
-import { getUserById } from '../redux/userSlice' 
+import { getUserById } from '../redux/userSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
@@ -10,6 +10,32 @@ const Post = ({ data, openForm }) => {
   const dispatch = useDispatch();
   const [isLike, setLike] = React.useState(false);
   const [countLikes, setCountLikes] = React.useState(data.likes.length);
+  const [curPage, setCurPage] = React.useState(1);
+  const [isHidden, setHidden] = React.useState(true);
+  const parsedPage = curPage;
+  const perPage = 5;
+  const totalPages = Math.ceil(data.comments.length / perPage);
+  const commentSlice = data.comments.slice(
+    parsedPage * perPage - perPage,
+    parsedPage * perPage
+  );
+
+  const getPageCount = (count) => {
+    const result = [];
+    for (let i = 1; i <= count; i += 1) {
+        result.push(
+            <li key={i}>
+                <button
+                    onClick={() => setCurPage(i)}
+                    className={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+                >
+                    {i}
+                </button>
+            </li>
+        );
+    }
+    return result;
+};
   const handleClick = () => {
     try {
       setLike(!isLike);
@@ -118,6 +144,7 @@ const Post = ({ data, openForm }) => {
         </div>
         <div className="p-1 mx-2 flex justify-center items-center cursor-pointer">
           <svg
+          onClick={() => setHidden(!isHidden)}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -140,7 +167,7 @@ const Post = ({ data, openForm }) => {
                     <div className='ml-1'>1</div>
                 </div> */}
       </div>
-      <div className="w-full pb-10 border p-5">
+      <div className={`w-full pb-0 border p-5 border-purple-800 overflow-hidden ${isHidden ? 'h-0 p-0 border-none' : 'h-full'}`}>
         <form action="#" class="mt-4">
           <label for="comment" class="block ">
             <textarea
@@ -173,34 +200,40 @@ const Post = ({ data, openForm }) => {
           <small class="text-base font-bold text-white ml-1">
             {data.comments.length} comments
           </small>
-          {data.comments.map((comment) => {
-            const user = dispatch(getUserById(comment.userId))
-            console.log(user)
-            return (
-              <div class="flex flex-col mt-4">
-                <div class="flex flex-row justify-between px-1 py-1">
-                  <div class="flex mr-2">
-                    <div class="items-center justify-center w-12 h-12 mx-auto">
-                      <img
-                        alt="profil"
-                        src="https://images.unsplash.com/photo-1619380061814-58f03707f082?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fG1hbiUyMGZhY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                        class="object-cover w-12 h-12 mx-auto rounded-full"
-                      />
-                    </div>
-                  </div>
-                  <div class="flex-1 pl-1">
-                    <div class="text-base font-semibold text-white">
-                      Timothy R. Arrieta
-                      <span class="text-sm font-normal text-white">
-                        - Feb 11, 2022
-                      </span>
-                    </div>
-                    <div class="text-sm text-white">{comment.value}</div>
+          {commentSlice.map((comment) => (
+            <div class="flex flex-col mt-4">
+              <div class="flex flex-row justify-between px-1 py-1">
+                <div class="flex mr-2">
+                  <div class="items-center justify-center w-12 h-12 mx-auto">
+                    <img
+                      alt="profil"
+                      src={`http://localhost:8080/api/static/${comment.author.avatar}`}
+                      class="object-cover w-12 h-12 mx-auto rounded-full"
+                    />
                   </div>
                 </div>
+                <div class="flex-1 pl-1">
+                  <div class="text-base font-semibold text-white">
+                    {comment.author.login}
+                    <span class="text-sm font-normal text-white">
+                      {' '}
+                      - {new Date(comment.createdAt).toDateString()}
+                    </span>
+                  </div>
+                  <div class="text-sm text-white">{comment.value}</div>
+                </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
+          {totalPages !== 1 ? (
+            <div className='w-full text-center mt-5'>
+              <ul class="inline-flex -space-x-px">
+                {getPageCount(totalPages)}
+              </ul>
+            </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>

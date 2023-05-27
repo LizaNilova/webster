@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nes
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
 import { Category } from '../categories/categories.model';
+import { Comment } from 'src/comments/comments.model';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
@@ -59,7 +60,8 @@ export class PostsService {
       include: [
         { all: true },
         { model: Category, through: { attributes: [] }, where: {}, attributes: ['value'] },
-        { model: User, attributes: ['id', 'login', 'email'] }
+        { model: User, attributes: ['id', 'login', 'email'] },
+        { model: Comment, attributes: ['id', 'value', 'postId', 'createdAt'], include: [{ model: User, attributes: ['id', 'login', 'email', 'avatar']}] }
       ],
       order: (sort === 'byCategories') ? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
       where: {}

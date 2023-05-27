@@ -37,7 +37,6 @@ const PostsPage = () => {
                 </li>
             );
         }
-        // console.log(result)
         return result;
     };
     //   console.log(categories)

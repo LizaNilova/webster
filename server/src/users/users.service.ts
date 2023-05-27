@@ -131,12 +131,14 @@ export class UsersService {
       };
 
     return {
-      id: user.id,
-      login: user.login,
-      email: user.email,
-      avatar: user.avatar,
-      role: user.roles[0].value,
-      rating: rating,
+      user: {
+        id: user.id,
+        login: user.login,
+        email: user.email,
+        avatar: user.avatar,
+        role: user.roles[0].value,
+        rating: rating,
+      },
       posts: user.posts,
       ban: user.ban,
       subscriptions: user.subscriptions,
