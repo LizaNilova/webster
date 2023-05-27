@@ -18,7 +18,7 @@ export const LoginPage = () => {
 
     useEffect(() => {
         dispatch(userProfile())
-        if (status === 'You are signed in') {
+        if (status === 'The user is authorized') {
             navigate('/')
         }
         console.log(status)

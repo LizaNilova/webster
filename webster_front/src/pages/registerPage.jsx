@@ -24,7 +24,7 @@ export const RegistrationPage = () => {
         if (status === 'Send mail' && eventId) {
             navigate(`/confirm/${eventId}`)
         }
-    }, [status, navigate])
+    }, [status, navigate, eventId])
 
     useEffect(() => {
         if(regErrorTexts?.password){

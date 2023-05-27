@@ -59,7 +59,7 @@ export const useRoutes = (isAuthenticated) => {
 
 
 
-                <Route path='/confirm' element={<ConfirmPage/>} />
+                {/* <Route path='/confirm' element={<ConfirmPage/>} /> */}
                 
                 {/* <Route path="companies/:id/add-new-member" element={<VerifyInvite />} /> */}
                 {/* <Route path="verify_company/:token" element={<VerifyCompanyEmailPage />} /> */}
