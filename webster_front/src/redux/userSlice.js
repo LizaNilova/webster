@@ -11,10 +11,20 @@ const initialState = {
 
 export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData, { dispatch }) => {
     try {
-        const { data } = await axios.patch(`http://localhost:8080/api/users`, submitData, { withCredentials: true })
+        const { data } = await $api.patch(`http://localhost:8080/api/users`, submitData, { withCredentials: true })
         console.log(data.user)
         dispatch(setUserData(data.user))
         return (data)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
+    try {
+        const { data } = await axios.get(`http://localhost:8080/api/users/${id}`, submitData, { withCredentials: true })
+        console.log(data)
+        return data
     } catch (error) {
         console.log(error)
     }
@@ -43,7 +53,7 @@ export const uploadUserAvatar = createAsyncThunk('user/uploadUserAvatar', async 
 
 export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     try {
-        const { data } = await axios.delete(`http://localhost:8080/api/users`, { withCredentials: true })
+        const { data } = await $api.delete(`http://localhost:8080/api/users`, { withCredentials: true })
         console.log(data.message)
         return (data)
     } catch (error) {

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
+import $api from '../utils/api'
 import postRouter from "../routes/post-router"
 
 export const getAllPosts = createAsyncThunk(
@@ -20,7 +21,7 @@ export const createPost = createAsyncThunk(
     'post/api/posts',
     async (formData) => {
       try {
-        const { data } = await axios.post(postRouter.createPostPath(), formData, { withCredentials: true });
+        const { data } = await $api.post(postRouter.createPostPath(), formData, { withCredentials: true });
         console.log(data);
         return (data)
       } catch (error) {
@@ -34,7 +35,7 @@ export const updatePost = createAsyncThunk(
     'patch/api/posts',
     async ({id, formData}) => {
       try {
-        const { data } = await axios.patch(postRouter.updatePostPath(id), formData, { withCredentials: true });
+        const { data } = await $api.patch(postRouter.updatePostPath(id), formData, { withCredentials: true });
         console.log(data);
         return (data)
       } catch (error) {
@@ -44,8 +45,19 @@ export const updatePost = createAsyncThunk(
     }
 )
 
-
-
+export const likePost = createAsyncThunk(
+  'post/api/likes/post/:id',
+  async ( { id } ) => {
+    try {
+      const { data } = await $api.post(postRouter.likePost(id));
+      console.log(data);
+      return (data)
+    } catch (error) {
+      console.log(error)
+      return ({ message: error.response.message })
+    }
+  }
+)
 
 
 const postsSlice = createSlice({

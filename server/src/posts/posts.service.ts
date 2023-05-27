@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nes
 import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './posts.model';
 import { Category } from '../categories/categories.model';
+import { Comment } from 'src/comments/comments.model';
 import { CreatePostDto } from './dto/create-post.dto';
 import { FilesService } from '../files/files.service';
 import { CategoriesService } from '../categories/categories.service';
@@ -42,7 +43,7 @@ export class PostsService {
     const post = await this.postsRepository.findByPk(id, {
       include: [
         { all: true },
-        { model: Category, where: {}, attributes: ['id', 'value', 'description'] },
+        { model: Category, through: { attributes: [] }, where: {}, attributes: ['value'] },
         { model: User, attributes: ['id', 'login', 'email'] }
       ],
     });
@@ -54,11 +55,13 @@ export class PostsService {
     const parsedPage = page ? page : 1;
     const perPage = 10;
 
+    
     const filterOptions: FindOptions<Post> = {
       include: [
         { all: true },
-        { model: Category, where: {}, attributes: ['id', 'value', 'description'] },
-        { model: User, attributes: ['id', 'login', 'email'] }
+        { model: Category, through: { attributes: [] }, where: {}, attributes: ['value'] },
+        { model: User, attributes: ['id', 'login', 'email'] },
+        { model: Comment, attributes: ['id', 'value', 'postId', 'createdAt'], include: [{ model: User, attributes: ['id', 'login', 'email', 'avatar']}] }
       ],
       order: (sort === 'byCategories') ? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
       where: {}
@@ -69,7 +72,6 @@ export class PostsService {
 
     if (filter.length > 0) {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
-      console.log(filterOptions.include)
     }
     const posts = await this.postsRepository.findAll(filterOptions);
     const totalPages = Math.ceil(posts.length / perPage);
