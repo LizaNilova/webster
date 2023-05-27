@@ -14,7 +14,7 @@ const initialState = {
 
 export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData, { dispatch }) => {
     try {
-        const { data } = await $api.patch(`http://localhost:8080/api/users`, submitData, { withCredentials: true })
+        const { data } = await $api.patch(`http://localhost:8080/api/users/edit`, submitData, { withCredentials: true })
         console.log(data)
         dispatch(setUserData(data))
         return (data)
@@ -36,7 +36,6 @@ export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
 export const userProfile = createAsyncThunk('user/profile', async () => {
     try {
         const { data } = await $api.get(`http://localhost:8080/api/users/profile`, {withCredentials: true})
-        // console.log(data.user)
         return (data)
     } catch (error) {
         console.log(error)

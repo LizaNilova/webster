@@ -149,59 +149,11 @@ const ProfileTab = () => {
 
         {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
-          {!updateImage && <>
             <div className="justify-center w-40 mt-5 ">
               <img alt={user.avatar} className="items-center rounded-[3rem]"
-                src={'https://th.bing.com/th/id/R.acc466d998c5886cfe9aa20269f10f86?rik=N0PrszZQEG%2bdlQ&riu=http%3a%2f%2fferma-nasele.ru%2fwp-content%2fuploads%2f2017%2f06%2f10-67.jpg&ehk=cw4aW5EoyrkmdvXrVdhhZWrqjZWRrwIXhXxxQcJzIlo%3d&risl=&pid=ImgRaw&r=0'}
+                src={`http://localhost:8080/api/static/${user.avatar}`}
               />
             </div>
-            <div
-              className="text-[12px] mt-2 mb-8  cursor-pointer flex flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-              onClick={() => { setUpdateImage(true) }}>
-              <img className="w-4" src='editing_icon.png' alt='edit info' />
-              Change avatar
-            </div>
-          </>
-
-          }
-          {
-            updateImage && <div className="rounded-3xl bg-dark-purple w-3/4 h-fit">
-              <div className="p-4 pb-2 items-start justify-start">
-                <button
-                  onClick={onClickCancelImage}
-                  className="flex justify-center items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4">
-                  Cancel
-                </button>
-              </div>
-
-              <div className="flex flex-col p-4 justify-center items-center">
-                <label
-                  className="text-gray-300 w-full py-2 px-6 bg-gray-600 text-xs flex items-center justify-center border-2 border-dotted cursor-pointer">
-                  Add image
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={(e) => { setNewImage(e.target.files[0]) }}
-                  />
-                </label>
-                <div className="flex object-cover py-2">
-                  {!newImage &&
-                    <img className='w-40' src={`http://localhost:3002/${user.avatar}`} alt={user.avatar} />
-                  }
-                  {newImage &&
-                    <img className='w-40' src={URL.createObjectURL(newImage)} alt={newImage.name} />
-                  }
-                </div>
-                <button
-                  onClick={onClickBut}
-                  className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">
-                  Save
-                </button>
-              </div>
-
-            </div>
-          }
-
 
           {/* Full name */}
           <div className="text-[25px]">{user.login}</div>

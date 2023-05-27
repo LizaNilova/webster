@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import '../../styles/TabsStyles.css'
 import '../../styles/ScrollbarStyles.css'
 
-// import { updateUserData, uploadUserAvatar, deleteUser } from "../../redux/userSlice"
+import { updateUserData, userProfile } from "../../redux/userSlice"
 
 const EditProfile = ({ setEditBoxOpen }) => {
-    const [updateImage, setUpdateImage] = useState(false)
-
-
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const { user } = useSelector((state) => state.user)
 
     const [state, setState] = useState({
@@ -22,8 +18,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
         email: user.email,
     })
 
-    //Part for EditBlock
-    //---------------------------------------------------------------------
     const { status } = useSelector((state) => state.user)
 
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -62,31 +56,22 @@ const EditProfile = ({ setEditBoxOpen }) => {
                 }
             }
             console.log(state)
-
+            let data = new FormData()
             if (newImage) {
-                let data = new FormData()
                 data.append('avatar', newImage)
-                data.append('login', state.login)
-                data.append('email', state.email)
+            }
+            if (state.login === user.login) { data.append('login', state.login) }
+            if (state.email === user.email) { data.append('email', state.email) }
+            if (state.password !== '') {
                 data.append('password', state.password)
                 data.append('passwordConfirm', confirmPassword)
-                data.append('oldPassword', state.oldPassword)
-                console.log(data)
-
-                dispatch(updateUserData(data))
-
-                setNewImage(null)
-            } else {
-                const data = {
-                    login: state.login,
-                    email: state.email,
-                    password: state.password,
-                    passwordConfirm: confirmPassword,
-                    oldPassword: state.oldPassword
-                }
-                dispatch(updateUserData(data))
-
             }
+            data.append('oldPassword', state.oldPassword)
+            console.log(data)
+
+            dispatch(updateUserData(data))
+
+            setNewImage(null)
 
             if (status && !user) {
                 console.log(status)
@@ -179,32 +164,32 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         onSubmit={(e) => e.preventDefault()}
                     >
 
-                            <div className="flex flex-col p-4 justify-center items-center">
-                                <label
-                                    className="text-gray-300 w-full py-2 px-6 bg-gray-600 text-xs flex items-center justify-center border-2 border-dotted cursor-pointer">
-                                    Add image
-                                    <input
-                                        type="file"
-                                        className="hidden"
-                                        onChange={(e) => { setNewImage(e.target.files[0]) }}
-                                    />
-                                </label>
-                                <div className="flex object-cover py-2">
-                                    {!newImage &&
-                                        <img className='w-40' src={`http://localhost:8080/${user.avatar}`} alt={user.avatar} />
-                                    }
-                                    {newImage &&
-                                        <img className='w-40' src={URL.createObjectURL(newImage)} alt={newImage.name} />
-                                    }
-                                </div>
+                        <div className="flex flex-col p-4 justify-center items-center">
+                            <label
+                                className="text-gray-300 w-full py-2 px-6 bg-gray-600 text-xs flex items-center justify-center border-2 border-dotted cursor-pointer">
+                                Add image
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    onChange={(e) => { setNewImage(e.target.files[0]) }}
+                                />
+                            </label>
+                            <div className="flex object-cover py-2">
+                                {!newImage &&
+                                    <img className='w-40' src={`http://localhost:8080/api/static/${user.avatar}`} alt={user.avatar} />
+                                }
+                                {newImage &&
+                                    <img className='w-40' src={URL.createObjectURL(newImage)} alt={newImage.name} />
+                                }
                             </div>
+                        </div>
 
                         <label className="text-sm text-beige">
                             Username (login) <span className="text-2xl text-red-500"> *</span>
                             <input type="text"
-                                placeholder="Username"
+                                placeholder="Login"
                                 value={state.login}
-                                name='username'
+                                name='login'
                                 onChange={changeHandler}
 
                                 className={`text-black w-full rounded-lg bg-${loginColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
