@@ -5,6 +5,7 @@ import {
   ParseFilePipe
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { EditUserDto } from './dto/edit-user';
 import { UsersService } from './users.service';
 import {
   ApiBadRequestResponse,
@@ -417,7 +418,7 @@ export class UsersController {
   })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('avatar'))
-  async edit_profile(@Req() request: RequestDto, @Body() userDto: CreateUserDto, 
+  async edit_profile(@Req() request: RequestDto, @Body() userDto: EditUserDto, 
     @UploadedFile(new ParseFilePipe()) avatar: Express.Multer.File) {
       return {
       user: await this.usersService.edit_profile(request.user.id, userDto, avatar),
