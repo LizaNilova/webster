@@ -11,8 +11,7 @@ import { User } from '../users/models/users.model';
 import { PostReport } from 'src/posts/post-complaints.model';
 import { ReportPostDto } from './dto/report-to-post.dto';
 import * as fsp from 'fs/promises';
-import * as path from 'path';
-import * as uuid from 'uuid';
+import { Comment } from 'src/comments/comments.model';
 
 @Injectable()
 export class PostsService {
@@ -47,6 +46,10 @@ export class PostsService {
         { model: User, attributes: ['id', 'login', 'email'] }
       ],
     });
+
+    if (post) 
+      post.comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  
     return post;
   }
 

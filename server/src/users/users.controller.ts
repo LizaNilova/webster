@@ -2,11 +2,12 @@ import {
   BadRequestException, Body, Query, Controller, ForbiddenException,
   Get, NotFoundException, Param, Post, Req, UnauthorizedException,
   UseGuards, UsePipes,  Delete,  Patch, UseInterceptors, UploadedFile,
-  ParseFilePipe
+  ParseFilePipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserDto } from './dto/edit-user.dto';
 import { UsersService } from './users.service';
+import { IsOptional } from 'class-validator';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -419,7 +420,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('avatar'))
   async edit_profile(@Req() request: RequestDto, @Body() userDto: EditUserDto, 
-    @UploadedFile(new ParseFilePipe()) avatar: Express.Multer.File) {
+    @UploadedFile() avatar?: Express.Multer.File) {
       return {
       user: await this.usersService.edit_profile(request.user.id, userDto, avatar),
       message: 'Changes are saved. If you have changed your email, check the it'
