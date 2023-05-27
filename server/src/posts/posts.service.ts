@@ -42,7 +42,7 @@ export class PostsService {
     const post = await this.postsRepository.findByPk(id, {
       include: [
         { all: true },
-        { model: Category, where: {}, attributes: ['id', 'value', 'description'] },
+        { model: Category, through: { attributes: [] }, where: {}, attributes: ['value'] },
         { model: User, attributes: ['id', 'login', 'email'] }
       ],
     });
@@ -58,7 +58,7 @@ export class PostsService {
     const filterOptions: FindOptions<Post> = {
       include: [
         { all: true },
-        { model: Category, where: {}, attributes: ['id', 'value', 'description'] },
+        { model: Category, through: { attributes: [] }, where: {}, attributes: ['value'] },
         { model: User, attributes: ['id', 'login', 'email'] }
       ],
       order: (sort === 'byCategories') ? [[{ model: Category, as: 'categories' }, 'value', 'ASC']] : [['createdAt', 'DESC']],
@@ -70,7 +70,6 @@ export class PostsService {
 
     if (filter.length > 0) {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
-      console.log(filterOptions.include)
     }
     const posts = await this.postsRepository.findAll(filterOptions);
     const totalPages = Math.ceil(posts.length / perPage);
