@@ -10,7 +10,6 @@ $secondary-dark: #7B6CD9;
 $notchSize: 40px;
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
 
-
 * { box-sizing: border-box; }
 
 body {
@@ -86,7 +85,330 @@ body {
   linear-gradient(135deg, transparent, rgba($primary, 0.2));
 }
 
+// TEST STYLE ---------------------------------------------------------------------------------
 
+$green: #11dbab;
+$transparent-green: rgba(17, 219, 171, 0.21);
+$purple: #a537ff;
+$transparent-purple: rgba(165, 57, 255, 0.21);
+$red: #ff2c6d;
+$transparent-red: rgba(255, 45, 110, 0.21);
+$blue: #0098ff;
+$transparent-blue: rgba(0, 144, 255, 0.21);
+$yellow: #ffea00;
+$transparent-yellow: rgba(255, 250, 0, 0.21);
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color);
+  line-height: 2em;
+  margin-bottom: 0.4em;
+  border-bottom: 1px solid var(--color);
+  opacity: 0.8;
+  text-shadow: 0 0 2px var(--light-color);
+  text-transform: uppercase;
+
+  &:empty {
+    line-height: 0;
+    margin: 0;
+  }
+}
+
+:root {
+  --color: #{$green};
+  --light-color: #{lighten($green, 20%)};
+  --transparent-color: #{$transparent-green};
+  --dark-color: #{darken($green, 20%)};
+  --skew: 1deg;
+
+  .green {
+    --color: #{$green};
+    --light-color: #{lighten($green, 20%)};
+    --transparent-color: #{$transparent-green};
+    --dark-color: #{darken($green, 20%)};
+    --skew: 1deg;
+  }
+
+  .red {
+    --color: #{$red};
+    --light-color: #{lighten($red, 20%)};
+    --dark-color: #{darken($red, 20%)};
+    --transparent-color: #{$transparent-red};
+    --skew: -2deg;
+  }
+
+  .yellow {
+    --color: #{$yellow};
+    --light-color: #{lighten($yellow, 20%)};
+    --dark-color: #{darken($yellow, 20%)};
+    --transparent-color: #{$transparent-yellow};
+    --skew: 2deg;
+  }
+
+  .purple {
+    --color: #{$purple};
+    --light-color: #{lighten($purple, 20%)};
+    --dark-color: #{darken($purple, 20%)};
+    --transparent-color: #{$transparent-purple};
+    --skew: -2deg;
+  }
+
+  .blue {
+    --color: #{$blue};
+    --light-color: #{lighten($blue, 20%)};
+    --dark-color: #{darken($blue, 20%)};
+    --transparent-color: #{$transparent-blue};
+    --skew: 1deg;
+  }
+}
+
+.glowbox {
+  background-color: var(--transparent-color);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  box-shadow: 0 0 5px var(--color);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color);
+}
+
+.glow {
+  &:not(.text) {
+    @extend .glowbox;
+  }
+
+  &.text {
+    @extend .glowtext;
+  }
+}
+
+.glowtext {
+  color: var(--color);
+  line-height: 2em;
+  text-shadow: 0px 0px 4px var(--color);
+}
+
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+
+  label {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  &:focus-within {
+    label {
+      animation: flicker 1s 1 forwards;
+    }
+  }
+
+  &:after {
+    color: var(--color);
+    content: attr(data-unit);
+    display: block;
+    height: 1em;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    width: 1em;
+  }
+
+  &.error {
+    label {
+      color: $red;
+      text-shadow: 0 0 3px lighten($red, 20%);
+      opacity: 1;
+    }
+
+    input {
+      background-color: rgba(255, 45, 100, 0.21);
+      background-image: repeating-linear-gradient(
+        30deg,
+        rgba(255, 255, 255, 0.21),
+        rgba(255, 255, 255, 0.21) 20px,
+        rgba(255, 45, 100, 0.21) 20px,
+        rgba(255, 45, 100, 0.21) 40px,
+        rgba(255, 255, 255, 0.21) 40px
+      );
+      background-repeat: repeat;
+      background-size: 200% 100%;
+      border-color: $red;
+      box-shadow: 0px 0px 7px 1px $red;
+      opacity: 1;
+      animation: scroll-background 4s infinite linear;
+    }
+  }
+}
+
+input {
+  background: var(--transparent-color);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color);
+  box-shadow: inset 0 0 5px hsl(0, 0, 0);
+  padding: 0.5em;
+  transition: opacity 0.2s ease;
+  outline: 0;
+  opacity: 1;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 7px var(--color);
+    border-color: var(--color);
+    opacity: 1;
+  }
+
+  &:invalid,
+  &.error {
+    background-color: $transparent-red;
+    background-image: repeating-linear-gradient(
+      30deg,
+      rgba(255, 255, 255, 0.21),
+      rgba(255, 255, 255, 0.21) 20px,
+      $transparent-red 20px,
+      $transparent-red 40px,
+      rgba(255, 255, 255, 0.21) 40px
+    );
+    background-repeat: repeat;
+    background-size: 200% 100%;
+    border-color: $red;
+    box-shadow: 0px 0px 7px 1px $red;
+    opacity: 1;
+    animation: scroll-background 4s infinite linear;
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 2px 1px var(--color);
+    opacity: 1;
+  }
+  13% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  20% {
+    box-shadow: 0 0 2px 1px var(--color);
+    opacity: 1;
+  }
+  27% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  34% {
+    box-shadow: 0 0 5px 1px var(--color);
+    opacity: 1;
+  }
+  40% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  48% {
+    box-shadow: 0 0 3px 1px var(--color);
+    opacity: 1;
+  }
+  55% {
+    box-shadow: 0 0 9px 1px var(--color);
+    opacity: 0.9;
+  }
+  62% {
+    box-shadow: 0 0 5px 0 var(--color);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 8px 0 var(--color);
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  13% {
+    opacity: 0.3;
+  }
+  23% {
+    opacity: 0.8;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  38% {
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 0.7;
+  }
+  53% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes flicker-lite {
+  0% {
+    opacity: 1;
+  }
+  13% {
+    opacity: 0.9;
+  }
+  30% {
+    opacity: 1;
+  }
+  38% {
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 1;
+  }
+  53% {
+    opacity: 0.9;
+  }
+  60% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 0.9;
+  }
+  73% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.9;
+  }
+  97% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-background {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -80px 0;
+  }
+}
 // BUTTONS ----------------------------------------------------------------------------------------------------
 @import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap");
 
