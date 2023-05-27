@@ -20,6 +20,16 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async (sub
     }
 })
 
+export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
+    try {
+        const { data } = await axios.get(`http://localhost:8080/api/users/${id}`, submitData, { withCredentials: true })
+        console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 export const userProfile = createAsyncThunk('user/profile', async () => {
     try {
         const { data } = await $api.get(`http://localhost:8080/api/users/profile`, {withCredentials: true})
