@@ -3,6 +3,7 @@ const apiPath = 'http://localhost:8080/api';
 export default {
   // POST
   createPostPath: () => [apiPath, 'posts'].join('/'),
+  likePost: (id) => [apiPath, 'likes', 'post', id].join('/'),
 
   //GET
   allPostsPath: (sort, filter, search, page) => [apiPath, 'posts'].join('/').concat(`?sort=${sort}&filter=${filter}&search=${search}&page=${page}`),
