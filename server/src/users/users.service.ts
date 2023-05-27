@@ -223,8 +223,7 @@ export class UsersService {
       await user.save();
       return await this.sendCode(user);
     }
-
-
+    
     await user.save();
     return user;
   }
