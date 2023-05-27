@@ -17,7 +17,7 @@ import { hasSubscribers } from 'diagnostics_channel';
 import { Op } from 'sequelize';
 import { FilesService } from 'src/files/files.service';
 import * as fsp from 'fs/promises';
-import { EditUserDto } from './dto/edit-user';
+import { EditUserDto } from './dto/edit-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -203,8 +203,9 @@ export class UsersService {
       user.login = dto.login;
     }
 
+    console.log(user.password, dto.oldPassword)
     if (dto.password) {
-      if (!await bcrypt.compare(dto.password, dto.oldPassword)) {
+      if (!(await bcrypt.compare(dto.oldPassword, user.password))) {
         throw new HttpException("old password and your password don't matched", HttpStatus.BAD_REQUEST);
       }
       if (dto.password !== dto.passwordComfirm) {

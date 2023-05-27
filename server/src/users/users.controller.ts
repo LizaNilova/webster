@@ -5,7 +5,7 @@ import {
   ParseFilePipe
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { EditUserDto } from './dto/edit-user';
+import { EditUserDto } from './dto/edit-user.dto';
 import { UsersService } from './users.service';
 import {
   ApiBadRequestResponse,
@@ -412,7 +412,7 @@ export class UsersController {
           "updatedAt": new Date(),
           "createdAt": new Date()
         },
-        "message": "Create user"
+        "message": "Changes are saved. If you have changed your email, check the it"
       }
     }
   })
