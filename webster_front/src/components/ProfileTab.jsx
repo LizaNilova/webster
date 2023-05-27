@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import TabNavItem from "../TabNavItem"
-import TabContent from "../TabContent";
-import '../../styles/TabsStyles.css'
-import '../../styles/ScrollbarStyles.css'
+import TabNavItem from "./TabNavItem"
+import TabContent from "./TabContent";
+import '../styles/TabsStyles.css'
+import '../styles/ScrollbarStyles.css'
 
 // import Button from '@material-ui/core/Button';
 // import Dialog from '@material-ui/core/Dialog';
@@ -16,16 +16,14 @@ import '../../styles/ScrollbarStyles.css'
 // import CompanyListItem from "../CompanyListItem";
 
 // import { updateUserData, uploadUserAvatar, deleteUser } from "../../redux/userSlice"
-import { logout } from "../../redux/authSlice";
-import EditProfile from "./EditProfile";
+import { logout } from "../redux/authSlice";
+import EditProfile from "./allTabs/EditProfile";
 
 // import EventInFavourite from "../EventInFavourite";
 
 const ProfileTab = () => {
   const [activeTabCompanies, setActiveTabCompanies] = useState("following_companies")
   const [editBoxOpen, setEditBoxOpen] = useState(false)
-  const [updateImage, setUpdateImage] = useState(false)
-  const [openDialog, setOpenDialog] = useState(false)
 
 
   const dispatch = useDispatch()
@@ -41,107 +39,21 @@ const ProfileTab = () => {
     }
   }
 
-  const [state, setState] = useState({
-    login: user.login,
-    password: '',
-    oldPassword: '',
-    email: user.email,
-  })
+  // const handleClickCancelDelete = () => {
+  //   setOpenDialog(false);
+  // };
 
-  //Part for EditBlock
-  //---------------------------------------------------------------------
-  const { status } = useSelector((state) => state.user)
-
-  const [newImage, setNewImage] = useState(null)
-  const [emailColorBg, setEmailColorBg] = useState('gray-400')
-  const [loginColorBg, setLoginColorBg] = useState('gray-400')
-  const [passwordColorBg, setPasswordColorBg] = useState('gray-400')
-
-
-  const changeHandler = (e) => {
-    const { name, value } = e.target
-    switch (name) {
-      case 'login': {
-        if (value === '') {
-          setLoginColorBg('red-500')
-        } else {
-          setLoginColorBg('gray-400')
-        }
-        setState(prevState => ({
-          ...prevState,
-          [name]: value,
-          errMessage: ''
-        }));
-        break;
-      }
-      case 'email': {
-        if (value === '' || !value.includes('@')) {
-          setEmailColorBg('red-500')
-        } else {
-          setEmailColorBg('gray-400')
-        }
-        setState(prevState => ({
-          ...prevState,
-          [name]: value,
-          errMessage: ''
-        }));
-        break;
-      }
-      case 'oldPassword': {
-        if (value === '') {
-          setPasswordColorBg('red-500')
-        } else {
-          setPasswordColorBg('gray-400')
-        }
-        setState(prevState => ({
-          ...prevState,
-          'oldPassword': value,
-          errMessage: ''
-        }));
-        break;
-      }
-      default: {
-        setState(prevState => ({
-          ...prevState,
-          [name]: value,
-          errMessage: ''
-        }));
-      }
-    }
-  }
-
-  const cancelHandler = () => {
-    setState(({
-      id: user.id,
-      login: user.login,
-      password: '',
-      oldPassword: '',
-      email: user.email,
-    }))
-    setEditBoxOpen(false)
-  }
-
-  //----------------------------------------------------------------------------------------------
-
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleClickCancelDelete = () => {
-    setOpenDialog(false);
-  };
-
-  const handleClickDeleteUser = () => {
-    dispatch(deleteUser())
-    setOpenDialog(false);
-    dispatch(logout())
-    navigate('/')
-  };
+  // const handleClickDeleteUser = () => {
+  //   dispatch(deleteUser())
+  //   setOpenDialog(false);
+  //   dispatch(logout())
+  //   navigate('/')
+  // };
 
 
   return (
-    <div className="flex flex-col bg-opacity-30 bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
-      <div className="flex flex-row space-x-4 w-full">
+    <div className="flex flex-col bg-opacity-30 w-2/3 bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
+      <div className="flex flex-row space-x-4 w-2/3">
         {
           editBoxOpen &&
           <EditProfile setEditBoxOpen={setEditBoxOpen} />
@@ -149,11 +61,11 @@ const ProfileTab = () => {
 
         {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
-            <div className="justify-center w-40 mt-5 ">
-              <img alt={user.avatar} className="items-center rounded-[3rem]"
-                src={`http://localhost:8080/api/static/${user.avatar}`}
-              />
-            </div>
+          <div className="justify-center w-40 mt-5 ">
+            <img alt={user.avatar} className="items-center rounded-[3rem]"
+              src={`http://localhost:8080/api/static/${user.avatar}`}
+            />
+          </div>
 
           {/* Full name */}
           <div className="text-[25px]">{user.login}</div>
@@ -221,7 +133,8 @@ const ProfileTab = () => {
           </div>
 
           <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
-            onClick={handleClickOpen} >Delete account</div>
+          // onClick={handleClickOpen} 
+          >Delete account</div>
           {/* <Dialog
             open={openDialog}
             onClose={handleClickCancelDelete}
@@ -245,6 +158,11 @@ const ProfileTab = () => {
             </DialogActions>
           </Dialog> */}
         </div>
+      </div>
+
+      <div>
+        My posts
+        
       </div>
     </div >
   );

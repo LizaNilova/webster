@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import '../../styles/TabsStyles.css'
 import '../../styles/ScrollbarStyles.css'
@@ -22,9 +21,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
 
     const [confirmPassword, setConfirmPassword] = useState('')
     const [newImage, setNewImage] = useState(null)
-    const [emailColorBg, setEmailColorBg] = useState('gray-400')
-    const [loginColorBg, setLoginColorBg] = useState('gray-400')
-    const [passwordColorBg, setPasswordColorBg] = useState('gray-400')
 
     const submitHandler = () => {
         try {
@@ -35,7 +31,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
             }
 
             if (!state.email.includes('@')) {
-                setEmailColorBg('red-500')
                 console.log("Uncorrect email")
                 return
             }
@@ -60,14 +55,14 @@ const EditProfile = ({ setEditBoxOpen }) => {
             if (newImage) {
                 data.append('avatar', newImage)
             }
-            if (state.login === user.login) { data.append('login', state.login) }
-            if (state.email === user.email) { data.append('email', state.email) }
-            if (state.password !== '') {
+            if (state.login !== user.login) { data.append('login', state.login) }
+            if (state.email !== user.email) { data.append('email', state.email) }
+            if (state.password !== '' && confirmPassword !== '') {
                 data.append('password', state.password)
-                data.append('passwordConfirm', confirmPassword)
+                data.append('passwordComfirm', confirmPassword)
             }
             data.append('oldPassword', state.oldPassword)
-            console.log(data)
+            console.log(data.email)
 
             dispatch(updateUserData(data))
 
@@ -87,11 +82,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
         const { name, value } = e.target
         switch (name) {
             case 'login': {
-                if (value === '') {
-                    setLoginColorBg('red-500')
-                } else {
-                    setLoginColorBg('gray-400')
-                }
                 setState(prevState => ({
                     ...prevState,
                     [name]: value,
@@ -100,11 +90,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
                 break;
             }
             case 'email': {
-                if (value === '' || !value.includes('@')) {
-                    setEmailColorBg('red-500')
-                } else {
-                    setEmailColorBg('gray-400')
-                }
                 setState(prevState => ({
                     ...prevState,
                     [name]: value,
@@ -113,11 +98,6 @@ const EditProfile = ({ setEditBoxOpen }) => {
                 break;
             }
             case 'oldPassword': {
-                if (value === '') {
-                    setPasswordColorBg('red-500')
-                } else {
-                    setPasswordColorBg('gray-400')
-                }
                 setState(prevState => ({
                     ...prevState,
                     'oldPassword': value,
@@ -192,7 +172,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                                 name='login'
                                 onChange={changeHandler}
 
-                                className={`text-black w-full rounded-lg bg-${loginColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
+                                className={`text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
                         </label>
 
                         <label className="mb-0 text-sm text-beige">
@@ -203,7 +183,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                                 value={state.email}
 
                                 onChange={changeHandler}
-                                className={`text-black w-full rounded-lg bg-${emailColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
+                                className={`text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
                         </label>
 
                         <div className="rounded-2xl border-[2px] border-beige bg-lilovii bg-opacity-50 mt-8 mb-6 p-4">
@@ -239,7 +219,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                                 name='oldPassword'
                                 onChange={changeHandler}
                                 placeholder="current password"
-                                className={` text-black w-full rounded-lg bg-${passwordColorBg} border py-1 px-2 text-xs outline-none placeholder:text-gray-700`}
+                                className={` text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`}
                             />
                         </label>
 

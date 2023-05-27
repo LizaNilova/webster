@@ -12,11 +12,10 @@ const initialState = {
     status: null
 }
 
-export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData, { dispatch }) => {
+export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData) => {
     try {
         const { data } = await $api.patch(`http://localhost:8080/api/users/edit`, submitData, { withCredentials: true })
         console.log(data)
-        dispatch(setUserData(data))
         return (data)
     } catch (error) {
         console.log(error)
@@ -42,17 +41,6 @@ export const userProfile = createAsyncThunk('user/profile', async () => {
     }
 })
 
-export const uploadUserAvatar = createAsyncThunk('user/uploadUserAvatar', async (req, { dispatch }) => {
-    try {
-        const { data } = await $api.patch(`http://localhost:8080/api/users/pic-load`, req, { withCredentials: true })
-        console.log(data)
-        if (data.user) dispatch(setUserData(data.user))
-        return (data)
-    } catch (error) {
-        console.log(error)
-    }
-})
-
 export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     try {
         const { data } = await $api.delete(`http://localhost:8080/api/users`, { withCredentials: true })
@@ -63,15 +51,10 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     }
 })
 
-
-
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUserData(state, action){
-            state.user = action.payload;
-        }
     },
     extraReducers: {
         //User Profile
@@ -85,7 +68,7 @@ export const userSlice = createSlice({
             state.ban = action.payload?.user.ban
             state.subscribers = action.payload?.user.subscribers
             state.subscriptions = action.payload?.user.subscriptions
-            console.log(state)
+            console.log(state.user)
             state.status = action.payload?.message
         },
         [userProfile.rejected]: (state, action) => {
@@ -114,6 +97,7 @@ export const userSlice = createSlice({
         },
         [updateUserData.fulfilled]: (state, action) => {
             state.loading = false
+            state.user = action.payload?.user
             state.status = action.payload?.message
         },
         [updateUserData.rejected]: (state, action) => {
