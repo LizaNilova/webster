@@ -4,12 +4,12 @@ import { getAllProjects } from '../redux/CanvasSlice';
 import { getAllCategories } from '../redux/categoriesSlice';
 import axios from 'axios';
 import { dataURItoBlob } from '../functions/toBlob';
-import { createPost, updatePost } from '../redux/postsSlice';
+import { createPost, getAllPosts, updatePost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
 const PostForm = ({ data, closeForm }) => {
-    console.log(data)
+    // console.log(data)
     const dispatch = useDispatch();
     const projects = useSelector(state => state.canvas.projects);
     const categories = useSelector(state => state.categories.categories);
@@ -43,8 +43,11 @@ const PostForm = ({ data, closeForm }) => {
                     });
                     // fd.append('category_value', );
                     dispatch(createPost(fd));
+                    // dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search, page: curPage}));
+                    closeForm();
                 })
         } else {
+            console.log('Title:', state.title, 'Content:', state.content, 'image:', state.image, 'categories:', state.categories);
             axios.get(apiPath + '/static/' + state.image,{ responseType: 'blob' })
                 .then(response =>{ 
                     console.log('Title:', state.title, 'Content:', state.content, 'image:', response.data, 'categories:', state.categories);
@@ -57,7 +60,9 @@ const PostForm = ({ data, closeForm }) => {
                         return;
                     });
                     // fd.append('category_value', );
-                    dispatch(updatePost(fd));
+                    // dispatch(updatePost({id: data.id, formData: fd}));
+                    // dispatch(getAllPosts({sort: sort, filter: JSON.stringify(filter), search: search, page: curPage}));
+                    // closeForm();
                 })
         }
     }
@@ -134,13 +139,13 @@ const PostForm = ({ data, closeForm }) => {
                                     categories && categories.map(category => {
                                         return (
                                             <div className='flex items-center justify-center p-2'>
-                                                <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(state.categories.findIndex(f_category => f_category === category.value))} onChange={(e) => {
-                                                    console.log(e.target.checked)
-                                                    console.log(state)
-                                                    let idx = state.categories.findIndex(f_category => f_category === category.value);
+                                                <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(state.categories.findIndex(f_category => f_category === category))} onChange={(e) => {
+                                                    // console.log(e.target.checked)
+                                                    // console.log(state)
+                                                    let idx = state.categories.findIndex(f_category => f_category === category);
                                                     if (idx < 0) {
                                                         let new_categories = [...state.categories];
-                                                        new_categories.push(category.value);
+                                                        new_categories.push(category);
                                                         setState(prevState => ({
                                                             ...prevState,
                                                             categories: new_categories,
@@ -154,7 +159,7 @@ const PostForm = ({ data, closeForm }) => {
                                                         }))
                                                     }
                                                 }} />
-                                                <p className='pl-2 text-lg'>{category.value}</p>
+                                                <p className='pl-2 text-lg'>{category}</p>
                                             </div>
                                         )
                                     })

@@ -36,10 +36,10 @@ const PostsPage = () => {
             </li>
           );
         }
-        console.log(result)
+        // console.log(result)
         return result;
       };
-
+    //   console.log(categories)
     return (
         <>
             {form && <PostForm data={form} closeForm={() => { openForm(null) }} />}
@@ -59,11 +59,11 @@ const PostsPage = () => {
                     <div className='w-full flex flex-wrap justify-around m-1'>
                         {
                             categories && categories.map(category => {
-                                console.log(filter.findIndex(f_category => f_category === category.value))
+                                // console.log(filter.findIndex(f_category => f_category === category.value))
                                 return (
                                     <div className='flex items-center justify-center p-2'>
-                                        <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(filter.findIndex(f_category => f_category === category.value))} onChange={(e)=>{
-                                            let idx = filter.findIndex(f_category => f_category === category.value);
+                                        <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(filter.findIndex(f_category => f_category === category))} onChange={(e)=>{
+                                            let idx = filter.findIndex(f_category => f_category === category);
                                             if(idx < 0)
                                             {
                                                 let new_filters = [...filter];
@@ -75,7 +75,7 @@ const PostsPage = () => {
                                                 setFilter(new_filters);
                                             }
                                         }}/>
-                                        <p className='pl-2 text-lg'>{category.value}</p>
+                                        <p className='pl-2 text-lg'>{category}</p>
                                     </div>
                                 )
                             })
