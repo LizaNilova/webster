@@ -48,7 +48,7 @@ export class UsersService {
     const fileBuffer = await fsp.readFile(filePath);
     const fileName = await this.filesService.createAvatar(fileBuffer);
     user.avatar = fileName;
-    
+
     user.save()
     return user;
   }
@@ -64,14 +64,16 @@ export class UsersService {
   // добавить сортировку по рейтингу 
   async getAllUsers(search) {
 
-    const users = (search) ? await this.userRepository.findAll({ where: {
+    const users = (search) ? await this.userRepository.findAll({
+      where: {
         login: {
           [Op.iLike]: `%${search}%`
         }
       },
-      include: { all: true }}) :
-       await this.userRepository.findAll({ include: { all: true } });
-  
+      include: { all: true }
+    }) :
+      await this.userRepository.findAll({ include: { all: true } });
+
 
     const usersWithRating = [];
 
@@ -117,17 +119,17 @@ export class UsersService {
 
     const postIds = user.posts.map((post) => post.id);
 
-    const likes = await this.likeRepository.findAll({where: { postId: postIds,}})
+    const likes = await this.likeRepository.findAll({ where: { postId: postIds, } })
     let rating = likes.length
-    const subscribers = await this.subscriptionsRepository.findAll({where: {userId: id}})
-    rating += subscribers.length   
+    const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: id } })
+    rating += subscribers.length
 
-    let usersSubscriber  = []
-      for (const subscriber of subscribers)  {
-        usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
-          attributes: ['id', 'login']
-        }));
-      };
+    let usersSubscriber = []
+    for (const subscriber of subscribers) {
+      usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
+        attributes: ['id', 'login']
+      }));
+    };
 
     return {
       id: user.id,
@@ -139,7 +141,7 @@ export class UsersService {
       posts: user.posts,
       ban: user.ban,
       subscriptions: user.subscriptions,
-      subscribers: usersSubscriber, 
+      subscribers: usersSubscriber,
     };
   }
 
@@ -153,6 +155,12 @@ export class UsersService {
   async getUserByLogin(login: string) {
     return await this.userRepository.findOne({
       where: { login },
+      include: { all: true },
+    });
+  }
+
+  async getUserByIdInToken(id: number) {
+    return await this.userRepository.findByPk(id, {
       include: { all: true },
     });
   }
@@ -194,8 +202,8 @@ export class UsersService {
     throw new HttpException('user undefined', HttpStatus.NOT_FOUND);
   }
 
-  async edit_profile(id: number, dto: EditUserDto, avatar?: any){
-    let user = await this.userRepository.findOne({ where: { id }});
+  async edit_profile(id: number, dto: EditUserDto, avatar?: any) {
+    let user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
@@ -222,7 +230,7 @@ export class UsersService {
     }
 
     if (dto.email) {
-      user.email = dto.email; 
+      user.email = dto.email;
       user.is_active = false;
       await user.save();
       return await this.sendCode(user);
@@ -240,17 +248,17 @@ export class UsersService {
     });
     await this.mailService.sendUserConfirmation(user, code);
     const id = event.id
-    return {event_id: id}
+    return { event_id: id }
   }
 
-  async delete_profile(id: number){
+  async delete_profile(id: number) {
     const user = await this.userRepository.findByPk(id);
     if (!user) {
       throw new HttpException(`User with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
     await user.destroy();
     return "User was deleted";
-}
+  }
 
   async isExistsUser(login: string, email: string): Promise<boolean> {
     const condidateEmail = await this.getUserByEmail(email);
