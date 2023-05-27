@@ -46,10 +46,26 @@ export class PostsService {
       ],
     });
 
+    const categories = post.categories.map(({ value }) => value);
+    console.log(categories)
+
     if (post) 
       post.comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    const post_with_categories = {
+      id: post.id,
+      title: post.title, 
+      content: post.content, 
+      image: post.image, 
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt, 
+      categories: categories,
+      author: post.author, 
+      comments: post.comments, 
+      likes:post.likes
+    }
   
-    return post;
+    return post_with_categories;
   }
 
   async getAll(sort, filter, search, page: number) {
