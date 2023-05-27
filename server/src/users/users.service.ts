@@ -35,7 +35,7 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     const isTruth = await this.isExistsUser(dto.login, dto.email);
-    if (isTruth) {
+    if (isTruth.email || isTruth.login) {
       throw new BadRequestException('User exists');
     }
     const salt = 5;
