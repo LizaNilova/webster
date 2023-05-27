@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../redux/authSlice.js'
 import '../styles/loginPage.scss'
+import '../styles/glitch.scss'
 import { userProfile } from "../redux/userSlice.js"
 
 export const LoginPage = () => {
@@ -52,7 +53,10 @@ export const LoginPage = () => {
             onSubmit={e => e.preventDefault()}
             className="main-container">
             <div className="login-card diagonal-gridlines card-border bb-login">
-                <h3 className="card_title">sign in</h3>
+                    <div className="glitch-box">
+                    <h3 className="glitch-text">sign in</h3>
+                    </div>
+                
                 <div className="separator"></div>
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="flex flex-col my-3 w-2/3">

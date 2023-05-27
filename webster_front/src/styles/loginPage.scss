@@ -30,8 +30,8 @@ body {
 
 .login-card {
   background: rgba(0,0,0,.5);
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   padding: calc($notchSize / 2) $notchSize;
   clip-path: polygon(
     0% $notchSize, 
@@ -181,7 +181,7 @@ body {
 
 $anime-time: 8s;
 
-$box-size-login: 450px;
+$box-size-login: 500px;
 $clip-distance: .0;
 $clip-size-login: $box-size-login * (1 + $clip-distance * 2);
 $path-width: 2px;

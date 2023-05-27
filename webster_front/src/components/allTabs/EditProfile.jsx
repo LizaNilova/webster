@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import '../../styles/TabsStyles.css'
 import '../../styles/ScrollbarStyles.css'
 
-import { updateUserData, userProfile } from "../../redux/userSlice"
+import { updateUserData } from "../../redux/userSlice"
 
 const EditProfile = ({ setEditBoxOpen }) => {
     const dispatch = useDispatch()
