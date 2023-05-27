@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { likePost } from '../redux/postsSlice';
-import { getUserById } from '../redux/userSlice';
+import { likePost, createCommentPost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
@@ -12,6 +11,7 @@ const Post = ({ data, openForm }) => {
   const [countLikes, setCountLikes] = React.useState(data.likes.length);
   const [curPage, setCurPage] = React.useState(1);
   const [isHidden, setHidden] = React.useState(true);
+  const [commentText, setCommentText] = React.useState('')
   const parsedPage = curPage;
   const perPage = 5;
   const totalPages = Math.ceil(data.comments.length / perPage);
@@ -49,6 +49,14 @@ const Post = ({ data, openForm }) => {
       console.log(e);
     }
   };
+  const handleForm = (e) => {
+    try {
+    e.preventDefault();
+    dispatch(createCommentPost({id: data.id, value: commentText}))
+    } catch (e) {
+      console.log(e)
+    }
+  }
   React.useEffect(() => {
     console.log(data);
     const isLikeUser = data.likes.find((like) => {
@@ -168,19 +176,21 @@ const Post = ({ data, openForm }) => {
                 </div> */}
       </div>
       <div className={`w-full pb-0 border p-5 border-purple-800 overflow-hidden ${isHidden ? 'h-0 p-0 border-none' : 'h-full'}`}>
-        <form action="#" class="mt-4">
+        <form onSubmit={handleForm} class="mt-4">
           <label for="comment" class="block ">
             <textarea
               id="comment"
               cols="30"
               rows="3"
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
               placeholder="Type your comment..."
-              class="px-3 py-2 border shadow-sm border-gray-300 rounded-md w-full block placeholder:text-gray-400 placeholder-gray-500
+              class="px-3 py-2 border text-black shadow-sm border-gray-300 rounded-md w-full block placeholder:text-gray-400 placeholder-gray-500
                     focus:outline-none focus:ring-1 bg-gray-50 focus:ring-blue-600 focus:border-blue-600 text-sm"
             ></textarea>
           </label>
           <button
-            type="button"
+            type="submit"
             class="mt-2  inline-flex items-center justify-center text-gray-100 font-medium leading-none
                                     bg-blue-600 rounded-md py-2 px-3 border border-transparent transform-gpu hover:-translate-y-0.5 
                                     transition-all ease-in duration-300 hover:text-gray-200 hover:bg-blue-700 text-sm"
@@ -200,7 +210,10 @@ const Post = ({ data, openForm }) => {
           <small class="text-base font-bold text-white ml-1">
             {data.comments.length} comments
           </small>
-          {commentSlice.map((comment) => (
+          {commentSlice.map((comment) => {
+            const date = new Date(comment.createdAt).toDateString();
+            const time = new Date(comment.createdAt).toLocaleTimeString()
+            return (
             <div class="flex flex-col mt-4">
               <div class="flex flex-row justify-between px-1 py-1">
                 <div class="flex mr-2">
@@ -217,14 +230,14 @@ const Post = ({ data, openForm }) => {
                     {comment.author.login}
                     <span class="text-sm font-normal text-white">
                       {' '}
-                      - {new Date(comment.createdAt).toDateString()}
+                      - {`${date} ${time}`}
                     </span>
                   </div>
                   <div class="text-sm text-white">{comment.value}</div>
                 </div>
               </div>
             </div>
-          ))}
+          )})}
           {totalPages !== 1 ? (
             <div className='w-full text-center mt-5'>
               <ul class="inline-flex -space-x-px">

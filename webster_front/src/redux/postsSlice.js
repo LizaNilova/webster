@@ -17,6 +17,22 @@ export const getAllPosts = createAsyncThunk(
     }
 )
 
+export const createCommentPost = createAsyncThunk(
+  'post/api/comments/post/:id',
+  async ( {value, id} ) => {
+    try {
+      const { data } = await $api.post(postRouter.createPostComment(id), {
+        value
+      });
+      console.log(data);
+      return (data)
+    } catch (error) {
+      console.log(error)
+      return ({ message: error.response.message })
+    }
+  }
+)
+
 export const createPost = createAsyncThunk(
     'post/api/posts',
     async (formData) => {
