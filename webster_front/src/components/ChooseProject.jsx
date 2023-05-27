@@ -15,13 +15,13 @@ const ChooseProject = ({closeForm, loadProject}) => {
     console.log(projects);
 
     return (
-        <div className="text-white justify-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-slate-600 bg-opacity-50">
-            <div className="relative my-2 mx-auto w-1/2 flex flex-col justify-center">
+        <div className="form-background">
+            <div className="form-container">
                 {/*content*/}
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-dark-blue-pastel outline-none focus:outline-none">
+                <div className="form-content-container">
                     {/*header*/}
-                    <div className="flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t">
-                        <h3 className="text-3xl pl-4 font-semibold text-light-grey-pastel font-serif">
+                    <div className="form-header-container">
+                        <h3 className="form-header-title">
                             Project selection
                         </h3>
                         <button
@@ -34,8 +34,8 @@ const ChooseProject = ({closeForm, loadProject}) => {
                         </button>
                     </div>
                     {/*body*/}
-                    <div className="relative px-8 py-3 flex flex-col m-1">
-                        <div className='pb-1 my-1 flex items-center justify-around w-full text-xl text-beige'>
+                    <div className="form-body-container">
+                        <div className='w-full form-body-item-container'>
                             <label className='text-center w-1/4'>Choose your project:</label>
                             <div className='w-2/3 flex flex-wrap justify-between'>
                                 {projects.map(project => {
@@ -50,7 +50,7 @@ const ChooseProject = ({closeForm, loadProject}) => {
                         </div>
                     </div>
                     {/*footer*/}
-                    <div className="flex items-center justify-end p-3 border-t border-solid border-slate-200 rounded-b">
+                    <div className="form-footer-container">
                         <button
                             className="text-pink-700 hover:text-pink-600 background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-350"
                             type="button"

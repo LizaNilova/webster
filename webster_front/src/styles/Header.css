@@ -25,12 +25,13 @@
     .header-logout-container {
         @apply w-1/4 flex flex-row justify-end;
     }
+    
 
     .header-logout-div {
         @apply w-1/2 flex flex-col items-end justify-center
     }
 
-    .header-logout-button {
+    .header-log-button {
         @apply flex items-center justify-around border border-purple-900 rounded-full w-2/3 p-3 bg-violet-700 hover:bg-violet-500 hover:border-purple-600 transition duration-500 hover:ease-in font-semibold text-lg;
     }
 }
