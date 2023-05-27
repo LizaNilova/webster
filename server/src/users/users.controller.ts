@@ -7,7 +7,6 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserDto } from './dto/edit-user.dto';
 import { UsersService } from './users.service';
-import { IsOptional } from 'class-validator';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
