@@ -86,23 +86,12 @@ export class UsersService {
       const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: user.id } });
       rating += subscribers.length;
 
-      const subscriberIds = subscribers.map((subscriber) => subscriber.subscriberId);
-      const subscribersWithLogin = await this.userRepository.findAll({
-        where: { id: subscriberIds },
-        attributes: ['id', 'login']
-      });
-
       const userWithRating = {
         id: user.id,
         login: user.login,
-        email: user.email,
         role: user.roles[0].value,
-        rating: rating,
-        posts: user.posts,
-        projects: user.projects,
-        ban: user.ban,
-        subscriptions: user.subscriptions,
-        subscribers: subscribersWithLogin
+        rating: rating, 
+        avatar: user.avatar
       };
 
       usersWithRating.push(userWithRating);
