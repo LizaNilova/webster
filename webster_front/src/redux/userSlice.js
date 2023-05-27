@@ -4,7 +4,10 @@ import { setUserData } from './authSlice'
 
 const initialState = {
     user: null,
-    updatedUser: null,
+    otherUser: null,
+    ban: null,
+    subscriptions: null,
+    subscribers: null,
     loading: false,
     status: null
 }
@@ -12,8 +15,8 @@ const initialState = {
 export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData, { dispatch }) => {
     try {
         const { data } = await $api.patch(`http://localhost:8080/api/users`, submitData, { withCredentials: true })
-        console.log(data.user)
-        dispatch(setUserData(data.user))
+        console.log(data)
+        dispatch(setUserData(data))
         return (data)
     } catch (error) {
         console.log(error)
@@ -22,7 +25,7 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async (sub
 
 export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
     try {
-        const { data } = await axios.get(`http://localhost:8080/api/users/${id}`, submitData, { withCredentials: true })
+        const { data } = await axios.get(`http://localhost:8080/api/users/${id}`, { withCredentials: true })
         console.log(data)
         return data
     } catch (error) {
@@ -33,7 +36,7 @@ export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
 export const userProfile = createAsyncThunk('user/profile', async () => {
     try {
         const { data } = await $api.get(`http://localhost:8080/api/users/profile`, {withCredentials: true})
-        console.log(data.user)
+        // console.log(data.user)
         return (data)
     } catch (error) {
         console.log(error)
@@ -79,11 +82,29 @@ export const userSlice = createSlice({
         },
         [userProfile.fulfilled]: (state, action) => {
             state.loading = false
-            state.user = action.payload?.user
-            console.log(action.payload?.user)
+            state.user = action.payload?.user.user
+            state.ban = action.payload?.user.ban
+            state.subscribers = action.payload?.user.subscribers
+            state.subscriptions = action.payload?.user.subscriptions
+            console.log(state)
             state.status = action.payload?.message
         },
         [userProfile.rejected]: (state, action) => {
+            state.loading = false
+            state.message = action.payload?.message
+        },
+        //user by id
+        [getUserById.pending]: (state) => {
+            state.loading = true
+            state.status = null
+        },
+        [getUserById.fulfilled]: (state, action) => {
+            state.loading = false
+            state.otherUser = action.payload
+            console.log(action.payload)
+            state.status = action.payload?.message
+        },
+        [getUserById.rejected]: (state, action) => {
             state.loading = false
             state.message = action.payload?.message
         },
@@ -100,18 +121,6 @@ export const userSlice = createSlice({
             state.loading = false
             state.status = action.payload?.message
             console.log(action.payload.message)
-        },
-        [uploadUserAvatar.pending]: (state) => {
-            state.loading = true
-            state.status = null
-        },
-        [uploadUserAvatar.fulfilled]: (state, action) => {
-            state.loading = false
-            state.status = action.payload?.message
-        },
-        [uploadUserAvatar.rejected]: (state, action) => {
-            state.loading = false
-            state.status = action.payload?.message
         },
 
         // Delete user

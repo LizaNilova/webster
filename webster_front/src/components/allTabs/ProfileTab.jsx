@@ -52,69 +52,11 @@ const ProfileTab = () => {
   //---------------------------------------------------------------------
   const { status } = useSelector((state) => state.user)
 
-  const [confirmPassword, setConfirmPassword] = useState('')
   const [newImage, setNewImage] = useState(null)
   const [emailColorBg, setEmailColorBg] = useState('gray-400')
   const [loginColorBg, setLoginColorBg] = useState('gray-400')
   const [passwordColorBg, setPasswordColorBg] = useState('gray-400')
 
-  const submitHandler = () => {
-    try {
-
-      if (state.login === '' || state.email === '' || state.oldPassword === '') {
-        console.log("Fill all required fields")
-        return
-      }
-
-      if (!state.email.includes('@')) {
-        setEmailColorBg('red-500')
-        console.log("Uncorrect email")
-        return
-      }
-
-      if (state.password !== '') {
-        if (confirmPassword === '') {
-          console.log("Please, repeat new password for confirmation")
-          return
-        }
-        if (state.password !== confirmPassword) {
-          console.log("New password and its confirmation are different. Please, try again.")
-          setState(prevState => ({
-            ...prevState,
-            password: ''
-          }))
-          setConfirmPassword('')
-          return
-        }
-      }
-      console.log(state)
-
-
-      dispatch(updateUserData({ ...state }))
-
-      if (status && !user) {
-        console.log(status)
-        return
-      }
-      setEditBoxOpen(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const onClickBut = () => {
-    let data = new FormData()
-    data.append('files', newImage)
-    console.log(data)
-    dispatch(uploadUserAvatar(data))
-    setNewImage(null)
-    setUpdateImage(false)
-  }
-
-  const onClickCancelImage = () => {
-    setNewImage(null)
-    setUpdateImage(false)
-  }
 
   const changeHandler = (e) => {
     const { name, value } = e.target
