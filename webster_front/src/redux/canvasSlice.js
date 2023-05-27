@@ -6,7 +6,7 @@ export const getAllProjects = createAsyncThunk(
     'get/api/projects',
     async () => {
       try {
-        const { data } = await axios.get(projectRouter.allProjects(), { withCredentials: true })
+        const { data } = await $api.get(projectRouter.allProjects(), { withCredentials: true })
         console.log(data);
         return (data)
       } catch (error) {
@@ -20,7 +20,7 @@ export const createProject = createAsyncThunk(
     'post/api/project',
     async (formData) => {
       try {
-        const { data } = await axios.post(projectRouter.createProject(), formData , { withCredentials: true })
+        const { data } = await $api.post(projectRouter.createProject(), formData , { withCredentials: true })
         console.log(data);
         return (data)
       } catch (error) {
@@ -35,7 +35,7 @@ export const updateProject = createAsyncThunk(
     async ({id, formData}) => {
       console.log(id, formData);
       try {
-        const { data } = await axios.patch(projectRouter.updateProject(id), formData , { withCredentials: true })
+        const { data } = await $api.patch(projectRouter.updateProject(id), formData , { withCredentials: true })
         console.log(data);
         return (data)
       } catch (error) {
