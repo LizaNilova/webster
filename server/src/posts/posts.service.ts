@@ -11,7 +11,6 @@ import { User } from '../users/models/users.model';
 import { PostReport } from 'src/posts/post-complaints.model';
 import { ReportPostDto } from './dto/report-to-post.dto';
 import * as fsp from 'fs/promises';
-import { Comment } from 'src/comments/comments.model';
 
 @Injectable()
 export class PostsService {
