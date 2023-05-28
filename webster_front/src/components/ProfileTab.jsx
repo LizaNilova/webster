@@ -13,12 +13,12 @@ import '../styles/ScrollbarStyles.css'
 // import DialogContent from '@material-ui/core/DialogContent';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 // import DialogTitle from '@material-ui/core/DialogTitle';
-// import CompanyListItem from "../CompanyListItem";
 import UserListItem from "./UserlistItem";
 
 // import { updateUserData, uploadUserAvatar, deleteUser } from "../../redux/userSlice"
 import { logout } from "../redux/authSlice";
 import EditProfile from "./allTabs/EditProfile";
+import Post from "./Post";
 
 // import EventInFavourite from "../EventInFavourite";
 
@@ -32,8 +32,8 @@ const ProfileTab = () => {
   const { user } = useSelector((state) => state.user)
   const { subscriptions } = useSelector((state) => state.user)
   const { subscribers } = useSelector((state) => state.user)
-  const { posts } = useSelector((state) => state.user)
-  const { meta } = useSelector((state) => state.user)
+  const { usersPosts } = useSelector((state) => state.posts)
+  const { usersMeta } = useSelector((state) => state.posts)
   //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
 
   const arrayItemsCount = (array) => {
@@ -43,6 +43,23 @@ const ProfileTab = () => {
       return '0'
     }
   }
+
+  const getPageCount = (count) => {
+    const result = [];
+    for (let i = 1; i <= count; i += 1) {
+      result.push(
+        <li key={i}>
+          <button
+            onClick={() => setCurPage(i)}
+            className={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+          >
+            {i}
+          </button>
+        </li>
+      );
+    }
+    return result;
+  };
 
   // const handleClickCancelDelete = () => {
   //   setOpenDialog(false);
@@ -102,9 +119,9 @@ const ProfileTab = () => {
               <div>
                 <TabContent id="following" activeTab={activeTab}>
 
-                  <div className="text-beige m-auto text-md h-full w-full">
+                  {!subscriptions && <div className="text-beige m-auto text-md h-full w-full">
                     You don't follow any user yet...
-                  </div>
+                  </div>}
                   {subscriptions.length > 0 &&
                     <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                       {
@@ -165,15 +182,15 @@ const ProfileTab = () => {
       </div>
 
       <div className='posts-page-posts-container'>
-        {posts && posts.map(post => {
+        {usersPosts && usersPosts.map((post, index) => {
           return (
-            <Post data={post} openForm={() => { }} />
+            <Post data={post} key={index} openForm={() => { }} />
           )
         })}
-        {meta && meta.totalPages !== 1 ?
+        {usersMeta && usersMeta.totalPages !== 1 ?
           <div >
             <ul class="inline-flex -space-x-px">
-              {getPageCount(meta.totalPages)}
+              {getPageCount(usersMeta.totalPages)}
             </ul>
           </div> : ''
         }

@@ -6,12 +6,15 @@ import { useParams } from "react-router-dom";
 
 export const UserPage = () => {
     const { anotherUser } = useSelector((state) => state.user)
+    const { usersPosts } = useSelector((state) => state.posts)
+    const { usersMeta } = useSelector((state) => state.posts)
     const dispatch = useDispatch()
     const params = useParams()
     useEffect(() => {
         console.log(params.id)
         dispatch(getUserById(params.id))
-    }, [anotherUser])
+        //тут надо гет юзерс пост забубенить
+    }, [dispatch, params.id])
     const getPageCount = (count) => {
         const result = [];
         for (let i = 1; i <= count; i += 1) {
@@ -28,6 +31,10 @@ export const UserPage = () => {
         }
         return result;
     };
+
+    const subscribeToUser = () => {
+        
+    }
 
     if (!anotherUser) {
         return <div className="box-border flex justify-center items-center min-h-[100vh] bg-dark-purple">
@@ -57,8 +64,7 @@ export const UserPage = () => {
 
                     <div
                         className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-                        onClick={() => { }}>
-                        <img className="w-6" src='editing_icon.png' alt='edit info' />
+                        onClick={() => {}}>
                         Subscribe
                     </div>
                 </div>
@@ -67,15 +73,18 @@ export const UserPage = () => {
 
                     <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
                         <div className='posts-page-posts-container'>
-                            {anotherUser.posts && anotherUser.posts.map(post => {
+                            {!usersPosts && <div className="text-beige m-auto text-md h-full w-full">
+                                User have not any posts yet...
+                            </div>}
+                            {usersPosts && usersPosts.map(post => {
                                 return (
-                                    <Post data={post} openForm={() => {}} />
+                                    <Post data={post} openForm={() => { }} />
                                 )
                             })}
-                            {anotherUser.posts.meta.totalPages !== 1 ?
+                            {usersMeta && usersMeta.totalPages !== 1 ?
                                 <div >
                                     <ul class="inline-flex -space-x-px">
-                                        {getPageCount(meta.totalPages)}
+                                        {getPageCount(usersMeta.totalPages)}
                                     </ul>
                                 </div> : ''
                             }

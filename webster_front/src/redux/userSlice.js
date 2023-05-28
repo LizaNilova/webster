@@ -5,8 +5,6 @@ import { setUserData } from './authSlice'
 const initialState = {
     user: null,
     anotherUser: null,
-    posts: null,
-    meta: null,
     ban: null,
     subscriptions: null,
     subscribers: null,
@@ -53,6 +51,16 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     }
 })
 
+export const subscribeUser = createAsyncThunk('user/subscribeUser', async (id) => {
+    try{
+        const { data } = await $api.post(`http://localhost:8080/api/subscriptions/subscribe/user/${id}`, {withCredentials: true})
+        console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -70,8 +78,6 @@ export const userSlice = createSlice({
             state.ban = action.payload?.user.ban
             state.subscribers = action.payload?.user.subscribers
             state.subscriptions = action.payload?.user.subscriptions
-            state.meta = action.payload?.user.meta
-            state.posts = action.payload?.user.posts
             console.log(state.user)
             state.status = action.payload?.message
         },
@@ -108,6 +114,21 @@ export const userSlice = createSlice({
             state.loading = false
             state.status = action.payload?.message
             console.log(action.payload.message)
+        },
+
+        // Subscribe to user
+        [subscribeUser.pending]: (state) => {
+            state.loading = true
+            state.status = null
+        },
+        [subscribeUser.fulfilled]: (state, action) => {
+            state.loading = false
+            state.status = action.payload?.message
+            console.log(action.payload)
+        },
+        [subscribeUser.rejected]: (state, action) => {
+            state.loading = false
+            state.status = action.payload?.message
         },
 
         // Delete user
