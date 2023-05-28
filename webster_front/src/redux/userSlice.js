@@ -22,9 +22,9 @@ export const updateUserData = createAsyncThunk('user/updateUserData', async (sub
     }
 })
 
-export const getUserById = createAsyncThunk('get/user/:id', async ({ id }) => {
+export const getUserById = createAsyncThunk('user/getUserById', async (id) => {
     try {
-        const { data } = await axios.get(`http://localhost:8080/api/users/${id}`, { withCredentials: true })
+        const { data } = await $api.get(`http://localhost:8080/api/users/${id}`, { withCredentials: true })
         console.log(data)
         return data
     } catch (error) {
@@ -82,8 +82,8 @@ export const userSlice = createSlice({
         },
         [getUserById.fulfilled]: (state, action) => {
             state.loading = false
-            state.anotherUser = action.payload
-            console.log(action.payload)
+            state.anotherUser = action.payload.user
+            console.log(action)
             state.status = action.payload?.message
         },
         [getUserById.rejected]: (state, action) => {

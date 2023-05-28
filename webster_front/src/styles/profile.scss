@@ -1,0 +1,541 @@
+$main-bg: #363159;
+$secondary-bg: #202026;
+$main-fg: #eee;
+
+$primary: #05C7F2;
+$primary-dark: #05AFF2;
+$secondary: #D63BD9;
+$secondary-dark: #7B6CD9;
+
+$notchSize: 40px;
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@600&display=swap');
+
+* { box-sizing: border-box; }
+
+body {
+   font-family: 'Exo 2', sans-serif;
+  margin: 0;
+}
+
+.main-container  {
+  align-items: center;
+  background: linear-gradient(-45deg, $secondary-bg, $main-bg);
+  color: $main-fg;
+  display: grid;  
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.profile-card {
+  background: rgba(0,0,0,.5);
+  width: 450px;
+  height: 450px;
+  padding: calc($notchSize / 2) $notchSize;
+  clip-path: polygon(
+    0% $notchSize, 
+    $notchSize 0%, 
+    100% 0%,  
+    100% calc(100% - #{$notchSize}), 
+    calc(100% - #{$notchSize}) 100%, 
+    0px 100%, 
+  );
+  
+  .card_title {
+    font-size: 30px;
+    font-weight: 700;
+    animation: text-glow 1.1s ease-in-out infinite alternate;
+  }
+  
+  .separator {
+    height: 1px;
+    width: 100%;
+    background-color: $primary;
+    margin:  0 0 20px 0;
+    box-shadow: 0 0 10px $primary;
+  }
+  
+  .card_content {
+    text-shadow: 0px 0px 5px rgba(255,255,255,.2);
+  }
+}
+
+.card-border {
+  filter: drop-shadow(3px $primary);
+}
+
+@keyframes text-glow {
+  from {
+    text-shadow: 0 0 1px $primary;
+  }
+  to {
+    text-shadow: 0 0 7px $primary;
+  }
+}
+
+
+.diagonal-gridlines {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba($primary-dark, .1),
+    rgba($primary-dark, .1) 2px,
+    rgba($primary, .02) 2px,
+    rgba($primary, .02) 10px
+  ),
+  linear-gradient(135deg, transparent, rgba($primary, 0.2));
+}
+
+// TEST STYLE ---------------------------------------------------------------------------------
+
+$green: #11dbab;
+$transparent-green: rgba(17, 219, 171, 0.21);
+$purple: #a537ff;
+$transparent-purple: rgba(165, 57, 255, 0.21);
+$red: #ff2c6d;
+$transparent-red: rgba(255, 45, 110, 0.21);
+$blue: #0098ff;
+$transparent-blue: rgba(0, 144, 255, 0.21);
+$yellow: #ffea00;
+$transparent-yellow: rgba(255, 250, 0, 0.21);
+
+:root {
+  --color: #{$green};
+  --light-color: #{lighten($green, 20%)};
+  --transparent-color: #{$transparent-green};
+  --dark-color: #{darken($green, 20%)};
+  --skew: 1deg;
+
+  .green {
+    --color: #{$green};
+    --light-color: #{lighten($green, 20%)};
+    --transparent-color: #{$transparent-green};
+    --dark-color: #{darken($green, 20%)};
+    --skew: 1deg;
+  }
+
+  .red {
+    --color: #{$red};
+    --light-color: #{lighten($red, 20%)};
+    --dark-color: #{darken($red, 20%)};
+    --transparent-color: #{$transparent-red};
+    --skew: -2deg;
+  }
+
+  .yellow {
+    --color: #{$yellow};
+    --light-color: #{lighten($yellow, 20%)};
+    --dark-color: #{darken($yellow, 20%)};
+    --transparent-color: #{$transparent-yellow};
+    --skew: 2deg;
+  }
+
+  .purple {
+    --color: #{$purple};
+    --light-color: #{lighten($purple, 20%)};
+    --dark-color: #{darken($purple, 20%)};
+    --transparent-color: #{$transparent-purple};
+    --skew: -2deg;
+  }
+
+  .blue {
+    --color: #{$blue};
+    --light-color: #{lighten($blue, 20%)};
+    --dark-color: #{darken($blue, 20%)};
+    --transparent-color: #{$transparent-blue};
+    --skew: 1deg;
+  }
+}
+
+.glowbox {
+  background-color: var(--transparent-color);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  box-shadow: 0 0 5px var(--color);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color);
+}
+
+.glow {
+  &:not(.text) {
+    @extend .glowbox;
+  }
+
+  &.text {
+    @extend .glowtext;
+  }
+}
+
+.glowtext {
+  color: var(--color);
+  line-height: 2em;
+  text-shadow: 0px 0px 4px var(--color);
+}
+
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+
+  label {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  &:focus-within {
+    label {
+      animation: flicker 1s 1 forwards;
+    }
+  }
+
+  &:after {
+    color: var(--color);
+    content: attr(data-unit);
+    display: block;
+    height: 1em;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    width: 1em;
+  }
+
+  &.error {
+    label {
+      color: $red;
+      text-shadow: 0 0 3px lighten($red, 20%);
+      opacity: 1;
+    }
+
+    input {
+      background-color: rgba(255, 45, 100, 0.21);
+      background-image: repeating-linear-gradient(
+        30deg,
+        rgba(255, 255, 255, 0.21),
+        rgba(255, 255, 255, 0.21) 20px,
+        rgba(255, 45, 100, 0.21) 20px,
+        rgba(255, 45, 100, 0.21) 40px,
+        rgba(255, 255, 255, 0.21) 40px
+      );
+      background-repeat: repeat;
+      background-size: 200% 100%;
+      border-color: $red;
+      box-shadow: 0px 0px 7px 1px $red;
+      opacity: 1;
+      animation: scroll-background 4s infinite linear;
+    }
+  }
+}
+
+.profile-input {
+  background: var(--transparent-color);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color);
+  box-shadow: inset 0 0 5px hsl(0, 0, 0);
+  padding: 0.5em;
+  transition: opacity 0.2s ease;
+  outline: 0;
+  opacity: 1;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 7px var(--color);
+    border-color: var(--color);
+    opacity: 1;
+  }
+
+  &:invalid,
+  &.error {
+    background-color: $transparent-red;
+    background-image: repeating-linear-gradient(
+      30deg,
+      rgba(255, 255, 255, 0.21),
+      rgba(255, 255, 255, 0.21) 20px,
+      $transparent-red 20px,
+      $transparent-red 40px,
+      rgba(255, 255, 255, 0.21) 40px
+    );
+    background-repeat: repeat;
+    background-size: 200% 100%;
+    border-color: $red;
+    box-shadow: 0px 0px 7px 1px $red;
+    opacity: 1;
+    animation: scroll-background 4s infinite linear;
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 2px 1px var(--color);
+    opacity: 1;
+  }
+  13% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  20% {
+    box-shadow: 0 0 2px 1px var(--color);
+    opacity: 1;
+  }
+  27% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  34% {
+    box-shadow: 0 0 5px 1px var(--color);
+    opacity: 1;
+  }
+  40% {
+    box-shadow: 0 0 8px 1px var(--color);
+    opacity: 0.9;
+  }
+  48% {
+    box-shadow: 0 0 3px 1px var(--color);
+    opacity: 1;
+  }
+  55% {
+    box-shadow: 0 0 9px 1px var(--color);
+    opacity: 0.9;
+  }
+  62% {
+    box-shadow: 0 0 5px 0 var(--color);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 8px 0 var(--color);
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  13% {
+    opacity: 0.3;
+  }
+  23% {
+    opacity: 0.8;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  38% {
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 0.7;
+  }
+  53% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes flicker-lite {
+  0% {
+    opacity: 1;
+  }
+  13% {
+    opacity: 0.9;
+  }
+  30% {
+    opacity: 1;
+  }
+  38% {
+    opacity: 0.9;
+  }
+  45% {
+    opacity: 1;
+  }
+  53% {
+    opacity: 0.9;
+  }
+  60% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 0.9;
+  }
+  73% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.9;
+  }
+  97% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-background {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -80px 0;
+  }
+}
+// BUTTONS ----------------------------------------------------------------------------------------------------
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap");
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  position: relative;
+  padding: 1rem 2rem;
+  border: 1px solid $primary-dark;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  &:not(:last-child) {
+    margin-right: 40px;
+  }
+}
+
+// border animation
+.btn-border {
+  &::before,
+  &::after {
+    content: "";
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border: inherit;
+    transition: 0.5s;
+  }
+
+  &::before {
+    top: -15px;
+    left: -15px;
+    border-width: 2px 0 0 2px;
+  }
+  &::after {
+    bottom: -15px;
+    right: -15px;
+    border-width: 0 2px 2px 0;
+  }
+  &:hover::before,
+  &:hover::after {
+    width: calc(100% + 28px);
+    height: calc(100% + 28px);
+  }
+}
+
+// skew animation
+
+.btn-skew {
+  overflow: hidden;
+  // border: none;
+  &::before {
+    content: "";
+    top: 0;
+    left: -25px;
+    opacity: 50%;
+    background-color: $primary;
+    position: absolute;
+    height: 100%;
+    width: 0%;
+    transform: skewX(35deg);
+    z-index: -1;
+    transition: width 1s;
+  }
+  &:hover::before {
+    width: 150%;
+  }
+}
+
+// cyberpunk button
+
+.btn-cyber-punk {
+  position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 75%);
+  background-color: #dc3545;
+  transition: all 0.5s;
+
+  &:hover {
+    background-color: lighten(#dc3545, 5);
+    color: #17141d;
+  }
+}
+//------------------------------------------------------------------------
+
+$anime-time: 8s;
+
+$box-size-profile: 500px;
+$clip-distance: .0;
+$clip-size-profile: $box-size-profile * (1 + $clip-distance * 2);
+$path-width: 2px;
+
+$main-color: #69ca62;
+
+$codepen-logo-path: url('//blog.codepen.io/wp-content/uploads/2012/06/Button-White-Large.png');
+
+%full-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.bb-profile {
+  @extend %full-fill;
+  width: $box-size-profile;
+  height: $box-size-profile;
+  margin: auto;
+  color: $main-color;
+  box-shadow: inset 0 0 0 1px rgba($main-color, .5);
+
+  &::before,
+  &::after {
+    @extend %full-fill;
+    content: '';
+    z-index: -1;
+    // margin: -1 * $clip-distance * 100%;
+    box-shadow: inset 0 0 0 $path-width; 
+    animation: clipMe-profile $anime-time linear infinite;
+  }
+
+  &::before {
+    animation-delay: $anime-time * -.5;
+  }
+
+  // for debug
+  // &:hover {
+  //   &::after,
+  //   &::before {
+  //     background-color: rgba(#f00, .3);
+  //   }
+  // }
+
+}
+
+
+@keyframes clipMe-profile {
+  0%, 100% {clip: rect(0px, $clip-size-profile, $path-width, 0px); }
+  25% {clip: rect(0px, $path-width, $clip-size-profile, 0px); }
+  50% {clip: rect($clip-size-profile - $path-width, $clip-size-profile, $clip-size-profile, 0px); }
+  75% {clip: rect(00px, $clip-size-profile, $clip-size-profile, $clip-size-profile - $path-width); }
+}

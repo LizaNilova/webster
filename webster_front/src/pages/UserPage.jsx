@@ -1,10 +1,17 @@
-import React from "react";
-import { useSelector } from 'react-redux'
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import Post from "../components/Post";
+import { getUserById } from "../redux/userSlice";
+import { useParams } from "react-router-dom";
 
 export const UserPage = () => {
-    const { anotherUser } = useSelector(state => state.user)
-
+    const { anotherUser } = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+    const params = useParams()
+    useEffect(() => {
+        console.log(params.id)
+        dispatch(getUserById(params.id))
+    }, [anotherUser])
     const getPageCount = (count) => {
         const result = [];
         for (let i = 1; i <= count; i += 1) {
@@ -62,10 +69,10 @@ export const UserPage = () => {
                         <div className='posts-page-posts-container'>
                             {anotherUser.posts && anotherUser.posts.map(post => {
                                 return (
-                                    <Post data={post} openForm={openForm} />
+                                    <Post data={post} openForm={() => {}} />
                                 )
                             })}
-                            {meta.totalPages !== 1 ?
+                            {anotherUser.posts.meta.totalPages !== 1 ?
                                 <div >
                                     <ul class="inline-flex -space-x-px">
                                         {getPageCount(meta.totalPages)}
