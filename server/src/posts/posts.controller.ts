@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query, UnauthorizedException, ForbiddenException, BadRequestException, ParseFilePipe, NotFoundException } from '@nestjs/common';
+import { Body, Controller, Post, Request, Req, UploadedFile, UseGuards, Delete, Patch, Get, Param, UseInterceptors, Query, UnauthorizedException, ForbiddenException, BadRequestException, ParseFilePipe, NotFoundException } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiConsumes, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/create-post.dto'
 import { PostsService } from './posts.service';
@@ -215,6 +215,65 @@ export class PostsController {
     };
   }
 
+  @ApiOperation({ summary: 'Find my post' })
+  @ApiOkResponse({
+    description: 'Find by id post', schema: {
+      example: {
+        "post": [
+          {
+            "id": 6,
+            "title": "Govna webste",
+            "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores velit voluptates assumenda vero minus similique accusantium voluptas provident sed ea, pariatur dolorem dolor, incidunt ratione tempore praesentium fuga consequuntur deleni",
+            "image": "fa95486b-f3da-4219-91fa-7f501677eace.jpg",
+            "userId": 3,
+            "createdAt": "2023-05-08T22:30:55.095Z",
+            "updatedAt": "2023-05-08T22:30:55.095Z",
+            "categories": [
+              {
+                "id": 1,
+                "value": "scenery",
+                "description": "about...",
+                "PostCategory": {
+                  "postId": 6,
+                  "categoryId": 1
+                }
+              }
+            ],
+            "author": {
+              "id": 3,
+              "login": "admin",
+              "email": "admin@gmail.com"
+            },
+            "comments": [],
+            "likes": []
+          }
+        ],
+        "message": "Success"
+      }
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found post',
+    schema: {
+      example: new NotFoundException('Undefined post')
+    }
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User unauthorized',
+    schema: {
+      example: new UnauthorizedException('User unauthorized')
+    }
+  })
+  @Get('/my-posts')
+  @UseGuards(JwtAuthGuard)
+  async getMyPosts(@Req() request: RequestDto, @Query('page') page: number) {
+    return {
+      post: await this.postServer.getMyPosts(request.user.id, page),
+      message: 'Success'
+    };
+  }
+
+
   @ApiOperation({ summary: 'Find post' })
   @ApiOkResponse({
     description: 'Find by id post', schema: {
@@ -266,6 +325,57 @@ export class PostsController {
     };
   }
 
+  @ApiOperation({ summary: 'Find user post' })
+  @ApiOkResponse({
+    description: 'Find by id post', schema: {
+      example: {
+        "post": [
+          {
+            "id": 6,
+            "title": "Govna webste",
+            "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores velit voluptates assumenda vero minus similique accusantium voluptas provident sed ea, pariatur dolorem dolor, incidunt ratione tempore praesentium fuga consequuntur deleni",
+            "image": "fa95486b-f3da-4219-91fa-7f501677eace.jpg",
+            "userId": 3,
+            "createdAt": "2023-05-08T22:30:55.095Z",
+            "updatedAt": "2023-05-08T22:30:55.095Z",
+            "categories": [
+              {
+                "id": 1,
+                "value": "scenery",
+                "description": "about...",
+                "PostCategory": {
+                  "postId": 6,
+                  "categoryId": 1
+                }
+              }
+            ],
+            "author": {
+              "id": 3,
+              "login": "admin",
+              "email": "admin@gmail.com"
+            },
+            "comments": [],
+            "likes": []
+          }
+        ],
+        "message": "Success"
+      }
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'Not found post',
+    schema: {
+      example: new NotFoundException('Undefined post')
+    }
+  })
+  @Get('/user/:id')
+  async getUserPosts(@Param('id') id: number, @Query('page') page: number) {
+    return {
+      post: await this.postServer.getMyPosts(id, page),
+      message: 'Success'
+    };
+  }
+ 
   @ApiOperation({ summary: 'Update post' })
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({

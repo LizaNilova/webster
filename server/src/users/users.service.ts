@@ -61,7 +61,7 @@ export class UsersService {
     return event;
   }
 
-   // добавить сортировку по рейтингу 
+  // добавить сортировку по рейтингу 
   async getAllUsers(search, page: number) {
     let users = (search) ? await this.userRepository.findAll({
       where: {

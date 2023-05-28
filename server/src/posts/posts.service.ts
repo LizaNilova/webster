@@ -68,6 +68,42 @@ export class PostsService {
     return post_with_categories;
   }
 
+  async getMyPosts(userId: number, page: number) {
+    const parsedPage = page ? page : 1;
+    const perPage = 10;
+    
+    const posts = await this.postsRepository.findAll({where:{userId}, order: [['createdAt', 'DESC']], include:  { all: true },})
+
+    if (!posts) {
+      throw new HttpException(`Post with user ID ${userId} not found`, HttpStatus.NOT_FOUND);
+    }
+
+    const postChanged = posts.map((post)=> ({
+        id: post.id,
+        title: post.title, 
+        content: post.content, 
+        image: post.image, 
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt, 
+        categories: post.categories.map(({value})=>value), 
+        author: post.author, 
+        comments: post.comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()), 
+        likes:post.likes
+
+    }))
+    
+    const totalPages = Math.ceil(postChanged.length / perPage);
+    const postFilter = postChanged.slice(
+      parsedPage * perPage - perPage,
+      parsedPage * perPage
+    );
+    return {
+      meta: { page: page || 1, perPage: Number(perPage), totalPages },
+      posts: postFilter,
+      message: 'Success'
+    }
+  }
+
   async getAll(sort, filter, search, page: number) {
     filter = filter ? JSON.parse(filter) : [];
     const parsedPage = page ? page : 1;
