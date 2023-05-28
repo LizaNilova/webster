@@ -81,13 +81,14 @@ const RightSideBar = ({
                     {
                         (canvasData?.mode === 'drawing' || canvasData?.mode === 'eraser') &&
                         <>
-                            <label className="block mb-2 text-lg">Brush size: {brushStateSize}</label>
+                            <label className="block mb-2 text-lg">{canvasData?.mode === 'drawing' ? 'Brush' : 'Eraser'} size: {brushStateSize}</label>
                             <input type="range" min="1" max="15" value={brushStateSize} step='1' onChange={(e) => { setBrushSize(Number(e.target.value)); setBrushStateSize(e.target.value) }} className="w-3/4 h-2 bg-gray-200 rounded-lg cursor-pointer dark:bg-gray-700"></input>
-                            <label className='mt-3 mb-1 text-lg'>Brush color: {brushStateColor} </label>
-                            <input className='w-1/3 rounded-sm' type='color' name='brushColor' value={brushStateColor} onChange={(e) => { setBrushColor(e.target.value); setBrushStateColor(e.target.value) }} defaultValue={"#000"} />
                             {
                                 canvasData?.mode === 'drawing' &&
                                 <>
+                                    <label className='mt-3 mb-1 text-lg'>Brush color: {brushStateColor} </label>
+                                    <input className='w-1/3 rounded-sm' type='color' name='brushColor' value={brushStateColor} onChange={(e) => { setBrushColor(e.target.value); setBrushStateColor(e.target.value) }} defaultValue={"#000"} />
+
                                     <label className='mt-2 mb-1 text-lg'>Shadow color: {brushShadow?.color} </label>
                                     <input className='w-1/3 rounded-sm' type='color' name='shadowColor' value={brushShadow?.color} onChange={(e) => {
                                         setBrushShadow(prevState => ({
@@ -628,7 +629,7 @@ const RightSideBar = ({
                                         applyTextFilter('textBackgroundColor', e.target.value);
                                     }} defaultValue={selectedObject?.textBackgroundColor} />
                                 </div>
-                                
+
                             </div>
                         </div>
                     }

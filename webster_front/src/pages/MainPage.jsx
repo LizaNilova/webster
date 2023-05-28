@@ -37,7 +37,7 @@ const MainPage = () => {
       editor.canvas.loadFromJSON(canvasData?.curProject?.setting);
     } else{
       console.log('else');
-      clearCanvasClick()
+      clearCanvasClick();
     } 
       
     // editor.canvas.loadFromJSON(JSON.parse(canvasData?.curProject.setting));
@@ -188,6 +188,7 @@ const MainPage = () => {
       }
     })
     setHistory([]);
+    editor.canvas.setBackgroundImage(null);
     editor.canvas.renderAll();
   }
 
@@ -200,8 +201,10 @@ const MainPage = () => {
     newHistory.push(...editor.canvas.getActiveObjects());
     editor.canvas.remove(...editor.canvas.getActiveObjects());
     editor.canvas.discardActiveObject();
+
     // console.log('new', newHistory, 'hist', history);
     setHistory(newHistory);
+    editor.canvas.requestRenderAll();
   };
 
   const undoClick = () => {
@@ -257,6 +260,7 @@ const MainPage = () => {
             img.scaleToHeight(canvasData.height - 10, false)
           editor.canvas.add(img);
           editor.canvas.viewportCenterObject(img);
+          editor.canvas.requestRenderAll()
         })
       };
     })(file);
