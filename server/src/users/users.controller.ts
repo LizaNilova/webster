@@ -208,9 +208,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   // get all users and their rating
   @Get()
-  async getAll(@Query('search') search: string) {
+  async getAll(@Query('search') search: string, @Query('page') page: number,) {
     return {
-      users: await this.usersService.getAllUsers(search),
+      users: await this.usersService.getAllUsers(search, page),
       message: 'Success'
     }
   }
@@ -390,9 +390,9 @@ export class UsersController {
   // get me, my rating and my posts
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
-  async profile(@Req() request: RequestDto) {
+  async profile(@Req() request: RequestDto, @Query('page') page: number,) {
     return {
-      user: await this.usersService.getUserById(request.user.id),
+      user: await this.usersService.getUserById(request.user.id, page),
       message: 'Success'
     }
   }
@@ -471,9 +471,9 @@ export class UsersController {
   })
   // get another user by id, his rating and his posts
   @Get('/:id')
-  async getUserById(@Param('id') id: number) {
+  async getUserById(@Param('id') id: number, @Query('page') page: number,) {
     return {
-      user: await this.usersService.getUserById(id),
+      user: await this.usersService.getUserById(id, page),
       message: 'Success'
     };
   }
