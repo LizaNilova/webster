@@ -103,7 +103,7 @@ export class PostsService {
         updatedAt: post.updatedAt, 
         categories: post.categories.map(({value})=>value), 
         author: post.author, 
-        comments: post.comments, 
+        comments: post.comments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()), 
         likes:post.likes
 
       }))
