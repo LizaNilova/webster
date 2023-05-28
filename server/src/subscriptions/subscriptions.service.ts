@@ -11,7 +11,6 @@ export class SubscriptionsService {
     @InjectModel(User) private userRepository: typeof User) { }
 
   async subscribeTo(dto: CreateSubDto): Promise<ResponseSubDto> {
-    console.log(dto)
     if (Number(dto.userId) === Number(dto.authorId)) {
       throw new BadRequestException("You can't subscribe to yourself")
     }
@@ -27,7 +26,7 @@ export class SubscriptionsService {
         status: 200
       }
     }
-    await this.subscriptionsRepository.create({ userId: dto.authorId, subscriberId: dto.userId, login: user_login.login });
+    await this.subscriptionsRepository.create({ userId: dto.authorId, subscriberId: dto.userId });
     return {
       message: 'subscribed', 
       status: 201

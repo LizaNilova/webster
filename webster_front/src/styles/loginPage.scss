@@ -51,7 +51,7 @@ body {
     height: 1px;
     width: 100%;
     background-color: $primary;
-    margin: 20px 0;
+    margin:  0 0 20px 0;
     box-shadow: 0 0 10px $primary;
   }
   
@@ -97,26 +97,6 @@ $blue: #0098ff;
 $transparent-blue: rgba(0, 144, 255, 0.21);
 $yellow: #ffea00;
 $transparent-yellow: rgba(255, 250, 0, 0.21);
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--color);
-  line-height: 2em;
-  margin-bottom: 0.4em;
-  border-bottom: 1px solid var(--color);
-  opacity: 0.8;
-  text-shadow: 0 0 2px var(--light-color);
-  text-transform: uppercase;
-
-  &:empty {
-    line-height: 0;
-    margin: 0;
-  }
-}
 
 :root {
   --color: #{$green};
