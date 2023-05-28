@@ -41,7 +41,7 @@ export class AuthService {
       messages.email = {
         "value": userDto.login,
         "constraints": [
-          "Login is exists"
+          "Email is exists"
         ]
       }
     }
@@ -49,7 +49,7 @@ export class AuthService {
       messages.login = {
         "value": userDto.email,
         "constraints": [
-          "Email is exists"
+          "Login is exists"
         ]
       }
     }
