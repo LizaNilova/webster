@@ -41,11 +41,19 @@ const PostsPage = () => {
         return result;
     };
 
-    console.log(categories)
+    const triggerUpdate = () =>{
+        console.log('update trigger');
+        setTimeout(()=>{
+            dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage }));
+        }, 500);
+        
+    }
+
+    // console.log(categories)
 
     return (
         <>
-            {form && <PostForm data={form} closeForm={() => { openForm(null); dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage })); }} />}
+            {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
             <div className='posts-page-container'>
                 <div className='posts-page-filters-container'>
                     <button onClick={() => { openForm('Create') }} className='posts-page-filters-button'>Create</button>
@@ -99,7 +107,7 @@ const PostsPage = () => {
                 <div className='posts-page-posts-container'>
                     {posts && posts.map(post => {
                         return (
-                            <Post data={post} openForm={openForm} />
+                            <Post data={post} openForm={openForm} triggerUpdate={triggerUpdate}/>
                         )
                     })}
                     {meta.totalPages !== 1 ?

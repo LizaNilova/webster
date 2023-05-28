@@ -139,7 +139,7 @@ const PostForm = ({ data, closeForm }) => {
                                     categories && categories.map(category => {
                                         return (
                                             <div className='flex items-center justify-center p-2'>
-                                                <input type='checkbox' className='w-5 h-5' defaultChecked={!Boolean(state.categories.findIndex(f_category => f_category === category))} onChange={(e) => {
+                                                <input type='checkbox' className='w-5 h-5' defaultChecked={state.categories.findIndex(f_category => f_category === category) >= 0} onChange={(e) => {
                                                     // console.log(e.target.checked)
                                                     // console.log(state)
                                                     let idx = state.categories.findIndex(f_category => f_category === category);

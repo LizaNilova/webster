@@ -75,6 +75,19 @@ export const likePost = createAsyncThunk(
   }
 )
 
+export const deletePost = createAsyncThunk(
+  'delete/api/posts',
+  async (id) => {
+    try {
+      const { data } = await $api.delete(postRouter.deletePostPath(id), { withCredentials: true });
+      console.log(data);
+      return (data)
+    } catch (error) {
+      console.log(error)
+      return ({ message: error.response.message })
+    }
+  }
+)
 
 const postsSlice = createSlice({
     name: 'canvas',
