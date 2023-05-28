@@ -18,7 +18,7 @@ import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserEvents } from 'src/users/models/user-event.model';
-import _ from 'lodash'
+import {isEmpty} from 'lodash'
 @Injectable()
 export class AuthService {
   constructor(
@@ -62,8 +62,9 @@ export class AuthService {
         ]
       }
     }
-    if (!_.isEmpty(messages)) {
-      throw new BadRequestException(messages);
+    console.log(messages)
+    if (!isEmpty(messages)) {
+      throw new BadRequestException({messages});
     }
     const user = await this.userService.createUser(userDto);
     return await this.sendCode(user);
