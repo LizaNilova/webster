@@ -6,6 +6,7 @@ const apiPath = 'http://localhost:8080/api';
 
 const Post = ({ data, openForm, triggerUpdate }) => {
   const userID = useSelector((state) => state.user.user.id);
+  const userRole = useSelector((state) => state.user.user.role);
   const dispatch = useDispatch();
   const [isLike, setLike] = React.useState(false);
   const [countLikes, setCountLikes] = React.useState(data.likes.length);
@@ -23,19 +24,19 @@ const Post = ({ data, openForm, triggerUpdate }) => {
   const getPageCount = (count) => {
     const result = [];
     for (let i = 1; i <= count; i += 1) {
-        result.push(
-            <li key={i}>
-                <button
-                    onClick={() => setCurPage(i)}
-                    className={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
-                >
-                    {i}
-                </button>
-            </li>
-        );
+      result.push(
+        <li key={i}>
+          <button
+            onClick={() => setCurPage(i)}
+            className={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+          >
+            {i}
+          </button>
+        </li>
+      );
     }
     return result;
-};
+  };
 
   const handleClick = () => {
     try {
@@ -53,9 +54,9 @@ const Post = ({ data, openForm, triggerUpdate }) => {
 
   const handleForm = (e) => {
     try {
-    e.preventDefault();
-    dispatch(createCommentPost({id: data.id, value: commentText}));
-    triggerUpdate();
+      e.preventDefault();
+      dispatch(createCommentPost({ id: data.id, value: commentText }));
+      triggerUpdate();
     } catch (e) {
       console.log(e)
     }
@@ -91,33 +92,57 @@ const Post = ({ data, openForm, triggerUpdate }) => {
         <div className="w-1/5 flex items-center justify-end">
           {data.author.id === userID && (
             <>
-                        <button
-              onClick={() => {
-                openForm(data);
-              }}
-              className="px-3 py-2 bg-purple-700 hover:bg-purple-600"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
+              <button
+                onClick={() => {
+                  openForm({ method: 'Update', data: data });
+                }}
+                className="px-3 py-2 bg-purple-700 hover:bg-purple-600"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => {
+                  openForm({ method: 'Report', data: data });
+                }}
+                className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-pink-500"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
+                </svg>
+              </button>
+              {
+                userRole === 'ADMIN' &&
+                <button
+                  onClick={() => {
+                    console.log('BAN');
+                    triggerUpdate();
+                  }}
+                  className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-pink-500"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                  </svg>
+                </button>
+              }
+
               <button
                 onClick={() => {
                   // console.log(data.id);
                   dispatch(deletePost(data.id));
                   triggerUpdate();
-
                 }}
                 className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-rose-500"
               >
@@ -173,7 +198,7 @@ const Post = ({ data, openForm, triggerUpdate }) => {
         </div>
         <div className="p-1 mx-2 flex justify-center items-center cursor-pointer">
           <svg
-          onClick={() => setHidden(!isHidden)}
+            onClick={() => setHidden(!isHidden)}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -235,30 +260,31 @@ const Post = ({ data, openForm, triggerUpdate }) => {
             const date = new Date(comment.createdAt).toDateString();
             const time = new Date(comment.createdAt).toLocaleTimeString()
             return (
-            <div class="flex flex-col mt-4">
-              <div class="flex flex-row justify-between px-1 py-1">
-                <div class="flex mr-2">
-                  <div class="items-center justify-center w-12 h-12 mx-auto">
-                    <img
-                      alt="profil"
-                      src={`http://localhost:8080/api/static/${comment.author.avatar}`}
-                      class="object-cover w-12 h-12 mx-auto rounded-full"
-                    />
+              <div class="flex flex-col mt-4">
+                <div class="flex flex-row justify-between px-1 py-1">
+                  <div class="flex mr-2">
+                    <div class="items-center justify-center w-12 h-12 mx-auto">
+                      <img
+                        alt="profil"
+                        src={`http://localhost:8080/api/static/${comment.author.avatar}`}
+                        class="object-cover w-12 h-12 mx-auto rounded-full"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div class="flex-1 pl-1">
-                  <div class="text-base font-semibold text-white">
-                    {comment.author.login}
-                    <span class="text-sm font-normal text-white">
-                      {' '}
-                      - {`${date} ${time}`}
-                    </span>
+                  <div class="flex-1 pl-1">
+                    <div class="text-base font-semibold text-white">
+                      {comment.author.login}
+                      <span class="text-sm font-normal text-white">
+                        {' '}
+                        - {`${date} ${time}`}
+                      </span>
+                    </div>
+                    <div class="text-sm text-white">{comment.value}</div>
                   </div>
-                  <div class="text-sm text-white">{comment.value}</div>
                 </div>
               </div>
-            </div>
-          )})}
+            )
+          })}
           {totalPages !== 1 ? (
             <div className='w-full text-center mt-5'>
               <ul class="inline-flex -space-x-px">

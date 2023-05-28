@@ -5,11 +5,15 @@ import { getAllPosts } from '../redux/postsSlice';
 import PostForm from '../components/PostForm';
 import { getAllCategories } from '../redux/categoriesSlice';
 import '../styles/PostsPage.css'
+import ReportForm from '../components/reportForm';
 
 const PostsPage = () => {
     const dispatch = useDispatch();
     const posts = useSelector(state => state.posts.posts);
-    const meta = useSelector(state => state.posts.meta)
+    const meta = useSelector(state => state.posts.meta);
+    const user = useSelector((state) => state.user.user);
+    // console.log(user);
+
     const categories = useSelector(state => state.categories.categories);
 
     const [form, openForm] = useState(null);
@@ -53,10 +57,11 @@ const PostsPage = () => {
 
     return (
         <>
-            {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
+            {form && form.method !== 'Report' && <PostForm data={form.data} closeForm={() => { openForm(null); triggerUpdate() }} />}
+            {form && form.method === 'Report' && <ReportForm data={form.data} closeForm={() => { openForm(null);}}/>}
             <div className='posts-page-container'>
                 <div className='posts-page-filters-container'>
-                    <button onClick={() => { openForm('Create') }} className='posts-page-filters-button'>Create</button>
+                    {user?.role !== 'ADMIN' && <button onClick={() => { openForm('Create') }} className='posts-page-filters-button'>Create</button> }
                     <div className='text-xl mb-3'>Search post:</div>
                     <div className='w-full m-1'>
                         <input autoComplete='off' type="text" name="search"

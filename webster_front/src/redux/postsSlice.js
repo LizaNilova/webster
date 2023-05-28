@@ -113,6 +113,35 @@ export const deletePost = createAsyncThunk(
   }
 )
 
+export const reportPost = createAsyncThunk(
+  'report/api/posts',
+  async ({id, reportReason}) => {
+    try {
+      const { data } = await $api.post(postRouter.reportPost(id), {reportReason: reportReason}, { withCredentials: true });
+      console.log(data);
+      return (data)
+    } catch (error) {
+      console.log(error)
+      return ({ message: error.response.message })
+    }
+  }
+)
+
+
+export const banPost = createAsyncThunk(
+  'ban/api/posts',
+  async (id) => {
+    try {
+      const { data } = await $api.get(postRouter.banPostById(id), { withCredentials: true });
+      console.log(data);
+      return (data)
+    } catch (error) {
+      console.log(error)
+      return ({ message: error.response.message })
+    }
+  }
+)
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState: {

@@ -18,48 +18,48 @@ const MainPage = () => {
   const [openedForm, changeFormState] = useState(null);
 
 
-  const [history, setHistory] = useState([]);
-  const [historyProcessing, setHProcessing] = useState(false);
-  const [historyNextState, setHistoryNextState] = useState(JSON.stringify(editor?.canvas.toDatalessJSON()));
+  // const [history, setHistory] = useState([]);
+  // const [historyProcessing, setHProcessing] = useState(false);
+  // const [historyNextState, setHistoryNextState] = useState(JSON.stringify(editor?.canvas.toDatalessJSON()));
   
-  console.log(history, historyProcessing, historyNextState);
+  // console.log(history, historyProcessing, historyNextState);
 
-  const historyNext = () => {
-    // console.log(JSON.stringify(editor?.canvas.toDatalessJSON()));
-    setHistoryNextState(JSON.stringify(editor?.canvas.toDatalessJSON()))
-  }
-  const historySaveAction = () => {
-    if (historyProcessing)
-      return;
+  // const historyNext = () => {
+  //   // console.log(JSON.stringify(editor?.canvas.toDatalessJSON()));
+  //   setHistoryNextState(JSON.stringify(editor?.canvas.toDatalessJSON()))
+  // }
+  // const historySaveAction = () => {
+  //   if (historyProcessing)
+  //     return;
 
-    const json = historyNextState;
-    console.log(json);
-    let new_history = [...history];
-    new_history.push(json);
-    historyNext();
-    setHistory(new_history);
+  //   const json = historyNextState;
+  //   console.log(json);
+  //   let new_history = [...history];
+  //   new_history.push(json);
+  //   historyNext();
+  //   setHistory(new_history);
     
-  }
+  // }
 
   const undo = () => {
-    setHProcessing(true);
+    // setHProcessing(true);
   }
 
-  useEffect(()=>{
-    if(historyProcessing)
-    {
-      console.log('undo:', history)
-      let new_history = [...history];
-      let json = new_history.pop()
-      if (json != '{}')
-      {
-        editor.canvas.loadFromJSON(json)
-        editor.canvas.requestRenderAll();
-        setHistory(new_history);
-      }
-      setHProcessing(false);
-    }
-  }, [historyProcessing])
+  // useEffect(()=>{
+  //   if(historyProcessing)
+  //   {
+  //     console.log('undo:', history)
+  //     let new_history = [...history];
+  //     let json = new_history.pop()
+  //     if (json != '{}')
+  //     {
+  //       editor.canvas.loadFromJSON(json)
+  //       editor.canvas.requestRenderAll();
+  //       setHistory(new_history);
+  //     }
+  //     setHProcessing(false);
+  //   }
+  // }, [historyProcessing])
 
   useEffect(() => {
     if (!editor || !fabric) {
@@ -94,25 +94,25 @@ const MainPage = () => {
       });
     }
     
-    editor.canvas.off('object:modified');
-    editor.canvas.off('object:added');
-    editor.canvas.off('object:removed');
+    // editor.canvas.off('object:modified');
+    // editor.canvas.off('object:added');
+    // editor.canvas.off('object:removed');
 
-    editor.canvas.on('object:modified', (opt) =>{
-      console.log('object:modified');
-      // console.log('history:', history);
-      historySaveAction();
-    })
-    editor.canvas.on('object:added', (opt) =>{
-      console.log('object:added');
-      // console.log('history:', history);
-      historySaveAction();
-    })
-    editor.canvas.on('object:removed', (opt) =>{
-      console.log('object:removed');
-      // console.log('history:', history);
-      historySaveAction();
-    }) 
+    // editor.canvas.on('object:modified', (opt) =>{
+    //   console.log('object:modified');
+    //   // console.log('history:', history);
+    //   historySaveAction();
+    // })
+    // editor.canvas.on('object:added', (opt) =>{
+    //   console.log('object:added');
+    //   // console.log('history:', history);
+    //   historySaveAction();
+    // })
+    // editor.canvas.on('object:removed', (opt) =>{
+    //   console.log('object:removed');
+    //   // console.log('history:', history);
+    //   historySaveAction();
+    // }) 
 
     if (!editor.canvas.__eventListeners["mouse:move"]) {
       editor.canvas.on("mouse:move", function (opt) {
