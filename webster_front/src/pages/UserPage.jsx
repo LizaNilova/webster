@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from 'react-redux'
 import ProfileTab from "../components/ProfileTab";
 
-export const Profile = () => {
+export const UserPage = () => {
     const { user } = useSelector(state => state.user)
 
     if (!user) {

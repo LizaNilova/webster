@@ -30,6 +30,7 @@ const ProfileTab = () => {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.user)
   const { subscriptions } = useSelector((state) => state.user)
+  const {subscribers} = useSelector((state) => state.user)
   //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
 
   const arrayItemsCount = (array) => {
@@ -104,10 +105,10 @@ const ProfileTab = () => {
                   {subscriptions.length > 0 &&
                     <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                       {
-                        user?.subscriptions_companies.map((company, index) => (
-                          <CompanyListItem
+                        subscriptions.map((user, index) => (
+                          <UserListItem
                             key={index}
-                            company={company} />
+                            user={user} />
                         ))}
                     </ul>
                   }

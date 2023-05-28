@@ -114,9 +114,13 @@ export class UsersService {
     rating += subscribers.length
 
     let usersSubscriber = []
+    let subscriptions_with_avas = []
     for (const subscriber of subscribers) {
       usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
-        attributes: ['id', 'login']
+        attributes: ['id', 'login', 'avatar']
+      }));
+      subscriptions_with_avas.push(await this.userRepository.findByPk(subscriber.userId, {
+        attributes: ['id', 'login', 'avatar']
       }));
     };
 
@@ -131,7 +135,7 @@ export class UsersService {
       },
       posts: user.posts,
       ban: user.ban,
-      subscriptions: user.subscriptions,
+      subscriptions: subscriptions_with_avas,
       subscribers: usersSubscriber,
     };
   }
