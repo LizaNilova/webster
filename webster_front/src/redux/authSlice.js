@@ -21,16 +21,20 @@ export const registerUser = createAsyncThunk(
       }, { withCredentials: true })
       return {data}
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error.response)
       if(error.response.status === 400){
-        return ({errors: {
-          login: error.response.data?.login?.constraints[0],
-          email: error.response.data?.email?.constraints[0],
-          password: error.response.data?.password?.constraints[0],
-          passwordConfirm: error.response.data?.passwordComfirm?.constraints[0]
-        }})
+        console.log(error.response.data.messages?.email.constraints[0])
+        const errors = {
+          login: error.response.data.messages?.login.constraints[0],
+          email: error.response.data.messages?.email.constraints[0],
+          password: error.response.data.messages?.password.constraints[0],
+          passwordConfirm: error.response.data.messages?.passwordComfirm.constraints[0]
+        }
+        console.log(errors)
+        return (errors)
+      } else {
+        return {errors: error.message}
       }
-      return {errors: error.message}
     }
   },
 )
@@ -148,6 +152,7 @@ export const authSlice = createSlice({
     },
     [registerUser.rejected]: (state, action) => {
       // console.log(action)
+      console.log(action.payload?.errors)
       state.regErrorTexts = action.payload?.errors
       state.eventId = null
       // console.log(action)
