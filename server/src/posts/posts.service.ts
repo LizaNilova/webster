@@ -121,6 +121,7 @@ export class PostsService {
   }
 
   async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {
+    console.log(dto)
     const post = await this.postsRepository.findOne({
       where: { id, userId }, include: [
         { all: true },
@@ -131,7 +132,7 @@ export class PostsService {
     if (!post) {
       throw new HttpException(`Post with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
-    const isTruthe = await this.isTitleExists(dto.title);
+    const isTruthe = await this.isTitleExists(dto.title, id);
 
     if (isTruthe) {
       throw new BadRequestException('Title is existst');
@@ -178,8 +179,11 @@ export class PostsService {
     return "Post was banned";
   }
 
-  private async isTitleExists(title: string): Promise<boolean> {
-    const post = this.postsRepository.findOne({ where: { title } });
+  private async isTitleExists(title: string, id: number): Promise<boolean> {
+    const post = await this.postsRepository.findOne({ where: { title } });
+    if (post?.title === title && post.id === Number(id)) {
+      return false;
+    }
     return Boolean(post);
   }
 
