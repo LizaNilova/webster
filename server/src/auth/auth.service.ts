@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -17,7 +18,7 @@ import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserEvents } from 'src/users/models/user-event.model';
-
+import _ from 'lodash'
 @Injectable()
 export class AuthService {
   constructor(
@@ -35,11 +36,34 @@ export class AuthService {
 
   async registration(userDto: CreateUserDto) {
     const isTruth = await this.userService.isExistsUser(userDto.login, userDto.email);
-    if (isTruth.email || isTruth.login) {
-      throw new HttpException(`${isTruth.email ? 'Email is exists' : ''}${isTruth.email && isTruth.login ? ', ' : ''}${isTruth.login ? 'Login is exists' : ''}`, HttpStatus.BAD_REQUEST);
+    const messages: any = {};
+    if (isTruth.email) {
+      messages.email = {
+        "value": userDto.login,
+        "constraints": [
+          "Login is exists"
+        ]
+      }
+    }
+    if (isTruth.login) {
+      messages.login = {
+        "value": userDto.email,
+        "constraints": [
+          "Email is exists"
+        ]
+      }
     }
     if (userDto.password !== userDto.passwordComfirm) {
-      throw new HttpException('Password do not match', HttpStatus.BAD_REQUEST);
+      messages.login = {
+        "value1": userDto.password,
+        "value2": userDto.passwordComfirm,
+        "constraints": [
+          "Password do not match"
+        ]
+      }
+    }
+    if (!_.isEmpty(messages)) {
+      throw new BadRequestException(messages);
     }
     const user = await this.userService.createUser(userDto);
     return await this.sendCode(user);
