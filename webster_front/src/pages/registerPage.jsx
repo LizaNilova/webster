@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from "react";
 import '../styles/registerPage.scss'
+import '../styles/glitch.scss'
 
 export const RegistrationPage = () => {
     const dispatch = useDispatch()
@@ -70,14 +71,15 @@ export const RegistrationPage = () => {
         onSubmit={e => e.preventDefault()}
         className="main-container">
         <div className="card diagonal-gridlines card-border bb">
-            <h3 className="card_title">sign up</h3>
-            <div className="separator"></div>
+            <div className="glitch-box">
+            <h3 className="glitch-text">sign up</h3>
+            </div>
+            
             <div className="flex flex-col my-3 w-full">
                 <div className="flex flex-row justify-between">
                     <span className="">Login</span>
                     <p className="text-red-600">{regErrorTexts?.login}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
-
                 </div>
                 <input
                     type="text"
