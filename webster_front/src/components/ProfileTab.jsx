@@ -7,15 +7,8 @@ import TabContent from "./TabContent";
 import '../styles/TabsStyles.css'
 import '../styles/ScrollbarStyles.css'
 
-// import Button from '@material-ui/core/Button';
-// import Dialog from '@material-ui/core/Dialog';
-// import DialogActions from '@material-ui/core/DialogActions';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
-// import DialogTitle from '@material-ui/core/DialogTitle';
+import PostForm from '../components/PostForm';
 import UserListItem from "./UserlistItem";
-
-// import { updateUserData, uploadUserAvatar, deleteUser } from "../../redux/userSlice"
 import { logout } from "../redux/authSlice";
 import EditProfile from "./allTabs/EditProfile";
 import Post from "./Post";
@@ -27,9 +20,7 @@ const ProfileTab = () => {
   const [activeTab, setActiveTab] = useState("following")
   const [editBoxOpen, setEditBoxOpen] = useState(false)
   const [form, openForm] = useState(null);
-  
   const [curPage, setCurPage] = useState(1);
-
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -38,7 +29,6 @@ const ProfileTab = () => {
   const { subscribers } = useSelector((state) => state.user)
   const { usersPosts } = useSelector((state) => state.posts)
   const { usersMeta } = useSelector((state) => state.posts)
-  //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
 
   useEffect(() => {
     dispatch(getMyPosts())
@@ -73,7 +63,7 @@ const ProfileTab = () => {
   const triggerUpdate = () =>{
     console.log('update trigger');
     setTimeout(()=>{
-        dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage }));
+        dispatch(getMyPosts());
     }, 500);
     
 }
@@ -173,28 +163,6 @@ const ProfileTab = () => {
           <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
           // onClick={handleClickOpen} 
           >Delete account</div>
-          {/* <Dialog
-            open={openDialog}
-            onClose={handleClickCancelDelete}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{"Deleting user"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Do you really want to delete this account? You can`t turn your data back after
-                confirmation deleting.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClickCancelDelete} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleClickDeleteUser} color="primary" autoFocus>
-                Delete account
-              </Button>
-            </DialogActions>
-          </Dialog> */}
         </div>
       </div>
 
