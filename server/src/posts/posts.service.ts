@@ -91,9 +91,10 @@ export class PostsService {
     if (filter.length > 0) {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
     }
-    let posts = await this.postsRepository.findAll(filterOptions);
     
-    posts = posts.map((post)=> ({
+    const posts = await this.postsRepository.findAll(filterOptions)
+
+    const postChanged = posts.map((post)=> ({
         id: post.id,
         title: post.title, 
         content: post.content, 
@@ -105,10 +106,10 @@ export class PostsService {
         comments: post.comments, 
         likes:post.likes
 
-    }))
+      }))
     
-    const totalPages = Math.ceil(posts.length / perPage);
-    const postFilter = posts.slice(
+    const totalPages = Math.ceil(postChanged.length / perPage);
+    const postFilter = postChanged.slice(
       parsedPage * perPage - perPage,
       parsedPage * perPage
     );
