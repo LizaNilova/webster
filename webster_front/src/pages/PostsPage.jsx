@@ -19,6 +19,7 @@ const PostsPage = () => {
     const [curPage, setCurPage] = useState(1);
 
     useEffect(() => {
+        console.log('filters:', filter)
         dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage }));
         dispatch(getAllCategories());
     }, [dispatch, search, sort, filter, curPage]);
@@ -39,7 +40,9 @@ const PostsPage = () => {
         }
         return result;
     };
-    //   console.log(categories)
+
+    console.log(categories)
+
     return (
         <>
             {form && <PostForm data={form} closeForm={() => { openForm(null); dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage })); }} />}
@@ -66,7 +69,7 @@ const PostsPage = () => {
                                             let idx = filter.findIndex(f_category => f_category === category);
                                             if (idx < 0) {
                                                 let new_filters = [...filter];
-                                                new_filters.push(category.value);
+                                                new_filters.push(category);
                                                 setFilter(new_filters);
                                             } else {
                                                 let new_filters = [...filter];
