@@ -19,17 +19,45 @@ export class SubscriptionsService {
       throw new NotFoundException('Undefined user');
     }
     const is_subscribed = await this.subscriptionsRepository.findOne({ where: { userId: dto.authorId, subscriberId: dto.userId } })
+    
     if (is_subscribed) {
       await is_subscribed.destroy();
+      const sub = this.find_subs_sups(dto.userId)
       return {
         message: 'remove subscription',
+        subscribers: (await sub).usersSubscriber,
+        subscriptions: (await sub).subscriptions_with_avas,
         status: 200
       }
     }
+
     await this.subscriptionsRepository.create({ userId: dto.authorId, subscriberId: dto.userId });
+    const sub = this.find_subs_sups(dto.userId)
     return {
       message: 'subscribed', 
+      subscribers: (await sub).usersSubscriber,
+        subscriptions: (await sub).subscriptions_with_avas,
       status: 201
     };
+  }
+
+  async find_subs_sups(userId: number) {
+    const [subscriptions, subscribers] = await Promise.all([
+      this.subscriptionsRepository.findAll({ where: { subscriberId: userId } }),
+      this.subscriptionsRepository.findAll({ where: { userId: userId } })
+    ]);
+    let usersSubscriber = []
+    let subscriptions_with_avas = []
+    for (const subscriber of subscribers) {
+      usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
+        attributes: ['id', 'login', 'avatar']
+      }));
+    };
+    for (const subscription of subscriptions) {
+    subscriptions_with_avas.push(await this.userRepository.findByPk(subscription.userId, {
+        attributes: ['id', 'login', 'avatar']
+      }));
+    }
+    return {usersSubscriber, subscriptions_with_avas}
   }
 }
