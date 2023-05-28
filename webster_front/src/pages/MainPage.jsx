@@ -9,38 +9,71 @@ import RightSideBar from '../components/RightSideBar';
 import { download } from '../functions/download';
 import { dataURItoBlob } from '../functions/toBlob';
 import ChooseProject from '../components/ChooseProject';
-// import fabric from 'fabric';
-
 
 const MainPage = () => {
   const dispatch = useDispatch();
   let canvasData = useSelector(state => state.canvas);
 
   const { editor, onReady } = useFabricJSEditor();
-
-  const [history, setHistory] = useState([]);
-
   const [openedForm, changeFormState] = useState(null);
 
-  useEffect(() => {
 
+  const [history, setHistory] = useState([]);
+  const [historyProcessing, setHProcessing] = useState(false);
+  const [historyNextState, setHistoryNextState] = useState(JSON.stringify(editor?.canvas.toDatalessJSON()));
+  
+  console.log(history, historyProcessing, historyNextState);
+
+  const historyNext = () => {
+    // console.log(JSON.stringify(editor?.canvas.toDatalessJSON()));
+    setHistoryNextState(JSON.stringify(editor?.canvas.toDatalessJSON()))
+  }
+  const historySaveAction = () => {
+    if (historyProcessing)
+      return;
+
+    const json = historyNextState;
+    console.log(json);
+    let new_history = [...history];
+    new_history.push(json);
+    historyNext();
+    setHistory(new_history);
+    
+  }
+
+  const undo = () => {
+    setHProcessing(true);
+  }
+
+  useEffect(()=>{
+    if(historyProcessing)
+    {
+      console.log('undo:', history)
+      let new_history = [...history];
+      let json = new_history.pop()
+      if (json != '{}')
+      {
+        editor.canvas.loadFromJSON(json)
+        editor.canvas.requestRenderAll();
+        setHistory(new_history);
+      }
+      setHProcessing(false);
+    }
+  }, [historyProcessing])
+
+  useEffect(() => {
     if (!editor || !fabric) {
       return;
     }
 
-    // if(editor.canvas.width === canvasData.width) return;
-    // editor?.canvas.dispose();
-    // editor.canvas = fabric.;
     if(canvasData?.curProject?.setting)
     {
-      console.log('111');
+      // console.log('111');
       editor.canvas.loadFromJSON(canvasData?.curProject?.setting);
     } else{
-      console.log('else');
+      // console.log('else');
       clearCanvasClick();
     } 
-      
-    // editor.canvas.loadFromJSON(JSON.parse(canvasData?.curProject.setting));
 
     editor.canvas.setWidth(canvasData.width);
     editor.canvas.setHeight(canvasData.height);
@@ -60,6 +93,26 @@ const MainPage = () => {
         }
       });
     }
+    
+    editor.canvas.off('object:modified');
+    editor.canvas.off('object:added');
+    editor.canvas.off('object:removed');
+
+    editor.canvas.on('object:modified', (opt) =>{
+      console.log('object:modified');
+      // console.log('history:', history);
+      historySaveAction();
+    })
+    editor.canvas.on('object:added', (opt) =>{
+      console.log('object:added');
+      // console.log('history:', history);
+      historySaveAction();
+    })
+    editor.canvas.on('object:removed', (opt) =>{
+      console.log('object:removed');
+      // console.log('history:', history);
+      historySaveAction();
+    }) 
 
     if (!editor.canvas.__eventListeners["mouse:move"]) {
       editor.canvas.on("mouse:move", function (opt) {
@@ -133,6 +186,18 @@ const MainPage = () => {
     editor.canvas.renderAll();
   }, [canvasData.curProject, canvasData.width, canvasData.height, editor?.canvas]);
 
+  const undoClick = () => {
+    let new_history = history;
+    let json = new_history.pop();
+    clearCanvasClick();
+    editor.canvas.loadFromJSON(json);
+    setHistory(new_history);
+  }
+
+  const redoClick = () => {
+
+  }
+
   const closeForm = () => {
     changeFormState(null);
   }
@@ -187,45 +252,26 @@ const MainPage = () => {
         editor.canvas.remove(obj);
       }
     })
-    setHistory([]);
+    // setHistory([]);
     editor.canvas.setBackgroundImage(null);
     editor.canvas.renderAll();
   }
 
   const removeSelectedClick = () => {
-    console.log('Object:', editor.canvas.getActiveObject(), 'Objects:', editor.canvas.getActiveObjects())
-    let newHistory = history;
+    // console.log('Object:', editor.canvas.getActiveObject(), 'Objects:', editor.canvas.getActiveObjects())
+    // let newHistory = history;
     // console.log(editor.canvas.getActiveObject());
     // newHistory.push(editor.canvas.getActiveObject());
     // editor.canvas.remove(editor.canvas.getActiveObject());
-    newHistory.push(...editor.canvas.getActiveObjects());
+    // newHistory.push(...editor.canvas.getActiveObjects());
+
     editor.canvas.remove(...editor.canvas.getActiveObjects());
     editor.canvas.discardActiveObject();
 
-    // console.log('new', newHistory, 'hist', history);
-    setHistory(newHistory);
+    // setHistory(newHistory);
+
     editor.canvas.requestRenderAll();
   };
-
-  const undoClick = () => {
-    // console.log('undo')
-    // editor.canvas.undo();
-    // if (editor.canvas._objects.length > 0) {
-    //   let newHistory = history;
-    //   newHistory.push(editor.canvas._objects.pop());
-    //   setHistory(newHistory);
-    // }
-    // editor.canvas.renderAll();
-
-  }
-
-  const redoClick = () => {
-    // console.log('Redo: ', history, editor.canvas._objects);
-    // if (history.length > 0) {
-    //   editor.canvas.add(history.pop());
-    // }
-    // editor.canvas.renderAll();
-  }
 
   const setBrushSize = (width) => {
     // console.log(width);
@@ -451,7 +497,6 @@ const MainPage = () => {
     }
   }
 
-
   const updateProjectClick = () => {
     let jsonState = editor.canvas.toJSON();
     jsonState.width = canvasData.width;
@@ -487,7 +532,7 @@ const MainPage = () => {
           openForm={openForm}
           clearCanvasClick={clearCanvasClick}
           redoClick={redoClick}
-          undoClick={undoClick}
+          undoClick={undo}
           addImageToCanvas={addImageToCanvas}
           setBackgroundImage={setBackgroundImage}
           exportAsImage={exportAsImage}
