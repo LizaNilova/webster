@@ -32,6 +32,8 @@ const ProfileTab = () => {
   const { user } = useSelector((state) => state.user)
   const { subscriptions } = useSelector((state) => state.user)
   const { subscribers } = useSelector((state) => state.user)
+  const { posts } = useSelector((state) => state.user)
+  const { meta } = useSelector((state) => state.user)
   //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
 
   const arrayItemsCount = (array) => {
@@ -162,9 +164,19 @@ const ProfileTab = () => {
         </div>
       </div>
 
-      <div>
-        My posts
-
+      <div className='posts-page-posts-container'>
+        {posts && posts.map(post => {
+          return (
+            <Post data={post} openForm={() => { }} />
+          )
+        })}
+        {meta && meta.totalPages !== 1 ?
+          <div >
+            <ul class="inline-flex -space-x-px">
+              {getPageCount(meta.totalPages)}
+            </ul>
+          </div> : ''
+        }
       </div>
     </div >
   );
