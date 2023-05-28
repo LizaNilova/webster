@@ -30,8 +30,8 @@ body {
 
 .card {
   background: rgba(0,0,0,.5);
-  width: 450px;
-  height: 450px;
+  width: 480px;
+  height: 480px;
   padding: calc($notchSize / 2) $notchSize;
   justify-content: center;
   clip-path: polygon(
@@ -186,7 +186,7 @@ body {
 
 $anime-time: 8s;
 
-$box-size-register: 500px;
+$box-size-register: 530px;
 $clip-distance: .0;
 $clip-size-register: $box-size-register * (1 + $clip-distance * 2);
 $path-width: 2px;

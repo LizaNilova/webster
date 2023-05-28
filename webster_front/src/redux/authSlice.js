@@ -24,14 +24,38 @@ export const registerUser = createAsyncThunk(
       console.log(error.response)
       if(error.response.status === 400){
         console.log(error.response.data.messages?.email.constraints[0])
+        let passError;
+        let loginError;
+        let emailError;
+        let passConfError;
+        if(error.response.data?.messages?.login?.constraints[0]) {
+          loginError =  error.response.data.messages?.login?.constraints[0]
+        } else {
+          loginError = null
+        }
+        if(error.response.data?.messages?.email?.constraints[0]) {
+          emailError = error.response.data.messages?.email?.constraints[0]
+        } else {
+          emailError = null
+        }
+        if(error.response.data?.messages?.password?.constraints[0]){
+          passError = error.response.data.messages?.password?.constraints[0]
+        } else {
+          passError = null
+        }
+        if(error.response.data?.messages?.passwordComfirm?.constraints[0]){
+          passConfError = error.response.data.messages?.passwordComfirm?.constraints[0]
+        } else {
+          passConfError = null
+        }
         const errors = {
-          login: error.response.data.messages?.login.constraints[0],
-          email: error.response.data.messages?.email.constraints[0],
-          password: error.response.data.messages?.password.constraints[0],
-          passwordConfirm: error.response.data.messages?.passwordComfirm.constraints[0]
+          'login': loginError,
+          'email': emailError,
+          'password': passError,
+          'passwordConfirm': passConfError
         }
         console.log(errors)
-        return (errors)
+        return ({errors})
       } else {
         return {errors: error.message}
       }
@@ -145,14 +169,17 @@ export const authSlice = createSlice({
     },
     [registerUser.fulfilled]: (state, action) => {
       state.isLoading = false
-      state.status = action.payload?.data.message
-      state.eventId = action.payload?.data.eventId
-      state.regErrorTexts = action.payload?.errors
       console.log(action.payload)
+      if(action.payload?.data?.message){
+        state.status = action.payload?.data?.message
+      }      
+      state.eventId = action.payload?.data?.eventId
+      state.regErrorTexts = action.payload?.errors
+
     },
     [registerUser.rejected]: (state, action) => {
       // console.log(action)
-      console.log(action.payload?.errors)
+      console.log(action)
       state.regErrorTexts = action.payload?.errors
       state.eventId = null
       // console.log(action)

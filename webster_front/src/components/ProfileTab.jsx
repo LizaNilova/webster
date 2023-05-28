@@ -22,13 +22,14 @@ import EditProfile from "./allTabs/EditProfile";
 // import EventInFavourite from "../EventInFavourite";
 
 const ProfileTab = () => {
-  const [activeTabCompanies, setActiveTabCompanies] = useState("following_companies")
+  const [activeTab, setActiveTab] = useState("following")
   const [editBoxOpen, setEditBoxOpen] = useState(false)
 
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.user)
+  const { subscriptions } = useSelector((state) => state.user)
   //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
 
   const arrayItemsCount = (array) => {
@@ -90,17 +91,17 @@ const ProfileTab = () => {
 
             {!editBoxOpen && <>
               <ul className="Horizontalnav">
-                <TabNavItem title={`followed companies`} id="following_companies" activeTab={activeTabCompanies} setActiveTab={setActiveTabCompanies} />
-                <TabNavItem title={`followed events`} id="followed_events" activeTab={activeTabCompanies} setActiveTab={setActiveTabCompanies} />
+                <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
+                <TabNavItem title={`followers`} id="followers" activeTab={activeTab} setActiveTab={setActiveTab} />
               </ul>
 
               <div>
-                <TabContent id="following_companies" activeTab={activeTabCompanies}>
+                <TabContent id="following" activeTab={activeTab}>
 
                   <div className="text-beige m-auto text-md h-full w-full">
-                    You don't follow any company yet...
+                    You don't follow any user yet...
                   </div>
-                  {/* {user.subscriptions_companies.length > 0 &&
+                  {subscriptions.length > 0 &&
                     <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                       {
                         user?.subscriptions_companies.map((company, index) => (
@@ -109,10 +110,10 @@ const ProfileTab = () => {
                             company={company} />
                         ))}
                     </ul>
-                  } */}
+                  }
 
                 </TabContent>
-                <TabContent id="followed_events" activeTab={activeTabCompanies}>
+                <TabContent id="followers" activeTab={activeTab}>
                   <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                     <div className="border-0 shadow-lg relative flex flex-col w-full bg-dark-blue-pastel outline-none focus:outline-none ">
 
