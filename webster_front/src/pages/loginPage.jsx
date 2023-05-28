@@ -48,7 +48,7 @@ export const LoginPage = () => {
   const closeError = () => {
     setErrorVisible(false);
   };
-  console.log(status)
+  
   return (
     <form onSubmit={(e) => e.preventDefault()} className="main-container">
       <div className="login-card diagonal-gridlines card-border bb-login">
