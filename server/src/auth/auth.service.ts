@@ -18,7 +18,7 @@ import { MailService } from '../mail/mail.service';
 import generateCode from '../utils/generate-code.util';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserEvents } from 'src/users/models/user-event.model';
-import { isEmpty } from 'lodash'
+import {isEmpty} from 'lodash'
 @Injectable()
 export class AuthService {
   constructor(
@@ -64,7 +64,7 @@ export class AuthService {
     }
     console.log(messages)
     if (!isEmpty(messages)) {
-      throw new BadRequestException({ messages });
+      throw new BadRequestException({messages});
     }
     const user = await this.userService.createUser(userDto);
     return await this.sendCode(user);
@@ -114,16 +114,16 @@ export class AuthService {
       await this.userService.getUserByEmail(dto.username) :
       await this.userService.getUserByLogin(dto.username);
     if (!user) {
-      throw new NotFoundException({ message: { login: 'User undefined' } });
+      throw new NotFoundException('User undefined');
     }
     const passwordEquals = await bcrypt.compare(dto.password, user.password);
     if (passwordEquals) {
       return user;
     }
     if (!user.is_active) {
-      throw new HttpException({ message: { login: 'User inactive account' } }, HttpStatus.BAD_REQUEST);
+      throw new HttpException('User inactive account', HttpStatus.BAD_REQUEST);
     }
-    throw new UnauthorizedException({ massage: { password: 'Incorrect password' } });
+    throw new UnauthorizedException('Incorrect password');
   }
 
   async forgotPassword(userDto: CreateUserDto) {
