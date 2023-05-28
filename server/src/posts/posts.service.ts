@@ -72,7 +72,7 @@ export class PostsService {
     const parsedPage = page ? page : 1;
     const perPage = 10;
     
-    const posts = await this.postsRepository.findAll({where:{userId}, order: [['createdAt', 'DESC']], include:  { all: true },})
+    const posts = await this.postsRepository.findAll({where:{userId}, order: [['createdAt', 'DESC']], include: [{ all: true }, { model: Comment, attributes: ['id', 'value', 'postId', 'createdAt'], include: [{ model: User, attributes: ['id', 'login', 'email', 'avatar']}] }]})
 
     if (!posts) {
       throw new HttpException(`Post with user ID ${userId} not found`, HttpStatus.NOT_FOUND);
