@@ -114,7 +114,7 @@ export class AuthService {
       await this.userService.getUserByEmail(dto.username) :
       await this.userService.getUserByLogin(dto.username);
     if (!user) {
-      throw new HttpException({ message: { username: 'User undefined' } }, HttpStatus.BAD_REQUEST);
+      throw new HttpException({ message: { username: {value: dto.username, constraints: ['User undefined']} } }, HttpStatus.BAD_REQUEST);
     }
     const passwordEquals = await bcrypt.compare(dto.password, user.password);
     if (passwordEquals) {
@@ -123,7 +123,10 @@ export class AuthService {
     if (!user.is_active) {
       throw new HttpException({ message: 'User inactive account' }, HttpStatus.BAD_REQUEST);
     }
-    throw new HttpException({ message: { password: 'Incorrect password' } }, HttpStatus.BAD_REQUEST);
+    throw new HttpException({ message: { password: {
+      value: dto.password,
+      constraints: ['Incorrect password']
+    } } }, HttpStatus.BAD_REQUEST);
   }
 
   async forgotPassword(userDto: CreateUserDto) {
