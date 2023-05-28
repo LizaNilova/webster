@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from 'react-redux'
-import ProfileTab from "../components/ProfileTab";
+import Post from "../components/Post";
 
 export const UserPage = () => {
     const { anotherUser } = useSelector(state => state.user)
@@ -37,12 +37,7 @@ export const UserPage = () => {
     return <div className='flex flex-col justify-center items-center w-full h-screen bg-dark-purple'>
         <div className="flex flex-col bg-opacity-30 w-2/3 bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
             <div className="flex flex-row space-x-4 w-2/3">
-                {
-                    editBoxOpen &&
-                    <EditProfile setEditBoxOpen={setEditBoxOpen} />
-                }
-
-                {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
+                <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
                     <div className="justify-center w-40 mt-5 ">
                         <img alt={anotherUser.user.avatar} className="items-center rounded-[3rem]"
@@ -59,9 +54,7 @@ export const UserPage = () => {
                         <img className="w-6" src='editing_icon.png' alt='edit info' />
                         Subscribe
                     </div>
-                </div>}
-
-
+                </div>
 
                 <div className="w-1/2 ">
 
