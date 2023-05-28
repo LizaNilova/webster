@@ -47,6 +47,6 @@ export class SubscriptionsController {
   @UseGuards(JwtAuthGuard)
   async subscribe(@Param('id') id: number, @Req() request: RequestDto, @Res() res: Response) {
     const result = await this.subscriptionsService.subscribeTo({ authorId: id, userId: request.user.id })
-    res.status(result.status).json({message: result.message})
+    res.status(result.status).json({message: result.message, subscribers: result.subscribers, subscriptions: result.subscriptions})
   }
 }
