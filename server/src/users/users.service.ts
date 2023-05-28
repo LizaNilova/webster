@@ -62,9 +62,8 @@ export class UsersService {
   }
 
   // добавить сортировку по рейтингу 
-  async getAllUsers(search) {
-
-    const users = (search) ? await this.userRepository.findAll({
+  async getAllUsers(search, page: number) {
+    let users = (search) ? await this.userRepository.findAll({
       where: {
         login: {
           [Op.iLike]: `%${search}%`
@@ -74,6 +73,8 @@ export class UsersService {
     }) :
       await this.userRepository.findAll({ include: { all: true } });
 
+    const parsedPage = page ? page : 1;
+    const perPage = 10;
 
     const usersWithRating = [];
 
@@ -96,21 +97,36 @@ export class UsersService {
 
       usersWithRating.push(userWithRating);
     }
-    return usersWithRating.sort((a, b) => b.rating - a.rating);
+
+    users = usersWithRating.sort((a, b) => b.rating - a.rating);
+
+    const totalPages = Math.ceil(users.length / perPage);
+    const userFilter = users.slice(
+      parsedPage * perPage - perPage,
+      parsedPage * perPage
+    );
+
+    return {
+      meta: { page: page || 1, perPage: Number(perPage), totalPages },
+      user: userFilter,
+      message: 'Success'
+    }
   }
 
   // добавить рейтинг
-  async getUserById(id: number) {
+  async getUserById(id: number, page: number) {
     const user = await this.userRepository.findByPk(id, { include: { all: true } });
     if (!user) {
       throw new NotFoundException('User undefined');
     }
 
+    const parsedPage = page ? page : 1;
+    const perPage = 10;
+
     const postIds = user.posts.map((post) => post.id);
 
     const likes = await this.likeRepository.findAll({ where: { postId: postIds, } })
     let rating = likes.length
-
     const subscriptions = await this.subscriptionsRepository.findAll({ where: { subscriberId: id } })
     const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: id } })
     rating += subscribers.length
@@ -119,7 +135,6 @@ export class UsersService {
     let usersSubscriber = []
     let subscriptions_with_avas = []
     for (const subscriber of subscribers) {
-      console.log(subscriber)
       usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
         attributes: ['id', 'login', 'avatar']
       }));
@@ -130,7 +145,14 @@ export class UsersService {
       }));
     }
 
+    const totalPages = Math.ceil(user.posts.length / perPage);
+    const postFilter = user.posts.slice(
+      parsedPage * perPage - perPage,
+      parsedPage * perPage
+    );
     return {
+      meta: { page: page || 1, perPage: Number(perPage), totalPages },
+      posts: postFilter,
       user: {
         id: user.id,
         login: user.login,
@@ -139,11 +161,11 @@ export class UsersService {
         role: user.roles[0].value,
         rating: rating,
       },
-      posts: user.posts,
       ban: user.ban,
       subscriptions: subscriptions_with_avas,
       subscribers: usersSubscriber,
-    };
+      message: 'Success'
+    }
   }
 
   async getUserByEmail(email: string) {
