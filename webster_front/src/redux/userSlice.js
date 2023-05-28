@@ -4,7 +4,7 @@ import { setUserData } from './authSlice'
 
 const initialState = {
     user: null,
-    otherUser: null,
+    anotherUser: null,
     ban: null,
     subscriptions: null,
     subscribers: null,
@@ -82,7 +82,7 @@ export const userSlice = createSlice({
         },
         [getUserById.fulfilled]: (state, action) => {
             state.loading = false
-            state.otherUser = action.payload
+            state.anotherUser = action.payload
             console.log(action.payload)
             state.status = action.payload?.message
         },

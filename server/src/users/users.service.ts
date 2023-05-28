@@ -103,7 +103,7 @@ export class UsersService {
   async getUserById(id: number) {
     const user = await this.userRepository.findByPk(id, { include: { all: true } });
     if (!user) {
-      throw new NotFoundException('User undefined');
+      throw new NotFoundException('User undefined'); 
     }
 
     const postIds = user.posts.map((post) => post.id);
@@ -113,7 +113,7 @@ export class UsersService {
     const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: id } })
     rating += subscribers.length
 
-    let usersSubscriber = []
+    let usersSubscriber = [] 
     let subscriptions_with_avas = []
     for (const subscriber of subscribers) {
       usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {

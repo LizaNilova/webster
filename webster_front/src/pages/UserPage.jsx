@@ -3,9 +3,26 @@ import { useSelector } from 'react-redux'
 import ProfileTab from "../components/ProfileTab";
 
 export const UserPage = () => {
-    const { user } = useSelector(state => state.user)
+    const { anotherUser } = useSelector(state => state.user)
 
-    if (!user) {
+    const getPageCount = (count) => {
+        const result = [];
+        for (let i = 1; i <= count; i += 1) {
+            result.push(
+                <li key={i}>
+                    <button
+                        onClick={() => setCurPage(i)}
+                        className={`px-3 py-2 border border-gray-600 rounded-none ${i === curPage ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+                    >
+                        {i}
+                    </button>
+                </li>
+            );
+        }
+        return result;
+    };
+
+    if (!anotherUser) {
         return <div className="box-border flex justify-center items-center min-h-[100vh] bg-dark-purple">
             <div className="registerCard">
                 <img className="h-[100px] mt-4" src='../uevent_logo.png' alt='logo' />
@@ -28,21 +45,17 @@ export const UserPage = () => {
                 {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
                     <div className="justify-center w-40 mt-5 ">
-                        <img alt={user.avatar} className="items-center rounded-[3rem]"
-                            src={`http://localhost:8080/api/static/${user.avatar}`}
+                        <img alt={anotherUser.user.avatar} className="items-center rounded-[3rem]"
+                            src={`http://localhost:8080/api/static/${anotherUser.user.avatar}`}
                         />
                     </div>
 
-                    {/* Full name */}
-                    <div className="text-[25px]">{user.login}</div>
-
                     {/* Login */}
-                    <p className="text-xl" >{user.email}</p>
-
+                    <div className="text-[25px]">{anotherUser.user.login}</div>
 
                     <div
                         className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-                        onClick={() => {  }}>
+                        onClick={() => { }}>
                         <img className="w-6" src='editing_icon.png' alt='edit info' />
                         Subscribe
                     </div>
@@ -53,10 +66,21 @@ export const UserPage = () => {
                 <div className="w-1/2 ">
 
                     <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
+                        <div className='posts-page-posts-container'>
+                            {anotherUser.posts && anotherUser.posts.map(post => {
+                                return (
+                                    <Post data={post} openForm={openForm} />
+                                )
+                            })}
+                            {meta.totalPages !== 1 ?
+                                <div >
+                                    <ul class="inline-flex -space-x-px">
+                                        {getPageCount(meta.totalPages)}
+                                    </ul>
+                                </div> : ''
+                            }
+                        </div>
 
-                        {!editBoxOpen && <>
-
-                        </>}
                     </div>
                 </div>
             </div>
