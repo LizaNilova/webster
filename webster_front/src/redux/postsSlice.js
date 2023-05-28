@@ -21,12 +21,25 @@ export const getMyPosts = createAsyncThunk(
   'get/api/posts/my-posts',
   async() => {
     try{
-
+      const { data } = await axios.get(`http://localhost:8080/api/posts/my-posts`, {withCredentials: true})
+      console.log(data)
+      return (data)
     } catch(error) {
       console.log(error)
     }
   }
 )
+
+export const getUsersPosts = createAsyncThunk('get/api/posts/my-posts', 
+async(id) => {
+  try{
+    const {data} = await axios.get(`http://localhost:8080/api/posts/user/${id}`, {withCredentials: true})
+    console.log(data)
+    return (data)
+  } catch (error){
+    console.log(error)
+  }
+})
 
 export const createCommentPost = createAsyncThunk(
   'post/api/comments/post/:id',
@@ -101,7 +114,7 @@ export const deletePost = createAsyncThunk(
 )
 
 const postsSlice = createSlice({
-  name: 'canvas',
+  name: 'posts',
   initialState: {
     meta: {},
     posts: [],
@@ -117,6 +130,16 @@ const postsSlice = createSlice({
       state.posts = action.payload.posts;
       state.meta = action.payload.meta
       state.message = action.payload.message;
+    },
+    [getMyPosts.fulfilled]: (state, action) => {
+      state.usersPosts = action.payload.post.posts
+      state.usersMeta = action.payload.post.meta
+      state.message = action.payload.message
+    },
+    [getUsersPosts.fulfilled]: (state, action) => {
+      state.usersPosts = action.payload.post.posts
+      state.usersMeta = action.payload.post.meta
+      state.message = action.payload.message
     }
   }
 })

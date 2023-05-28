@@ -19,12 +19,16 @@ import UserListItem from "./UserlistItem";
 import { logout } from "../redux/authSlice";
 import EditProfile from "./allTabs/EditProfile";
 import Post from "./Post";
+import { getMyPosts } from "../redux/postsSlice";
 
 // import EventInFavourite from "../EventInFavourite";
 
 const ProfileTab = () => {
   const [activeTab, setActiveTab] = useState("following")
   const [editBoxOpen, setEditBoxOpen] = useState(false)
+  const [form, openForm] = useState(null);
+  
+  const [curPage, setCurPage] = useState(1);
 
 
   const dispatch = useDispatch()
@@ -35,6 +39,11 @@ const ProfileTab = () => {
   const { usersPosts } = useSelector((state) => state.posts)
   const { usersMeta } = useSelector((state) => state.posts)
   //   const userFavourites = useSelector(state => state.auth.user.subscriptions_events);
+
+  useEffect(() => {
+    dispatch(getMyPosts())
+  }, [dispatch])
+
 
   const arrayItemsCount = (array) => {
     if (array) {
@@ -60,6 +69,14 @@ const ProfileTab = () => {
     }
     return result;
   };
+
+  const triggerUpdate = () =>{
+    console.log('update trigger');
+    setTimeout(()=>{
+        dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage }));
+    }, 500);
+    
+}
 
   // const handleClickCancelDelete = () => {
   //   setOpenDialog(false);
@@ -182,9 +199,10 @@ const ProfileTab = () => {
       </div>
 
       <div className='posts-page-posts-container'>
+      {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
         {usersPosts && usersPosts.map((post, index) => {
           return (
-            <Post data={post} key={index} openForm={() => { }} />
+            <Post data={post} key={index} openForm={() => { }} triggerUpdate={triggerUpdate} />
           )
         })}
         {usersMeta && usersMeta.totalPages !== 1 ?
