@@ -17,7 +17,7 @@ export const Profile = () => {
         </div>
     }
 
-    return <div className='flex flex-col justify-center items-center w-full h-screen bg-dark-purple'>
+    return <div className='flex flex-col justify-center items-center w-full h-fit bg-dark-purple'>
         <ProfileTab />
     </div>
 }

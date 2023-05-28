@@ -35,15 +35,6 @@ const ProfileTab = () => {
     dispatch(getMyPosts())
   }, [dispatch])
 
-
-  const arrayItemsCount = (array) => {
-    if (array) {
-      return array.length
-    } else {
-      return '0'
-    }
-  }
-
   const getPageCount = (count) => {
     const result = [];
     for (let i = 1; i <= count; i += 1) {
@@ -82,42 +73,42 @@ const ProfileTab = () => {
 
 
   return (
-    <div className="flex flex-col bg-opacity-30 w-2/3 bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
+    <div className="flex flex-col bg-opacity-30 w-full bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
       {user.role !== 'ADMIN' && <>
-        <div className="flex flex-row space-x-4 w-full">
-          {
-            editBoxOpen &&
-            <EditProfile setEditBoxOpen={setEditBoxOpen} />
-          }
+        {
+          editBoxOpen &&
+          <EditProfile setEditBoxOpen={setEditBoxOpen} />
+        }
 
-          {!editBoxOpen && <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
+        {!editBoxOpen && <>
+          <div className="flex flex-row space-x-4 w-2/3">
+            <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
-            <div className="justify-center w-40 mt-5 ">
-              <img alt={user.avatar} className="items-center rounded-[3rem]"
-                src={`http://localhost:8080/api/static/${user.avatar}`}
-              />
+              <div className="justify-center w-40 mt-5 ">
+                <img alt={user.avatar} className="items-center rounded-[3rem]"
+                  src={`http://localhost:8080/api/static/${user.avatar}`}
+                />
+              </div>
+
+              {/* Full name */}
+              <div className="text-[25px]">{user.login}</div>
+
+              {/* Login */}
+              <p className="text-xl" >{user.email}</p>
+
+
+              <div
+                className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
+                onClick={() => { setEditBoxOpen(true) }}>
+                <img className="w-6" src='editing_icon.png' alt='edit info' />
+                Edit profile
+              </div>
             </div>
+            <div className="w-1/2 ">
 
-            {/* Full name */}
-            <div className="text-[25px]">{user.login}</div>
-
-            {/* Login */}
-            <p className="text-xl" >{user.email}</p>
+              <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
 
 
-            <div
-              className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-              onClick={() => { setEditBoxOpen(true) }}>
-              <img className="w-6" src='editing_icon.png' alt='edit info' />
-              Edit profile
-            </div>
-          </div>}
-
-          <div className="w-1/2 ">
-
-            <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
-
-              {!editBoxOpen && <>
                 <ul className="Horizontalnav">
                   <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
                   <TabNavItem title={`followers`} id="followers" activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -142,9 +133,11 @@ const ProfileTab = () => {
 
                   </TabContent>
                   <TabContent id="followers" activeTab={activeTab}>
-                    <div className="text-beige m-auto text-md h-full w-full">
-                      Nobody follows you yet...
-                    </div>
+                    {!subscribers &&
+                      <div className="text-beige m-auto text-md h-full w-full">
+                        Nobody follows you yet...
+                      </div>}
+
                     {subscribers.length > 0 &&
                       <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
                         {
@@ -157,30 +150,33 @@ const ProfileTab = () => {
                     }
                   </TabContent>
                 </div>
-              </>}
+                <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
+                // onClick={handleClickOpen} 
+                >Delete account</div>
+              </div>
+
             </div>
 
-            <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
-            // onClick={handleClickOpen} 
-            >Delete account</div>
           </div>
+          <div className='flex flex-col w-2/3 justify-center items-center'>
+            {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
+            {usersPosts && usersPosts.map((post, index) => {
+              return (
+                <Post data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
+              )
+            })}
+            {usersMeta && usersMeta.totalPages !== 1 ?
+              <div >
+                <ul class="inline-flex -space-x-px">
+                  {getPageCount(usersMeta.totalPages)}
+                </ul>
+              </div> : ''
+            }
+          </div>
+        </>
+        }
 
-        </div>
-        <div className='posts-page-posts-container'>
-          {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
-          {usersPosts && usersPosts.map((post, index) => {
-            return (
-              <Post data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
-            )
-          })}
-          {usersMeta && usersMeta.totalPages !== 1 ?
-            <div >
-              <ul class="inline-flex -space-x-px">
-                {getPageCount(usersMeta.totalPages)}
-              </ul>
-            </div> : ''
-          }
-        </div> </>}
+      </>}
       {user.role === 'ADMIN' &&
         <AdminProfile user={user} />
       }

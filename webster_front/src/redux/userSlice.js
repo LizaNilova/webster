@@ -54,7 +54,7 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
 export const subscribeUser = createAsyncThunk('user/subscribeUser', async (id) => {
     try{
         const { data } = await $api.post(`http://localhost:8080/api/subscriptions/subscribe/user/${id}`, {withCredentials: true})
-        console.log(data)
+        // console.log(data)
         return data
     } catch (error) {
         console.log(error)
@@ -78,7 +78,7 @@ export const userSlice = createSlice({
             state.ban = action.payload?.user.ban
             state.subscribers = action.payload?.user.subscribers
             state.subscriptions = action.payload?.user.subscriptions
-            console.log(state.user)
+            console.log(state.subscriptions)
             state.status = action.payload?.message
         },
         [userProfile.rejected]: (state, action) => {
@@ -124,6 +124,7 @@ export const userSlice = createSlice({
         [subscribeUser.fulfilled]: (state, action) => {
             state.loading = false
             state.status = action.payload?.message
+            state.subscriptions = action.payload?.subscriptions
             console.log(action.payload)
         },
         [subscribeUser.rejected]: (state, action) => {
