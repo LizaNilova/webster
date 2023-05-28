@@ -91,7 +91,22 @@ export class PostsService {
     if (filter.length > 0) {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
     }
-    const posts = await this.postsRepository.findAll(filterOptions);
+    let posts = await this.postsRepository.findAll(filterOptions);
+    
+    posts = posts.map((post)=> ({
+        id: post.id,
+        title: post.title, 
+        content: post.content, 
+        image: post.image, 
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt, 
+        categories: post.categories.map(({value})=>value), 
+        author: post.author, 
+        comments: post.comments, 
+        likes:post.likes
+
+    }))
+    
     const totalPages = Math.ceil(posts.length / perPage);
     const postFilter = posts.slice(
       parsedPage * perPage - perPage,
