@@ -16,8 +16,6 @@ interface SubscribeCreationAttrs {
 
 @Table({ tableName: 'subscriptions', createdAt: false, updatedAt: false })
 export class Subscriptions extends Model<Subscriptions, SubscribeCreationAttrs> {
-  @Column({ type: DataType.STRING })
-  login: string;
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })

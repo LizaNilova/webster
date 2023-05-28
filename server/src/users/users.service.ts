@@ -110,15 +110,25 @@ export class UsersService {
 
     const likes = await this.likeRepository.findAll({ where: { postId: postIds, } })
     let rating = likes.length
+
+    const subscriptions = await this.subscriptionsRepository.findAll({ where: { subscriberId: id } })
     const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: id } })
     rating += subscribers.length
 
+
     let usersSubscriber = []
+    let subscriptions_with_avas = []
     for (const subscriber of subscribers) {
+      console.log(subscriber)
       usersSubscriber.push(await this.userRepository.findByPk(subscriber.subscriberId, {
-        attributes: ['id', 'login']
+        attributes: ['id', 'login', 'avatar']
       }));
     };
+    for (const subscription of subscriptions) {
+    subscriptions_with_avas.push(await this.userRepository.findByPk(subscription.userId, {
+        attributes: ['id', 'login', 'avatar']
+      }));
+    }
 
     return {
       user: {
@@ -131,7 +141,7 @@ export class UsersService {
       },
       posts: user.posts,
       ban: user.ban,
-      subscriptions: user.subscriptions,
+      subscriptions: subscriptions_with_avas,
       subscribers: usersSubscriber,
     };
   }
