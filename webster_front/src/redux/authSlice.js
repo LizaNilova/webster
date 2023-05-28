@@ -96,6 +96,10 @@ export const loginUser = createAsyncThunk(
       if (error.response.status == 401) {
         return ({ message: error.response.data.massage})
       }
+      if (error.response.status == 400) {
+        console.log(error.response)
+        return ({ message: error.response.data})
+      }
     }
   },
 )
