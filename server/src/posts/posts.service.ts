@@ -86,7 +86,21 @@ export class PostsService {
       filterOptions.include[1].where = { value: { [Op.in]: filter } };
     }
 
-    return await this.postsRepository.findAll(filterOptions);
+    const posts = await this.postsRepository.findAll(filterOptions)
+
+    return posts.map((post)=> ({
+        id: post.id,
+        title: post.title, 
+        content: post.content, 
+        image: post.image, 
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt, 
+        categories: post.categories.map(({value})=>value), 
+        author: post.author, 
+        comments: post.comments, 
+        likes:post.likes
+
+      }))
   }
 
   async editPost(dto: CreatePostDto, userId: number, id: number, image?: any) {
