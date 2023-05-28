@@ -123,7 +123,7 @@ export class AuthService {
     if (!user.is_active) {
       throw new HttpException('User inactive account', HttpStatus.BAD_REQUEST);
     }
-    throw new UnauthorizedException({ massage: 'Incorrect login or password' });
+    throw new UnauthorizedException('Incorrect password');
   }
 
   async forgotPassword(userDto: CreateUserDto) {
