@@ -28,9 +28,31 @@
         @apply flex items-center justify-center p-2
     }
     .posts-page-posts-container{
-        @apply w-3/5 flex flex-col items-center border-l border-purple-800 py-3;
+        @apply w-3/5 flex flex-col items-center border-x border-purple-800 py-3;
     }
     .posts-page-filters-button{
         @apply w-2/3 bg-purple-700 m-3;
+    }
+
+    .posts-page-users-container{
+        @apply w-1/6 p-5;
+    }
+    .posts-page-users-title{
+        @apply w-full text-center text-xl font-semibold;
+    }
+    .posts-page-users-icon{
+        @apply w-full flex items-center justify-center;
+    }
+    .posts-page-users-subcontainer{
+        @apply w-full flex flex-col m-1;
+    }
+    .posts-page-users-user-card{
+        @apply w-full flex justify-between items-center mt-1 mb-2;
+    }
+    .posts-page-users-user-nickname{
+        @apply w-3/4 font-semibold;
+    }
+    .posts-page-users-user-count{
+        @apply w-1/4 flex items-center justify-center;
     }
 }
