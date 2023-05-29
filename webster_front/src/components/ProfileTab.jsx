@@ -15,6 +15,8 @@ import EditProfile from "./allTabs/EditProfile";
 import Post from "./Post";
 import { getMyPosts } from "../redux/postsSlice";
 import AdminProfile from "./AdminProfile";
+import ConfirmForm from "./ConfirmForm";
+import { deleteUser } from "../redux/userSlice";
 
 // import EventInFavourite from "../EventInFavourite";
 
@@ -23,6 +25,7 @@ const ProfileTab = () => {
   const [editBoxOpen, setEditBoxOpen] = useState(false)
   const [form, openForm] = useState(null);
   const [curPage, setCurPage] = useState(1);
+  const [cofirmForm, openConfirm] = useState(false);
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -157,7 +160,7 @@ const ProfileTab = () => {
                   </TabContent>
                 </div>
                 <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
-                // onClick={handleClickOpen} 
+                onClick={()=>{console.log(user.id); openConfirm(true); }} 
                 >Delete account</div>
               </div>
 
@@ -165,6 +168,16 @@ const ProfileTab = () => {
 
           </div>
           <div className='flex flex-col w-2/3 justify-center items-center'>
+            {cofirmForm && <ConfirmForm closeForm={()=>{openConfirm(false);}} confirmAction={()=>{ 
+              dispatch(deleteUser());
+              setTimeout(() => {
+                dispatch(logout());
+                setTimeout(() => {
+                  navigate('/');
+                  location.reload()
+                }, 500);
+              }, 1000);
+              }} action={'Deleting account'}/>}
             {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
             {usersPosts && usersPosts.map((post, index) => {
               return (
