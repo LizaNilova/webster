@@ -6,6 +6,7 @@ import TabNavItem from "./TabNavItem"
 import TabContent from "./TabContent";
 import '../styles/TabsStyles.css'
 import '../styles/ScrollbarStyles.css'
+import '../styles/profile.scss'
 
 import PostForm from '../components/PostForm';
 import UserListItem from "./UserlistItem";
@@ -73,8 +74,13 @@ const ProfileTab = () => {
 
 
   return (
-    <div className="flex flex-col bg-opacity-30 w-full bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
-      {user.role !== 'ADMIN' && <>
+    <>
+      {user.role === 'ADMIN' &&
+        <AdminProfile user={user} />
+      }
+      {user.role !== 'ADMIN' && <div 
+        className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
+        {/* className="profile-card"> */}
         {
           editBoxOpen &&
           <EditProfile setEditBoxOpen={setEditBoxOpen} />
@@ -176,11 +182,8 @@ const ProfileTab = () => {
         </>
         }
 
-      </>}
-      {user.role === 'ADMIN' &&
-        <AdminProfile user={user} />
-      }
-    </div >
+      </div>}
+    </>
   );
 };
 export default ProfileTab;

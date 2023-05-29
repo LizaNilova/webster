@@ -6,7 +6,7 @@ export const Profile = () => {
     const { user } = useSelector(state => state.user)
 
     if (!user) {
-        return <div className="box-border flex justify-center items-center min-h-[100vh] bg-dark-purple">
+        return <div className="box-border flex justify-center items-center bg-dark-purple">
             <div className="registerCard">
                 <img className="h-[100px] mt-4" src='../uevent_logo.png' alt='logo' />
                 <h3 className="uppercase tracking-[2px] text-light-beige mt-4 text-xl">Loading...</h3>
@@ -17,7 +17,7 @@ export const Profile = () => {
         </div>
     }
 
-    return <div className='flex flex-col justify-center items-center w-full h-fit bg-dark-purple'>
+    return <div className='flex flex-col justify-center items-center w-full h-fit min-h-screen bg-dark-purple'>
         <ProfileTab />
     </div>
 }

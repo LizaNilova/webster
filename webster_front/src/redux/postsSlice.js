@@ -19,27 +19,38 @@ export const getAllPosts = createAsyncThunk(
 
 export const getMyPosts = createAsyncThunk(
   'get/api/posts/my-posts',
-  async() => {
-    try{
-      const { data } = await axios.get(`http://localhost:8080/api/posts/my-posts`, {withCredentials: true})
+  async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:8080/api/posts/my-posts`, { withCredentials: true })
       console.log(data)
       return (data)
-    } catch(error) {
+    } catch (error) {
       console.log(error)
     }
   }
 )
 
-export const getUsersPosts = createAsyncThunk('get/api/posts/my-posts', 
-async(id) => {
-  try{
-    const {data} = await axios.get(`http://localhost:8080/api/posts/user/${id}`, {withCredentials: true})
-    console.log(data)
-    return (data)
-  } catch (error){
-    console.log(error)
-  }
-})
+export const getUsersPosts = createAsyncThunk('get/api/posts/my-posts',
+  async (id) => {
+    try {
+      const { data } = await axios.get(`http://localhost:8080/api/posts/user/${id}`, { withCredentials: true })
+      console.log(data)
+      return (data)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+export const getReportedPosts = createAsyncThunk('get/api/posts/post-reported',
+  async () => {
+    try {
+      const { data } = await axios.get('http://localhost:8080/api/posts/post-reported', { withCredentials: true })
+      console.log(data)
+      return (data)
+    } catch (error) {
+      console.log(error)
+    }
+  })
 
 export const createCommentPost = createAsyncThunk(
   'post/api/comments/post/:id',
@@ -115,9 +126,9 @@ export const deletePost = createAsyncThunk(
 
 export const reportPost = createAsyncThunk(
   'report/api/posts',
-  async ({id, reportReason}) => {
+  async ({ id, reportReason }) => {
     try {
-      const { data } = await $api.post(postRouter.reportPost(id), {reportReason: reportReason}, { withCredentials: true });
+      const { data } = await $api.post(postRouter.reportPost(id), { reportReason: reportReason }, { withCredentials: true });
       console.log(data);
       return (data)
     } catch (error) {
@@ -166,6 +177,11 @@ const postsSlice = createSlice({
       state.message = action.payload.message
     },
     [getUsersPosts.fulfilled]: (state, action) => {
+      state.usersPosts = action.payload.post.posts
+      state.usersMeta = action.payload.post.meta
+      state.message = action.payload.message
+    },
+    [getReportedPosts.fulfilled]: (state, action) => {
       state.usersPosts = action.payload.post.posts
       state.usersMeta = action.payload.post.meta
       state.message = action.payload.message
