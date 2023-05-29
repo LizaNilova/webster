@@ -80,129 +80,130 @@ const ProfileTab = () => {
       {user.role === 'ADMIN' &&
         <AdminProfile user={user} />
       }
-      {user.role !== 'ADMIN' && <div
-        className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
-        {/* className="profile-card"> */}
+      {user.role !== 'ADMIN' && <>
         {
           editBoxOpen &&
           <EditProfile setEditBoxOpen={setEditBoxOpen} />
         }
-
         {!editBoxOpen && <>
-          <div className="flex flex-row space-x-4 w-2/3">
-            <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
+          <div className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
 
-              <div className="justify-center w-40 mt-5 ">
-                <img alt={user.avatar} className="items-center rounded-[3rem]"
-                  src={`http://localhost:8080/api/static/${user.avatar}`}
-                />
-              </div>
+            <div className="flex flex-row space-x-4 w-2/3">
+              <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
-              {/* Full name */}
-              <div className='glitch-box' >
-                <div data-text={user.login} className="text-[25px] glitch-text">{user.login}</div>
-              </div>
-
-
-              {/* Login */}
-              <p className="text-xl glowtext" >{user.email}</p>
-
-              <div className='w-fit'>
-                <button
-                  //className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-                  className="button btn-cyber-punk mt-5"
-                  type='submit'
-                 onClick={() => { setEditBoxOpen(true) }}>
-                  {/* <img className="w-6" src='editing_icon.png' alt='edit info' /> */}
-                  Edit profile
-                </button>
-              </div>
-
-            </div>
-            <div className="w-1/2 ">
-
-              <div
-                // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
-                className="profile-card glowbox"
-              >
-                <ul className="Horizontalnav">
-                  <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
-                  <TabNavItem title={`followers`} id="followers" activeTab={activeTab} setActiveTab={setActiveTab} />
-                </ul>
-
-                <div>
-                  <TabContent id="following" activeTab={activeTab}>
-
-                    {!subscriptions && <div className="text-beige m-auto text-md h-full w-full">
-                      You don't follow any user yet...
-                    </div>}
-                    {subscriptions.length > 0 &&
-                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
-                        {
-                          subscriptions.map((user, index) => (
-                            <UserListItem
-                              key={index}
-                              user={user} />
-                          ))}
-                      </ul>
-                    }
-
-                  </TabContent>
-                  <TabContent id="followers" activeTab={activeTab}>
-                    {!subscribers &&
-                      <div className="text-beige m-auto text-md h-full w-full">
-                        Nobody follows you yet...
-                      </div>}
-
-                    {subscribers.length > 0 &&
-                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
-                        {
-                          subscribers.map((user, index) => (
-                            <UserListItem
-                              key={index}
-                              user={user} />
-                          ))}
-                      </ul>
-                    }
-                  </TabContent>
+                <div className="justify-center w-40 mt-5 ">
+                  <img alt={user.avatar} className="items-center rounded-[3rem]"
+                    src={`http://localhost:8080/api/static/${user.avatar}`}
+                  />
                 </div>
-                <button className="glowbox-del red text-white w-full cursor-pointer px-2 py-1 mt-4 h-fit text-[18px] text-beige"
-                  onClick={() => { console.log(user.id); openConfirm(true); }}
-                >Delete account</button>
+
+                {/* Full name */}
+                <div className='glitch-box' >
+                  <div data-text={user.login} className="text-[25px] glitch-text">{user.login}</div>
+                </div>
+
+
+                {/* Login */}
+                <p className="text-xl glowtext" >{user.email}</p>
+
+                <div className='w-fit'>
+                  <button
+                    //className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
+                    className="button btn-cyber-punk mt-5"
+                    type='submit'
+                    onClick={() => { setEditBoxOpen(true) }}>
+                    {/* <img className="w-6" src='editing_icon.png' alt='edit info' /> */}
+                    Edit profile
+                  </button>
+                </div>
+
+              </div>
+              <div className="w-1/2 ">
+
+                <div
+                  // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
+                  className="profile-card glowbox"
+                >
+                  <ul className="Horizontalnav">
+                    <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <TabNavItem title={`followers`} id="followers" activeTab={activeTab} setActiveTab={setActiveTab} />
+                  </ul>
+
+                  <div>
+                    <TabContent id="following" activeTab={activeTab}>
+
+                      {!subscriptions && <div className="text-beige m-auto text-md h-full w-full">
+                        You don't follow any user yet...
+                      </div>}
+                      {subscriptions.length > 0 &&
+                        <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
+                          {
+                            subscriptions.map((user, index) => (
+                              <UserListItem
+                                key={index}
+                                user={user} />
+                            ))}
+                        </ul>
+                      }
+
+                    </TabContent>
+                    <TabContent id="followers" activeTab={activeTab}>
+                      {!subscribers &&
+                        <div className="text-beige m-auto text-md h-full w-full">
+                          Nobody follows you yet...
+                        </div>}
+
+                      {subscribers.length > 0 &&
+                        <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
+                          {
+                            subscribers.map((user, index) => (
+                              <UserListItem
+                                key={index}
+                                user={user} />
+                            ))}
+                        </ul>
+                      }
+                    </TabContent>
+                  </div>
+                  <button className="glowbox-del red text-white w-full cursor-pointer px-2 py-1 mt-4 h-fit text-[18px] text-beige"
+                    onClick={() => { console.log(user.id); openConfirm(true); }}
+                  >Delete account</button>
+                </div>
+
               </div>
 
             </div>
-
-          </div>
-          <div className='flex flex-col w-full justify-center items-center'>
-            {cofirmForm && <ConfirmForm closeForm={() => { openConfirm(false); }} confirmAction={() => {
-              dispatch(deleteUser());
-              setTimeout(() => {
-                dispatch(logout());
+            <div className='flex flex-col w-full justify-center items-center'>
+              {cofirmForm && <ConfirmForm closeForm={() => { openConfirm(false); }} confirmAction={() => {
+                dispatch(deleteUser());
                 setTimeout(() => {
-                  navigate('/');
-                  location.reload()
-                }, 500);
-              }, 1000);
-            }} action={'Deleting account'} />}
-            {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
-            {usersPosts && usersPosts.map((post, index) => {
-              return (
-                <Post iter={index} data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
-              )
-            })}
-            {usersMeta && usersMeta.totalPages !== 1 ?
-              <div >
-                <ul class="inline-flex -space-x-px">
-                  {getPageCount(usersMeta.totalPages)}
-                </ul>
-              </div> : ''
-            }
+                  dispatch(logout());
+                  setTimeout(() => {
+                    navigate('/');
+                    location.reload()
+                  }, 500);
+                }, 1000);
+              }} action={'Deleting account'} />}
+              {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
+              {usersPosts && usersPosts.map((post, index) => {
+                return (
+                  <Post iter={index} data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
+                )
+              })}
+              {usersMeta && usersMeta.totalPages !== 1 ?
+                <div >
+                  <ul class="inline-flex -space-x-px">
+                    {getPageCount(usersMeta.totalPages)}
+                  </ul>
+                </div> : ''
+              }
+            </div>
+
+
           </div>
         </>
         }
-
-      </div>}
+      </>}
     </>
   );
 };
