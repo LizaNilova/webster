@@ -146,7 +146,7 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
                 onClick={() => {
                   openForm({ method: 'Update', data: data });
                 }}
-                className="px-3 py-2 bg-purple-700 hover:bg-purple-600"
+                className="px-3 py-2 glowbox green"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +167,7 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
                 onClick={() => {
                   openForm({ method: 'Report', data: data });
                 }}
-                className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-pink-500"
+                className="ml-2 px-3 py-2 glowbox-rep yellow"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +190,7 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
                   dispatch(deletePost(data.id));
                   triggerUpdate();
                 }}
-                className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-rose-500"
+                className="ml-2 px-3 py-2 red glowbox-del"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

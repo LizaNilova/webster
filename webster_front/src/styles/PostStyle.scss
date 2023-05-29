@@ -76,6 +76,24 @@ h6 {
   }
 }
 
+.glowbox-del {
+  background-color: $red;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  box-shadow: 0 0 5px $red;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $red;
+}
+
+.glowbox-rep {
+  background-color: $yellow;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  box-shadow: 0 0 5px $yellow;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $yellow;
+}
+
 .glowbox {
   background-color: var(--transparent-color);
   background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
