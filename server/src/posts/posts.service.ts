@@ -242,7 +242,13 @@ export class PostsService {
   async getAllReportedPosts(page: number){
     const parsedPage = page ? page : 1;
     const perPage = 10;
-    const reports = await this.postReportRepository.findAll({include:{ all: true }, order: [['createdAt', 'ASC']]})
+    const reports = await this.postReportRepository.findAll({
+      include: [
+        { all: true },
+        { model: Post, include: [{ all: true }] }
+      ],
+      order: [['createdAt', 'ASC']]
+    })
      const totalPages = Math.ceil(reports.length / perPage);
     const postFilter = reports.slice(
       parsedPage * perPage - perPage,
