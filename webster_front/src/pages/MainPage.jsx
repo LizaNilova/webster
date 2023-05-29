@@ -521,6 +521,11 @@ const MainPage = () => {
     dispatch(updateProject({id: canvasData.curProject.id, formData: fd }));
   }
 
+  const centerObject = () =>{
+    // let obj = editor.canvas.getActiveObject();
+    editor.canvas.viewportCenterObject(editor.canvas.getActiveObject());
+  }
+
   return (
     <>
       {openedForm === 'Create' && <CreateCanvasForm closeForm={closeForm} />}
@@ -569,6 +574,7 @@ const MainPage = () => {
           onChangeHeight={onChangeHeight}
           onChangeWidth={onChangeWidth}
           applyTextFilter={applyTextFilter}
+          centerObject={centerObject}
         />
 
       </div>

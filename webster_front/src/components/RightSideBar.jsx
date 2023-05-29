@@ -22,7 +22,8 @@ const RightSideBar = ({
     toggleEraser,
     onChangeHeight,
     onChangeWidth,
-    applyTextFilter }) => {
+    applyTextFilter,
+    centerObject }) => {
 
     const [brushStateSize, setBrushStateSize] = useState(brushData.brushSize);
     const [brushStateColor, setBrushStateColor] = useState(brushData.brushColor);
@@ -164,6 +165,7 @@ const RightSideBar = ({
                                         <input onChange={(e) => { onChangeWidth(e.target.value) }} type='number' min='1' defaultValue={Math.ceil(selectedObject.width)} className='border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' />
                                     </div>
                                 </div>
+                                <button onClick={centerObject} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Center</button>
                                 <button onClick={groupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Group</button>
                                 <button onClick={unGroupClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Ungroup</button>
                                 <button onClick={removeSelectedClick} disabled={canvasData?.mode === 'drawing'} className={canvasData?.mode === 'drawing' ? 'w-3/4 bg-gray-700 opacity-60 m-2 border-red-500 outline-none' : 'w-3/4 bg-purple-700 my-2 active:border-green-500 outline-none'}>Remove selected object(s)</button>
