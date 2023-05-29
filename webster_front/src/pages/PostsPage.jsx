@@ -181,6 +181,7 @@ const PostsPage = () => {
         </div>
         {/*container*/}
         <div className="posts-page-posts-container">
+          <div className='w-full min-h-screen flex flex-col items-center'>
           {posts &&
             posts.map((post, i) => {
               return (
@@ -192,8 +193,9 @@ const PostsPage = () => {
                 />
               );
             })}
+          </div>
           {meta.totalPages !== 1 ? (
-            <div>
+            <div className='sticky bottom-3'>
               <ul class="inline-flex -space-x-px">
                 {getPageCount(meta.totalPages)}
               </ul>

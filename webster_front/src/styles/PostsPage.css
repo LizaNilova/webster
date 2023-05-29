@@ -28,7 +28,7 @@
         @apply flex items-center justify-center p-2
     }
     .posts-page-posts-container{
-        @apply w-3/5 flex flex-col items-center border-x border-purple-800 py-3;
+        @apply w-3/5 min-h-screen flex flex-col items-center border-x border-purple-800 py-3;
     }
     .posts-page-filters-button{
         @apply w-2/3 bg-purple-700 m-3;
