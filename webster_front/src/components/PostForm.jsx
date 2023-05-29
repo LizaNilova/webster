@@ -8,8 +8,8 @@ import { createPost, getAllPosts, updatePost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
-const PostForm = ({ data, closeForm }) => {
-    // console.log(data)
+const PostForm = ({ method, data, closeForm }) => {
+    console.log(method, data)
     const dispatch = useDispatch();
     const projects = useSelector(state => state.canvas.projects);
     const categories = useSelector(state => state.categories.categories);
@@ -27,7 +27,7 @@ const PostForm = ({ data, closeForm }) => {
     })
 
     const handleUpdateOrCreateClick = () => {
-        if(data === 'Create')
+        if(method === 'Create')
         {
             console.log(state);
             axios.get(apiPath + '/static/' + state.image,{ responseType: 'blob' })

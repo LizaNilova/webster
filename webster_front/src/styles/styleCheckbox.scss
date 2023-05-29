@@ -1,0 +1,48 @@
+  .checkbox {
+    margin: 15px;
+  }
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  label {
+    font-family: Helvetica;
+    letter-spacing: 1px;
+  }
+  .checkbox-flip {
+    display: none;
+  }
+  
+//   .checkbox-flip + label span {
+//     display: inline-block;
+//     width: 10px;
+//     height: 19px;
+//     margin: 0 5px -4px 0;
+    /*layout relationship between check and label*/
+//   }
+  .checkbox-flip + label span:before, .checkbox-flip + label span:after {
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    content: "";
+    position: absolute;
+    z-index: 1;
+    width: 1rem;
+    height: 1rem;
+    background: transparent;
+    border: 2px solid #ff4040;
+  }
+  .checkbox-flip + label span:after {
+    z-index: 0;
+    border: none;
+  }
+  
+  .checkbox-flip:checked + label span:before {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    background: #ff4040;
+  }

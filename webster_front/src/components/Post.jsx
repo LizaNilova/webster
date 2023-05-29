@@ -214,7 +214,7 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
       <div className="w-6/7 text-sm text-justify mt-3 text glow">
         {data.content}
       </div>
-      <div className="w-5/6 flex justify-center">
+      <div className="w-4/6 flex justify-center">
         <img
           src={apiPath + '/static/' + data.image}
           alt={data.image}

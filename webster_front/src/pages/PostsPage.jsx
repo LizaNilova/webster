@@ -5,6 +5,7 @@ import { getAllPosts } from '../redux/postsSlice';
 import PostForm from '../components/PostForm';
 import { getAllCategories } from '../redux/categoriesSlice';
 import '../styles/PostsPage.css';
+import '../styles/StyleCheckbox.scss';
 import ReportForm from '../components/reportForm';
 import { getAllUsers } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
@@ -45,15 +46,17 @@ const PostsPage = () => {
     const result = [];
     for (let i = 1; i <= count; i += 1) {
       result.push(
-        <li key={i} className='glow'>
+        <li key={i} className="glow">
           <button
             onClick={() => setCurPage(i)}
             className="px-3 py-2 rounded-none"
             style={{
-              animation: i !== curPage ? '' : '0.8s ease-out infinite alternate glowing',
+              animation:
+                i !== curPage ? '' : '0.8s ease-out infinite alternate glowing',
               background: i !== curPage ? 'transparent' : 'var(--color)',
               transform: i !== curPage ? '' : 'scale(1) rotateZ(var(--skew))',
-              transition: i !== curPage ? '' : 'transform 0.05s ease, opacity 0.15s ease',
+              transition:
+                i !== curPage ? '' : 'transform 0.05s ease, opacity 0.15s ease',
               opacity: i !== curPage ? '' : '1',
             }}
           >
@@ -114,9 +117,14 @@ const PostsPage = () => {
           )}
           {/* <div className=""></div> */}
           <div className="w-full m-1 field purple">
-          <label htmlFor="search" className='text-center text-xl mb-3 glow text'>Search post:</label>
+            <label
+              htmlFor="search"
+              className="text-center text-xl mb-3 glow text"
+            >
+              Search post:
+            </label>
             <input
-            id='search'
+              id="search"
               autoComplete="off"
               type="text"
               name="search"
@@ -131,12 +139,45 @@ const PostsPage = () => {
             Filters by categories:
           </div>
           <div className="posts-page-filters-categories-container">
+            <ul className="flex flex-col">
             {categories &&
-              categories.map((category) => {
+              categories.map((category, i) => {
                 // console.log(filter.findIndex(f_category => f_category === category.value))
                 return (
-                  <div className="posts-page-filters-category">
-                    <input
+                      <li class="checkbox">
+                        <input
+                          class="checkbox-flip"
+                          type="checkbox"
+                          id={`check${i}`}
+                          defaultChecked={
+                            !Boolean(
+                              filter.findIndex(
+                                (f_category) => f_category === category
+                              )
+                            )
+                          }
+                          onChange={(e) => {
+                            let idx = filter.findIndex(
+                              (f_category) => f_category === category
+                            );
+                            if (idx < 0) {
+                              let new_filters = [...filter];
+                              new_filters.push(category);
+                              setFilter(new_filters);
+                            } else {
+                              let new_filters = [...filter];
+                              new_filters.splice(idx, 1);
+                              setFilter(new_filters);
+                            }
+                          }}
+                        />
+                        <label htmlFor={`check${i}`} className='flex '>
+                          <span></span>
+                          {category}
+                        </label>
+                      </li>
+
+                      /* <input
                       type="checkbox"
                       className="w-5 h-5"
                       defaultChecked={
@@ -160,42 +201,44 @@ const PostsPage = () => {
                           setFilter(new_filters);
                         }
                       }}
-                    />
-                    <p className="pl-2 text-lg">{category}</p>
-                  </div>
-                );
-              })}
+                    /> */
+                      /* <p className="pl-2 text-lg"></p> */
+                      );
+                    })}
+                    </ul>
           </div>
-          <div className="posts-page-filters-header">Sort by:</div>
+          <div className="posts-page-filters-header glow text">Sort by:</div>
           <div className="posts-page-filters-select-container">
             <select
-              className="posts-page-filters-select"
+              className="posts-page-filters-select text-white"
               onChange={(e) => {
                 setSort(e.target.value);
               }}
             >
-              <option value="date">Date</option>
+              <option value="date" className="glow text">
+                Date
+              </option>
               <option value="byCategories">Categories</option>
             </select>
           </div>
         </div>
         {/*container*/}
         <div className="posts-page-posts-container">
-          <div className='w-full min-h-screen flex flex-col items-center'>
-          {posts &&
-            posts.map((post, i) => {
-              return (
-                <Post
-                  iter={i}
-                  data={post}
-                  openForm={openForm}
-                  triggerUpdate={triggerUpdate}
-                />
-              );
-            })}
+          <div className="w-full min-h-screen flex flex-col items-center">
+            {posts &&
+              posts.map((post, i) => {
+                return (
+                  <Post
+                    iter={i}
+                    data={post}
+                    openForm={openForm}
+                    triggerUpdate={triggerUpdate}
+                  />
+                );
+              })}
           </div>
           {meta.totalPages !== 1 ? (
-            <div className='sticky bottom-3'>
+            <div className={(meta.totalPages === curPage && posts.length < 2) ? 'sticky bottom-3' : ''}>
               <ul class="inline-flex -space-x-px">
                 {getPageCount(meta.totalPages)}
               </ul>
