@@ -115,7 +115,10 @@ const ProfileTab = () => {
             </div>
             <div className="w-1/2 ">
 
-              <div className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl">
+              <div 
+              // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
+              className="profile-card"
+              >
 
 
                 <ul className="Horizontalnav">

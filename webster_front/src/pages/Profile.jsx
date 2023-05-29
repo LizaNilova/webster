@@ -18,8 +18,8 @@ export const Profile = () => {
     }
 
     return <div 
-    className='flex flex-col justify-center items-center w-full h-fit min-h-screen bg-dark-purple'>
-    {/* className="main-container"> */}
+    // className='flex flex-col justify-center items-center w-full h-fit min-h-screen bg-dark-purple'>
+    className="main-container flex-col h-fit min-h-screen">
         <ProfileTab />
     </div>
 }
