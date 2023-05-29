@@ -165,7 +165,7 @@ const ProfileTab = () => {
                       }
                     </TabContent>
                   </div>
-                  <button className="glowbox-del red text-white w-full cursor-pointer px-2 py-1 mt-4 h-fit text-[18px] text-beige"
+                  <button className="glowbox-del red text-white w-full cursor-pointer px-2 py-1 mt-4 h-fit text-[18px]"
                     onClick={() => { console.log(user.id); openConfirm(true); }}
                   >Delete account</button>
                 </div>
