@@ -37,7 +37,7 @@ export class ProjectController {
       example: new NotFoundException('User undefined')
     }
   })
-  @Roles('USER')
+  @Roles('USER', 'ADMIN')
   @UseGuards(RolesAuthGuard)
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -65,7 +65,7 @@ export class ProjectController {
       example: new NotFoundException('User undefined')
     }
   })
-  @Roles('USER')
+  @Roles('USER', 'ADMIN')
   @UseGuards(RolesAuthGuard)
   @Get(':id')
   @UseGuards(JwtAuthGuard)
@@ -77,17 +77,17 @@ export class ProjectController {
   @ApiCreatedResponse({
     description: 'The record has been successfully created.', schema: {
       example: {
-            "project": {
-                "id": 5,
-                "name": "Project1",
-                "setting": "{\"x\":5,\"y\":6}",
-                "userId": 1,
-                "image": "f4546a71-0a09-478e-a2c3-def50d2645df.jpg",
-                "updatedAt": "2023-05-26T12:05:44.215Z",
-                "createdAt": "2023-05-26T12:05:44.215Z"
-            },
-            "message": "Create project"
-    }
+        "project": {
+          "id": 5,
+          "name": "Project1",
+          "setting": "{\"x\":5,\"y\":6}",
+          "userId": 1,
+          "image": "f4546a71-0a09-478e-a2c3-def50d2645df.jpg",
+          "updatedAt": "2023-05-26T12:05:44.215Z",
+          "createdAt": "2023-05-26T12:05:44.215Z"
+        },
+        "message": "Create project"
+      }
     }
   })
   @ApiBadRequestResponse({
@@ -118,7 +118,7 @@ export class ProjectController {
       example: new UnauthorizedException('User unauthorized')
     }
   })
-  @Roles('USER')
+  @Roles('USER', 'ADMIN')
   @UseGuards(RolesAuthGuard)
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -127,7 +127,7 @@ export class ProjectController {
     @Request() req: RequestDto,
     @UploadedFile(new ParseFilePipe()) image: Express.Multer.File) {
     return await this.projectService.create({ ...dto, userId: req.user.id, image })
-    
+
   }
 
   @ApiOperation({ summary: 'Update project by id' })
@@ -165,7 +165,7 @@ export class ProjectController {
       example: new NotFoundException('User undefined')
     }
   })
-  @Roles('USER')
+  @Roles('USER', 'ADMIN')
   @UseGuards(RolesAuthGuard)
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
@@ -198,7 +198,7 @@ export class ProjectController {
       example: new NotFoundException('User undefined')
     }
   })
-  @Roles('USER')
+  @Roles('USER', 'ADMIN')
   @UseGuards(RolesAuthGuard)
   @Delete('/:id')
   @UseGuards(JwtAuthGuard)
