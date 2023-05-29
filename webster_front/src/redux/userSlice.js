@@ -139,6 +139,8 @@ export const userSlice = createSlice({
         },
         [subscribeUser.fulfilled]: (state, action) => {
             state.loading = false
+            state.subscriptions = action.payload?.subscriptions
+            state.subscribers = action.payload?.subscribers
             state.status = action.payload?.message
             console.log(action.payload)
         },

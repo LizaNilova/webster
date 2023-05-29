@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import Post from "../components/Post";
-import { getUserById, subscribeUser } from "../redux/userSlice";
+import { getUserById, subscribeUser, userProfile } from "../redux/userSlice";
 import { useParams } from "react-router-dom";
 import { getUsersPosts } from "../redux/postsSlice";
 
@@ -17,8 +17,8 @@ export const UserPage = () => {
     const params = useParams()
 
     const [subscribed, setSubscribed] = useState(() => {
-        for (let i = 0; i < subscriptions.length; i++){
-            if(params.id === subscriptions[i].id){
+        for (let i = 0; i < subscriptions.length; i++) {
+            if (params.id === subscriptions[i].id) {
                 return true
             }
         }
@@ -30,6 +30,7 @@ export const UserPage = () => {
         dispatch(getUserById(params.id))
         dispatch(getUsersPosts(params.id))
     }, [dispatch, params.id])
+
 
     const getPageCount = (count) => {
         const result = [];
@@ -54,8 +55,8 @@ export const UserPage = () => {
     }
 
     const isSubscribed = () => {
-        for (let i = 0; i < subscriptions.length; i++){
-            if(anotherUser.user.id === subscriptions[i].id){
+        for (let i = 0; i < subscriptions.length; i++) {
+            if (anotherUser.user.id === subscriptions[i].id) {
                 return true
             }
         }
@@ -87,15 +88,19 @@ export const UserPage = () => {
                 {/* Login */}
                 <div className="text-[25px]">{anotherUser.user.login}</div>
 
-                {subscribed && <div
-                    className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-                    onClick={subscribeToUser}>
-                    Subscribe
+                {subscribed && <div className='w-fit'>
+                    <button
+                        className="button btn-cyber-punk mt-5"
+                        onClick={subscribeToUser}>
+                        Subscribe
+                    </button>
                 </div>}
-                {!subscribed && <div
-                    className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-blue-900 border-dark-purple text-dark-purple"
-                    onClick={subscribeToUser}>
-                    Following
+                {!subscribed && <div className='w-fit'>
+                    <button
+                        className="button btn-cyber-punk mt-5"
+                        onClick={subscribeToUser}>
+                        Following
+                    </button>
                 </div>}
             </div>
 
