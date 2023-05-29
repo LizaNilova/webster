@@ -171,7 +171,7 @@ const PostsPage = () => {
                             }
                           }}
                         />
-                        <label htmlFor={`check${i}`}>
+                        <label htmlFor={`check${i}`} className='flex '>
                           <span></span>
                           {category}
                         </label>
@@ -238,7 +238,7 @@ const PostsPage = () => {
               })}
           </div>
           {meta.totalPages !== 1 ? (
-            <div className="sticky bottom-3">
+            <div className={(meta.totalPages === curPage && posts.length < 2) ? 'sticky bottom-3' : ''}>
               <ul class="inline-flex -space-x-px">
                 {getPageCount(meta.totalPages)}
               </ul>
