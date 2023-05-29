@@ -117,7 +117,7 @@ const PostsPage = () => {
             </button>
           )}
           {/* <div className=""></div> */}
-          <div className="w-full m-1 field purple">
+          <div className="w-full m-1 flex flex-col field purple">
             <label
               htmlFor="search"
               className="text-center text-xl mb-3 glow text"
