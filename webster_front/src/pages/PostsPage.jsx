@@ -159,7 +159,7 @@ const PostsPage = () => {
                                 } else if(users.user[1] == user)
                                 {
                                     return (
-                                        <div className='posts-page-users-user-card bg-emerald-500'>
+                                        <div className='posts-page-users-user-card bg-emerald-500' onClick={()=>{navigate(`/users/${user.id}`)}}>
                                             <div className='posts-page-users-user-nickname'>
                                                 {user.login}
                                             </div>
@@ -174,7 +174,7 @@ const PostsPage = () => {
                                 } else if(users.user[2] == user)
                                 {
                                     return (
-                                        <div className='posts-page-users-user-card bg-emerald-600'>
+                                        <div className='posts-page-users-user-card bg-emerald-600' onClick={()=>{navigate(`/users/${user.id}`)}}>
                                             <div className='posts-page-users-user-nickname'>
                                                 {user.login}
                                             </div>
@@ -188,7 +188,7 @@ const PostsPage = () => {
                                     )
                                 } else {
                                     return (
-                                        <div className='posts-page-users-user-card bg-emerald-800'>
+                                        <div className='posts-page-users-user-card bg-emerald-800' onClick={()=>{navigate(`/users/${user.id}`)}}>
                                             <div className='posts-page-users-user-nickname'>
                                                 {user.login}
                                             </div>
