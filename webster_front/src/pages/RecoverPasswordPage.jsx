@@ -47,11 +47,14 @@ export const RecoverPasswordPage = () => {
             onSubmit={e => e.preventDefault()}
             className="main-container">
             <div className="login-card diagonal-gridlines card-border bb-login">
-                <h3 className="card_title">don't remember password?</h3>
+                <div className="glitch-box">
+                    <h3 className="glitch-text" data-text="recover password">recover password</h3>
+                </div>
+
                 <div className="separator"></div>
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="flex flex-col my-3 w-full justify-center items-center">
-                        <span className="text-[15px] mb-4">Enter here your email with which you registered. <br />We will send you the necessary instructions to reset your password.</span>
+                        <span className="glow text mb-6">Enter here your email with which you registered. <br />We will send you the necessary instructions to reset your password.</span>
                         <input
                             type="email"
                             required="required"

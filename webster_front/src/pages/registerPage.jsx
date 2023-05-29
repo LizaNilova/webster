@@ -72,7 +72,7 @@ export const RegistrationPage = () => {
         className="main-container">
         <div className="card diagonal-gridlines card-border bb">
             <div className="glitch-box">
-            <h3 className="glitch-text">sign up</h3>
+            <h3 className="glitch-text" data-text='sign up'>sign up</h3>
             </div>
             
             <div className="flex flex-col my-3 w-full">

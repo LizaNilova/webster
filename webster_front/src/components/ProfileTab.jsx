@@ -81,7 +81,7 @@ const ProfileTab = () => {
       {user.role === 'ADMIN' &&
         <AdminProfile user={user} />
       }
-      {user.role !== 'ADMIN' && <div 
+      {user.role !== 'ADMIN' && <div
         className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
         {/* className="profile-card"> */}
         {
@@ -100,27 +100,31 @@ const ProfileTab = () => {
               </div>
 
               {/* Full name */}
-              <div className='glitch-box' > 
-              <div data-count={user.login} className="text-[25px] glitch-text">{user.login}</div>
+              <div className='glitch-box' >
+                <div data-text={user.login} className="text-[25px] glitch-text">{user.login}</div>
               </div>
-              
+
 
               {/* Login */}
               <p className="text-xl glowtext" >{user.email}</p>
 
-
-              <div
-                className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-                onClick={() => { setEditBoxOpen(true) }}>
-                <img className="w-6" src='editing_icon.png' alt='edit info' />
-                Edit profile
+              <div className='w-fit'>
+                <button
+                  //className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
+                  className="button btn-cyber-punk mt-5"
+                  type='submit'
+                 onClick={() => { setEditBoxOpen(true) }}>
+                  {/* <img className="w-6" src='editing_icon.png' alt='edit info' /> */}
+                  Edit profile
+                </button>
               </div>
+
             </div>
             <div className="w-1/2 ">
 
-              <div 
-              // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
-              className="profile-card glowbox"
+              <div
+                // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
+                className="profile-card glowbox"
               >
                 <ul className="Horizontalnav">
                   <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -164,7 +168,7 @@ const ProfileTab = () => {
                   </TabContent>
                 </div>
                 <div className="rounded-3xl cursor-pointer hover:bg-red-900 px-2 py-1 mt-4 h-fit text-[18px] bg-red-800 text-beige"
-                onClick={()=>{console.log(user.id); openConfirm(true); }} 
+                  onClick={() => { console.log(user.id); openConfirm(true); }}
                 >Delete account</div>
               </div>
 
@@ -172,7 +176,7 @@ const ProfileTab = () => {
 
           </div>
           <div className='flex flex-col w-2/3 justify-center items-center'>
-            {cofirmForm && <ConfirmForm closeForm={()=>{openConfirm(false);}} confirmAction={()=>{ 
+            {cofirmForm && <ConfirmForm closeForm={() => { openConfirm(false); }} confirmAction={() => {
               dispatch(deleteUser());
               setTimeout(() => {
                 dispatch(logout());
@@ -181,7 +185,7 @@ const ProfileTab = () => {
                   location.reload()
                 }, 500);
               }, 1000);
-              }} action={'Deleting account'}/>}
+            }} action={'Deleting account'} />}
             {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
             {usersPosts && usersPosts.map((post, index) => {
               return (

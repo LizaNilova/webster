@@ -53,7 +53,7 @@ export const LoginPage = () => {
     <form onSubmit={(e) => e.preventDefault()} className="main-container">
       <div className="login-card diagonal-gridlines card-border bb-login">
         <div className="glitch-box">
-          <h3 className="glitch-text">sign in</h3>
+          <h3 className="glitch-text" data-text='sign in'>sign in</h3>
         </div>
         {/* <p className='p-0 m-0 text-end text-[#ff2c6d]'>{status}</p> */}
         <div className="separator"></div>
