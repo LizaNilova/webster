@@ -176,7 +176,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                     </div>
                 </div>
 
-                <div className={'field my-3 w-full'}>
+                <div className={'field flex-col my-3 w-full'}>
                     <div className="flex justify-between items-center">
                         <label className="glow text">Login</label><span className="text-2xl text-red-700"> *</span>
                     </div>
@@ -189,7 +189,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                     />
                 </div>
 
-                <div className={'field my-3 w-full'}>
+                <div className={'field flex-col my-3 w-full'}>
                     <div className="flex justify-between items-center">
                         <label className="glow text">Email</label><span className="text-2xl text-red-700"> *</span>
                     </div>
@@ -205,7 +205,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                 <div className="border-[2px] card-border .password-card glowbox bg-opacity-50 mt-8 mb-6 p-4">
                     <div className="glitch-text uppercase">Change password</div>
 
-                    <div className={`field my-3 w-full`}>
+                    <div className={`field flex-col my-3 w-full`}>
                         <div className="flex justify-between items-center">
                             <label className="glow text">New password</label>
                         </div>
@@ -216,7 +216,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                             onChange={changeHandler}
                         />
                     </div>
-                    <div className={`field my-3 w-full`}>
+                    <div className={`field flex-col my-3 w-full`}>
                         <div className="flex justify-between items-center">
                             <label className="glow text">Repeat password</label>
                         </div>
@@ -228,7 +228,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         />
                     </div>
                 </div>
-                <div className={`field my-3 w-full`}>
+                <div className={`field flex-col my-3 w-full`}>
                     <div className="flex justify-between items-center">
                         <label className="glow text">Current password</label><span className="text-2xl text-red-700"> *</span>
                     </div>
