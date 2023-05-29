@@ -16,7 +16,7 @@
     }
 
     .form-header-container{
-        @apply flex items-start justify-between p-2 border-b border-solid border-slate-200 rounded-t;
+        @apply flex items-start justify-between p-2;
     }
     .form-header-title{
         @apply text-3xl pl-4 font-semibold text-light-grey-pastel font-serif;
@@ -37,7 +37,7 @@
     }
 
     .form-footer-container{
-        @apply flex items-center justify-end p-3 border-t border-solid border-slate-200 rounded-b
+        @apply flex items-center justify-end p-3 border-t border-solid border-[#a537ff]
     }
     .form-error-message{
         @apply text-red-500 text-2xl font-semibold underline underline-offset-4 text-center w-full m-1 p-1;
