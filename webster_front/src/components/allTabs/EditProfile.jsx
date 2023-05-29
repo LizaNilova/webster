@@ -184,6 +184,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         type="text"
                         className="text-white p-2"
                         //   required="required"
+                        name="login"
                         value={state.login}
                         onChange={changeHandler}
                     />
@@ -197,6 +198,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         type="text"
                         className="text-white p-2"
                         //   required="required"
+                        name="email"
                         value={state.email}
                         onChange={changeHandler}
                     />
@@ -212,6 +214,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         <input
                             type="password"
                             className="text-white p-2"
+                            name="password"
                             value={state.password}
                             onChange={changeHandler}
                         />
@@ -223,6 +226,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                         <input
                             type="password"
                             className="text-white p-2"
+                            name="confirmPassword"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
@@ -235,6 +239,7 @@ const EditProfile = ({ setEditBoxOpen }) => {
                     <input
                         type="password"
                         className="text-white p-2"
+                        name="oldPassword"
                         value={state.oldPassword}
                         onChange={changeHandler}
                     />
