@@ -45,14 +45,17 @@ const PostsPage = () => {
     const result = [];
     for (let i = 1; i <= count; i += 1) {
       result.push(
-        <li key={i}>
+        <li key={i} className='glow'>
           <button
             onClick={() => setCurPage(i)}
-            className={`px-3 py-2 border border-gray-600 rounded-none ${
-              i === curPage
-                ? 'bg-gray-700 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
-            }`}
+            className="px-3 py-2 rounded-none"
+            style={{
+              animation: i !== curPage ? '' : '0.8s ease-out infinite alternate glowing',
+              background: i !== curPage ? 'transparent' : 'var(--color)',
+              transform: i !== curPage ? '' : 'scale(1) rotateZ(var(--skew))',
+              transition: i !== curPage ? '' : 'transform 0.05s ease, opacity 0.15s ease',
+              opacity: i !== curPage ? '' : '1',
+            }}
           >
             {i}
           </button>
