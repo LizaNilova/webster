@@ -89,7 +89,7 @@ const ChooseProject = ({ closeForm, loadProject }) => {
           {/*footer*/}
           <div className="form-footer-container">
             <button
-              className="text-pink-700 red hover:text-white background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-350"
+              className="text-pink-700 redв hover:text-white background-transparent font-bold uppercase px-3 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-350"
               type="button"
               onClick={closeForm}
             >

@@ -7,13 +7,13 @@ const SideBar = ({ canvasData, openForm, clearCanvasClick,
             <p className='sidebar-item-title hover:cursor-default glow text'>Create new canvas</p>
             <button onClick={()=>{openForm('Create')}} className='w-2/3 bg-purple-700 m-2 purple'>Create new canvas</button>
             <button onClick={()=>{openForm('Select project')}} className='w-2/3 bg-purple-700 m-2 purple'>Load project</button>
-            {localStorage.getItem('savedState') && !canvasData.curProject?.id && <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2'>Load last saved project</button>}
-            {canvasData && canvasData.name && !canvasData.curProject?.id && <button onClick={createProject} className='w-2/3 bg-purple-700 m-2'>Create project</button> }
-            {canvasData && canvasData.name && canvasData.curProject?.id && <button onClick={updateProject} className='w-2/3 bg-purple-700 m-2'>Update project</button>}
+            {localStorage.getItem('savedState') && !canvasData.curProject?.id && <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2 purple'>Load last saved project</button>}
+            {canvasData && canvasData.name && !canvasData.curProject?.id && <button onClick={createProject} className='w-2/3 bg-purple-700 m-2 purple'>Create project</button> }
+            {canvasData && canvasData.name && canvasData.curProject?.id && <button onClick={updateProject} className='w-2/3 bg-purple-700 m-2 purple'>Update project</button>}
             {
                 canvasData && canvasData.width > 0 &&
                 <>
-                    <p className='sidebar-item-title'
+                    <p className='sidebar-item-title glow text'
                         onClick={() => {
                             let ac = document.getElementById('canvas-actions-container');
                             ac.classList.toggle('hidden');
@@ -34,21 +34,21 @@ const SideBar = ({ canvasData, openForm, clearCanvasClick,
                         <div className='w-full flex'>
                             <button onClick={() => {
                                 exportAsImage('png');
-                            }} className='w-2/3 bg-purple-700 m-1.5'>Export as PNG</button>
+                            }} className='w-2/3 bg-purple-700 m-1.5 purple'>Export as PNG</button>
                             <button onClick={() => {
                                 exportAsImage('jpeg');
-                            }} className='w-2/3 bg-purple-700 m-1.5'>Export as JPEG</button>
+                            }} className='w-2/3 bg-purple-700 m-1.5 purple'>Export as JPEG</button>
                         </div>
                         <div className='w-full flex items-center py-1 my-1'>
-                            <label className='p-1'>Set background color: </label>
+                            <label className='p-1 glow text'>Set background color: </label>
                             <input type='color' className='w-1/3 rounded-sm mr-1' defaultValue={canvasData.color} onChange={onChangeBGColor} />
                         </div>
                         {/* <button className='w-2/3 bg-purple-700 m-2'>Change</button> */}
-                        <button onClick={saveCanvasState} className='w-2/3 bg-purple-700 m-2'>Save canvas (locally)</button>
+                        <button onClick={saveCanvasState} className='w-2/3 bg-purple-700 m-2 purple'>Save canvas (locally)</button>
                         {/* <button onClick={restoreCanvasState} className='w-2/3 bg-purple-700 m-2'>Restore canvas (local save)</button> */}
-                        <button onClick={clearCanvasClick} className='w-2/3 bg-purple-700 m-2'>Clear canvas</button>
+                        <button onClick={clearCanvasClick} className='w-2/3 bg-purple-700 m-2 purple'>Clear canvas</button>
                     </div>
-                    <p className='sidebar-item-title' onClick={() => {
+                    <p className='sidebar-item-title glow text' onClick={() => {
                         let ac = document.getElementById('add-image-container');
                         ac.classList.toggle('hidden');
                         let ac_up = document.getElementById('add-image-chevron-up');
@@ -73,16 +73,16 @@ const SideBar = ({ canvasData, openForm, clearCanvasClick,
                                 // console.log(file);
                                 if (file)
                                     addImageToCanvas(file)
-                            }} className='w-1/3 bg-purple-700 m-1'>Add</button>
+                            }} className='w-1/3 bg-purple-700 m-1 purple'>Add</button>
                             <button onClick={() => {
                                 let file = document.getElementById('image-upload').files[0];
                                 // console.log(file);
                                 if (file)
                                     setBackgroundImage(file)
-                            }} className='w-2/3 bg-purple-700 m-1 text-sm'>Background</button>
+                            }} className='w-2/3 bg-purple-700 m-1 text-sm purple'>Background</button>
                         </div>
                     </div>
-                    <p className='sidebar-item-title'
+                    <p className='sidebar-item-title glow text'
                         onClick={() => {
                             let ac = document.getElementById('text-actions-container');
                             ac.classList.toggle('hidden');
@@ -100,7 +100,7 @@ const SideBar = ({ canvasData, openForm, clearCanvasClick,
                         </svg>
                     </p>
                     <div className='w-full text-center hidden' id='text-actions-container'>
-                        <button onClick={addText} className='w-2/3 bg-purple-700 m-2'>Add text</button>
+                        <button onClick={addText} className='w-2/3 bg-purple-700 m-2 purple'>Add text</button>
                     </div>
                     {/* <button onClick={undoClick} className='w-2/3 bg-purple-700 m-2'>Undo</button>
                     <button onClick={redoClick} className='w-2/3 bg-purple-700 m-2'>Redo</button> */}
