@@ -495,7 +495,7 @@ $transparent-yellow: rgba(255, 250, 0, 0.21);
   position: relative;
   border-radius: 0;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 75%);
-  background-color: #05AFF2;
+  background-color: attr(color-btn);
   transition: all 0.5s;
   font-family: 'Exo 2', sans-serif;
 
