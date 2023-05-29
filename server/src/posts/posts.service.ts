@@ -223,7 +223,7 @@ export class PostsService {
     return Boolean(post);
   }
 
-  async reportPost(dto: ReportPostDto) {
+  async reportPost(dto: ReportPostDto, ) {
     let post = await this.postsRepository.findOne({ where: {id: dto.postId} });
     if (!post) {
       throw new HttpException(`Post with ID ${dto.postId} not found`, HttpStatus.NOT_FOUND);
@@ -239,8 +239,19 @@ export class PostsService {
     return report;
   }
 
-  async getAllReportedPosts(){
+  async getAllReportedPosts(page: number){
+    const parsedPage = page ? page : 1;
+    const perPage = 10;
     const reports = await this.postReportRepository.findAll({include:{ all: true }, order: [['createdAt', 'ASC']]})
-    return reports;
+     const totalPages = Math.ceil(reports.length / perPage);
+    const postFilter = reports.slice(
+      parsedPage * perPage - perPage,
+      parsedPage * perPage
+    );
+    return {
+      meta: { page: page || 1, perPage: Number(perPage), totalPages },
+      posts: postFilter,
+      message: 'Success'
+    }
   }
 }

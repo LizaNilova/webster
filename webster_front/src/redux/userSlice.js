@@ -45,7 +45,7 @@ export const userProfile = createAsyncThunk('user/profile', async () => {
 
 export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
     try {
-        const { data } = await $api.delete(`http://localhost:8080/api/users`, { withCredentials: true })
+        const { data } = await $api.delete(`http://localhost:8080/api/users/delete`, { withCredentials: true })
         console.log(data.message)
         return (data)
     } catch (error) {

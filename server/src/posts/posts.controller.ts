@@ -208,9 +208,9 @@ export class PostsController {
 
   @ApiOperation({ summary: 'All reported posts' })
   @Get('/post-reported')
-  async getAllReportedPosts() {
+  async getAllReportedPosts(@Query('page') page: number) {
     return {
-      posts: await this.postServer.getAllReportedPosts(),
+      posts: await this.postServer.getAllReportedPosts(page),
       message: 'Success'
     };
   }
@@ -575,7 +575,7 @@ export class PostsController {
   })
   @Post('/report/:id')
   @UseGuards(JwtAuthGuard)
-  async reportPost(@Param('id') id: number, @Request() req: RequestDto, @Body() dto: ReportPostDto,) {
+  async reportPost(@Param('id') id: number, @Request() req: RequestDto, @Body() dto: ReportPostDto) {
     return {
       message: await this.postServer.reportPost({ ...dto, postId: id, userId: req.user.id })
     };
