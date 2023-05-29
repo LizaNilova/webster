@@ -237,19 +237,19 @@ const PostsPage = () => {
               />
             </svg>
           </div>
-          <div className="posts-page-users-title">User tier list</div>
+          <div className="posts-page-users-title glow text">User tier list</div>
           <div className="posts-page-users-subcontainer">
             {users.user &&
               users?.user?.map((user) => {
                 if (users.user[0] === user) {
                   return (
-                    <div
+                    <button
                       className="posts-page-users-user-card bg-emerald-400"
                       onClick={() => {
                         navigate(`/users/${user.id}`);
                       }}
                     >
-                      <div className="posts-page-users-user-nickname">
+                      <div className="posts-page-users-user-nickname glow text">
                         {user.login}
                       </div>
                       <div className="posts-page-users-user-count">
@@ -269,17 +269,17 @@ const PostsPage = () => {
                         </svg>
                         {user.rating}
                       </div>
-                    </div>
+                    </button>
                   );
                 } else if (users.user[1] == user) {
                   return (
-                    <div
+                    <button
                       className="posts-page-users-user-card bg-emerald-500"
                       onClick={() => {
                         navigate(`/users/${user.id}`);
                       }}
                     >
-                      <div className="posts-page-users-user-nickname">
+                      <div className="posts-page-users-user-nickname glow text">
                         {user.login}
                       </div>
                       <div className="posts-page-users-user-count">
@@ -299,12 +299,12 @@ const PostsPage = () => {
                         </svg>
                         {user.rating}
                       </div>
-                    </div>
+                    </button>
                   );
                 } else if (users.user[2] == user) {
                   return (
-                    <div
-                      className="posts-page-users-user-card bg-emerald-600"
+                    <button
+                      className="posts-page-users-user-card bg-emerald-600 glow text"
                       onClick={() => {
                         navigate(`/users/${user.id}`);
                       }}
@@ -329,17 +329,17 @@ const PostsPage = () => {
                         </svg>
                         {user.rating}
                       </div>
-                    </div>
+                    </button>
                   );
                 } else {
                   return (
-                    <div
+                    <button
                       className="posts-page-users-user-card bg-emerald-800"
                       onClick={() => {
                         navigate(`/users/${user.id}`);
                       }}
                     >
-                      <div className="posts-page-users-user-nickname">
+                      <div className="posts-page-users-user-nickname glow text">
                         {user.login}
                       </div>
                       <div className="posts-page-users-user-count">
@@ -359,7 +359,7 @@ const PostsPage = () => {
                         </svg>
                         {user.rating}
                       </div>
-                    </div>
+                    </button>
                   );
                 }
               })}
