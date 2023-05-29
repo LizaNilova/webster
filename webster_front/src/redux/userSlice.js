@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import $api from "../utils/api.js" 
 import { setUserData } from './authSlice'
+import userRouter from '../routes/user-router.js'
 
 const initialState = {
     user: null,
@@ -9,7 +10,8 @@ const initialState = {
     subscriptions: null,
     subscribers: null,
     loading: false,
-    status: null
+    status: null,
+    allUsers: []
 }
 
 export const updateUserData = createAsyncThunk('user/updateUserData', async (submitData) => {
@@ -54,12 +56,26 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
 export const subscribeUser = createAsyncThunk('user/subscribeUser', async (id) => {
     try{
         const { data } = await $api.post(`http://localhost:8080/api/subscriptions/subscribe/user/${id}`, {withCredentials: true})
-        // console.log(data)
+        console.log(data)
         return data
     } catch (error) {
         console.log(error)
     }
 })
+
+export const getAllUsers = createAsyncThunk(
+    'get/api/users',
+    async (_) => {
+      try {
+        const { data } = await $api.get(userRouter.allUsersPath(), { withCredentials: true });
+        console.log(data);
+        return (data)
+      } catch (error) {
+        console.log(error)
+        return ({ message: error.response.message })
+      }
+    }
+  )
 
 export const userSlice = createSlice({
     name: 'user',
@@ -78,7 +94,7 @@ export const userSlice = createSlice({
             state.ban = action.payload?.user.ban
             state.subscribers = action.payload?.user.subscribers
             state.subscriptions = action.payload?.user.subscriptions
-            console.log(state.subscriptions)
+            console.log(state.user)
             state.status = action.payload?.message
         },
         [userProfile.rejected]: (state, action) => {
@@ -124,7 +140,6 @@ export const userSlice = createSlice({
         [subscribeUser.fulfilled]: (state, action) => {
             state.loading = false
             state.status = action.payload?.message
-            state.subscriptions = action.payload?.subscriptions
             console.log(action.payload)
         },
         [subscribeUser.rejected]: (state, action) => {
@@ -143,6 +158,9 @@ export const userSlice = createSlice({
         [deleteUser.rejected]: (state, action) => {
             state.loading = false
             state.status = action.payload?.message
+        },
+        [getAllUsers.fulfilled]: (state, action) => {
+            state.allUsers = action.payload.users;
         }
     }
 })

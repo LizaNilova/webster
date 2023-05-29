@@ -6,13 +6,18 @@ import PostForm from '../components/PostForm';
 import { getAllCategories } from '../redux/categoriesSlice';
 import '../styles/PostsPage.css'
 import ReportForm from '../components/reportForm';
+import { getAllUsers } from '../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const PostsPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const posts = useSelector(state => state.posts.posts);
     const meta = useSelector(state => state.posts.meta);
     const user = useSelector((state) => state.user.user);
-    // console.log(user);
+    const users = useSelector(state => state.user.allUsers);
+    console.log(users);
 
     const categories = useSelector(state => state.categories.categories);
 
@@ -26,6 +31,7 @@ const PostsPage = () => {
         console.log('filters:', filter)
         dispatch(getAllPosts({ sort: sort, filter: JSON.stringify(filter), search: search, page: curPage }));
         dispatch(getAllCategories());
+        dispatch(getAllUsers());
     }, [dispatch, search, sort, filter, curPage]);
 
     const getPageCount = (count) => {
@@ -133,17 +139,70 @@ const PostsPage = () => {
                         User tier list
                     </div>
                     <div className='posts-page-users-subcontainer'>
-                        <div className='posts-page-users-user-card'>
-                            <div className='posts-page-users-user-nickname'>
-                                User nickname
-                            </div>
-                            <div className='posts-page-users-user-count'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                </svg>
-                                123
-                            </div>
-                        </div>
+                        {
+                            users.user && users?.user?.map(user => {
+                                if(users.user[0] === user)
+                                {
+                                    return (
+                                        <div className='posts-page-users-user-card bg-emerald-400' onClick={()=>{navigate(`/users/${user.id}`)}}>
+                                            <div className='posts-page-users-user-nickname'>
+                                                {user.login}
+                                            </div>
+                                            <div className='posts-page-users-user-count'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                </svg>
+                                                {user.rating}
+                                            </div>
+                                        </div>
+                                    )
+                                } else if(users.user[1] == user)
+                                {
+                                    return (
+                                        <div className='posts-page-users-user-card bg-emerald-500'>
+                                            <div className='posts-page-users-user-nickname'>
+                                                {user.login}
+                                            </div>
+                                            <div className='posts-page-users-user-count'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                </svg>
+                                                {user.rating}
+                                            </div>
+                                        </div>
+                                    )
+                                } else if(users.user[2] == user)
+                                {
+                                    return (
+                                        <div className='posts-page-users-user-card bg-emerald-600'>
+                                            <div className='posts-page-users-user-nickname'>
+                                                {user.login}
+                                            </div>
+                                            <div className='posts-page-users-user-count'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                </svg>
+                                                {user.rating}
+                                            </div>
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <div className='posts-page-users-user-card'>
+                                            <div className='posts-page-users-user-nickname'>
+                                                {user.login}
+                                            </div>
+                                            <div className='posts-page-users-user-count'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                </svg>
+                                                {user.rating}
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            })
+                        }
                     </div>
                 </div>
             </div>

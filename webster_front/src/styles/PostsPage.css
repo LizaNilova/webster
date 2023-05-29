@@ -47,12 +47,15 @@
         @apply w-full flex flex-col m-1;
     }
     .posts-page-users-user-card{
-        @apply w-full flex justify-between items-center mt-1 mb-2;
+        @apply w-full flex justify-between items-center mt-1 mb-2 p-2 rounded-lg;
+    }
+    .posts-page-users-user-card:hover{
+        @apply cursor-pointer
     }
     .posts-page-users-user-nickname{
         @apply w-3/4 font-semibold;
     }
     .posts-page-users-user-count{
-        @apply w-1/4 flex items-center justify-center;
+        @apply w-1/4 flex items-center justify-center text-center;
     }
 }
