@@ -12,7 +12,7 @@
     }
 
     .header-logo {
-        @apply rounded-full;
+        @apply rounded-xl;
     }
     .header-logo:hover{
         @apply cursor-pointer;
