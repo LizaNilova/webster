@@ -174,7 +174,7 @@ const ProfileTab = () => {
             </div>
 
           </div>
-          <div className='flex flex-col w-2/3 justify-center items-center'>
+          <div className='flex flex-col w-full justify-center items-center'>
             {cofirmForm && <ConfirmForm closeForm={() => { openConfirm(false); }} confirmAction={() => {
               dispatch(deleteUser());
               setTimeout(() => {
