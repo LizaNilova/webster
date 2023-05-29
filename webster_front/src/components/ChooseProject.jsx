@@ -4,7 +4,7 @@ import { getAllProjects } from '../redux/CanvasSlice';
 import '../styles/glitch.scss';
 const apiPath = 'http://localhost:8080/api';
 
-const ChooseProject = ({ closeForm, loadProject }) => {
+const ChooseProject = ({ closeForm, loadProject, method  }) => {
   const dispatch = useDispatch();
   let projects = useSelector((state) => state.canvas.projects);
 
@@ -25,6 +25,92 @@ const ChooseProject = ({ closeForm, loadProject }) => {
     'red',
     'green',
   ];
+
+  const getBgrnds = () => {
+    let jsx = []
+    for (let i = 0; i < 20; i++) {
+      jsx.push(
+        <button
+          className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
+          onClick={() => {
+            loadProject(`backgrounds/bg_${i}.jpg`);
+            closeForm();
+          }}
+        >
+          <img
+            src={`backgrounds/bg_${i}.jpg`}
+            className="w-full h-32"
+          />
+        </button>
+      )
+    }
+    return jsx
+  }
+
+  const getElems = () => {
+    let jsx = []
+    for (let i = 0; i < 16; i++) {
+      jsx.push(
+        <button
+          className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
+          onClick={() => {
+            loadProject(`elements/element_${i}.png`);
+            closeForm();
+          }}
+        >
+          <img
+            src={`elements/element_${i}.png`}
+            className="w-full h-32"
+          />
+        </button>
+      )
+    }
+    return jsx
+  }
+
+  // console.log(projects);
+  const getContent = () => {
+    switch (method) {
+      case 'Project':
+        return (
+          <>
+            {projects.map((project, i) => {
+              return (
+                <button
+                  className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
+                  onClick={() => {
+                    loadProject(project);
+                    closeForm();
+                  }}
+                >
+                  <img
+                    src={apiPath + '/static/' + project.image}
+                    className="w-full h-32"
+                  />
+                </button>
+              );
+            })}
+          </>
+        );
+      // break;
+      case 'Background':
+        return (
+          <>
+            {getBgrnds()}
+          </>
+        );
+      case 'Element':
+        return(
+          <>
+            {getElems()}
+          </>
+        )
+
+      default:
+        break;
+    }
+  }
+
   return (
     <div className="form-background">
       <div className="form-container">
@@ -37,7 +123,7 @@ const ChooseProject = ({ closeForm, loadProject }) => {
                 className="form-header-title glitch-text"
                 data-text="Project selection"
               >
-                Project selection
+                {method} selection
               </h3>
             </div>
             <button
@@ -64,25 +150,10 @@ const ChooseProject = ({ closeForm, loadProject }) => {
           <div className="form-body-container">
             <div className="w-full form-body-item-container">
               <label className="text-center w-1/4 glow text">
-                Choose your project:
+                Choose your {method}:
               </label>
               <div className="w-2/3 flex flex-wrap justify-between">
-                {projects.map((project, i) => {
-                  return (
-                    <button
-                      className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
-                      onClick={() => {
-                        loadProject(project);
-                        closeForm();
-                      }}
-                    >
-                      <img
-                        src={apiPath + '/static/' + project.image}
-                        className="w-full h-32"
-                      />
-                    </button>
-                  );
-                })}
+                {getContent()}
               </div>
             </div>
           </div>

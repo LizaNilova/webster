@@ -320,12 +320,6 @@ const MainPage = () => {
         console.log(e.target.result);
         fabric.Image.fromURL(e.target.result, (img) => {
           console.log(img)
-          // editor.canvas.add(img);
-          // editor.canvas.viewportCenterObject(img);
-          // if(img.width != canvasData.width)
-          //   img.scaleToWidth(canvasData.width, false)
-          // if(img.height != canvasData.height)
-          //   img.scaleToHeight(canvasData.height, false)
           editor.canvas.setBackgroundImage(img);
           editor.canvas.requestRenderAll();
         })
@@ -526,10 +520,44 @@ const MainPage = () => {
     editor.canvas.viewportCenterObject(editor.canvas.getActiveObject());
   }
 
+  const loadBackground = (path) => {
+    fabric.Image.fromURL(path, (img) => {
+      console.log(img);
+      let imageTextureSize = img.width > img.height ? img.width : img.height;
+
+      if (imageTextureSize > fabric.textureSize) {
+        fabric.textureSize = imageTextureSize;
+      }
+      if (img.width >= canvasData.width)
+        img.scaleToWidth(canvasData.width, false);
+      editor.canvas.setBackgroundImage(img);
+      editor.canvas.requestRenderAll();
+    })
+  }
+  
+  const loadElement = (path) => {
+    fabric.Image.fromURL(path, (img) => {
+      console.log(img);
+      let imageTextureSize = img.width > img.height ? img.width : img.height;
+      if (imageTextureSize > fabric.textureSize) {
+        fabric.textureSize = imageTextureSize;
+      }
+      if (img.width >= canvasData.width)
+        img.scaleToWidth(canvasData.width - 10, false)
+      if (img.height >= canvasData.height)
+        img.scaleToHeight(canvasData.height - 10, false)
+      editor.canvas.add(img);
+      editor.canvas.viewportCenterObject(img);
+      editor.canvas.requestRenderAll()
+    })
+  }
+
   return (
     <>
       {openedForm === 'Create' && <CreateCanvasForm closeForm={closeForm} />}
-      {openedForm === 'Select project' && <ChooseProject closeForm={closeForm} loadProject={loadProject}/> }
+      {openedForm === 'Select project' && <ChooseProject closeForm={closeForm} loadProject={loadProject} method='Project'/> }
+      {openedForm === 'Select background' && <ChooseProject closeForm={closeForm} loadProject={loadBackground} method='Background'/>}
+      {openedForm === 'Select element' && <ChooseProject closeForm={closeForm} loadProject={loadElement} method='Element'/>}
       {/* <SaveAndPostForm /> */}
       <div className='main-page-container'>
         <SideBar
