@@ -139,12 +139,12 @@ const PostsPage = () => {
             Filters by categories:
           </div>
           <div className="posts-page-filters-categories-container">
-            <ul className="flex flex-col">
+            <ul className="flex flex-wrap justify-between">
             {categories &&
               categories.map((category, i) => {
                 // console.log(filter.findIndex(f_category => f_category === category.value))
                 return (
-                      <li class="checkbox">
+                      <li class="checkbox ">
                         <input
                           class="checkbox-flip"
                           type="checkbox"
@@ -171,38 +171,11 @@ const PostsPage = () => {
                             }
                           }}
                         />
-                        <label htmlFor={`check${i}`} className='flex '>
+                        <label htmlFor={`check${i}`} className='glow text'>
                           <span></span>
                           {category}
                         </label>
                       </li>
-
-                      /* <input
-                      type="checkbox"
-                      className="w-5 h-5"
-                      defaultChecked={
-                        !Boolean(
-                          filter.findIndex(
-                            (f_category) => f_category === category
-                          )
-                        )
-                      }
-                      onChange={(e) => {
-                        let idx = filter.findIndex(
-                          (f_category) => f_category === category
-                        );
-                        if (idx < 0) {
-                          let new_filters = [...filter];
-                          new_filters.push(category);
-                          setFilter(new_filters);
-                        } else {
-                          let new_filters = [...filter];
-                          new_filters.splice(idx, 1);
-                          setFilter(new_filters);
-                        }
-                      }}
-                    /> */
-                      /* <p className="pl-2 text-lg"></p> */
                       );
                     })}
                     </ul>
@@ -210,7 +183,7 @@ const PostsPage = () => {
           <div className="posts-page-filters-header glow text">Sort by:</div>
           <div className="posts-page-filters-select-container">
             <select
-              className="posts-page-filters-select text-white"
+              className="posts-page-filters-select text-white purple"
               onChange={(e) => {
                 setSort(e.target.value);
               }}
