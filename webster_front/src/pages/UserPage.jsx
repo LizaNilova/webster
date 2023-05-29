@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import Post from "../components/Post";
-import { getUserById, subscribeUser, userProfile } from "../redux/userSlice";
+import { getUserById, subscribeUser } from "../redux/userSlice";
 import { useParams } from "react-router-dom";
 import { getUsersPosts } from "../redux/postsSlice";
 
@@ -16,8 +16,7 @@ export const UserPage = () => {
     const dispatch = useDispatch()
     const params = useParams()
 
-    const [subscribed, setSubscribed] = useState(async() => {
-        dispatch(userProfile())
+    const [subscribed, setSubscribed] = useState(() => {
         for (let i = 0; i < subscriptions.length; i++) {
             if (params.id === subscriptions[i].id) {
                 return true
