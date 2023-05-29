@@ -75,7 +75,6 @@ const ProfileTab = () => {
   //   navigate('/')
   // };
 
-
   return (
     <>
       {user.role === 'ADMIN' &&
@@ -189,7 +188,7 @@ const ProfileTab = () => {
             {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
             {usersPosts && usersPosts.map((post, index) => {
               return (
-                <Post data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
+                <Post iter={index} data={post} key={index} openForm={openForm} triggerUpdate={triggerUpdate} />
               )
             })}
             {usersMeta && usersMeta.totalPages !== 1 ?
