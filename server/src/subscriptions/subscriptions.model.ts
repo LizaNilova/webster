@@ -25,9 +25,6 @@ export class Subscriptions extends Model<Subscriptions, SubscribeCreationAttrs> 
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @BelongsTo(() => User, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @BelongsTo(() => User)
   subscribers: User[];
 }

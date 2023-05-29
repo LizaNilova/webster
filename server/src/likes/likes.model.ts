@@ -32,9 +32,6 @@ export class Like extends Model<Like, LikeCreationAttrs> {
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @BelongsTo(() => User, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @BelongsTo(() => User)
   author: User[];
 }

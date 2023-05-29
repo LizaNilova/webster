@@ -35,9 +35,6 @@ export class Project extends Model<Project, ProjectCreationAttrs> {
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @BelongsTo(() => User, {
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @BelongsTo(() => User)
   creator: User;
 }
