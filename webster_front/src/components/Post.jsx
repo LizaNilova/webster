@@ -1,12 +1,14 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { likePost, createCommentPost, deletePost } from '../redux/postsSlice';
+import { banPost } from '../redux/postsSlice';
 
 const apiPath = 'http://localhost:8080/api';
 
 const Post = ({ data, openForm, triggerUpdate }) => {
   const userID = useSelector((state) => state.user.user.id);
   const userRole = useSelector((state) => state.user.user.role);
+  // console.log(userRole)
   const dispatch = useDispatch();
   const [isLike, setLike] = React.useState(false);
   const [countLikes, setCountLikes] = React.useState(data.likes.length);
@@ -90,6 +92,21 @@ const Post = ({ data, openForm, triggerUpdate }) => {
           {data.title}
         </div>
         <div className="w-1/5 flex items-center justify-end">
+          {
+            userRole && userRole === 'ADMIN' &&
+            <button
+              onClick={() => {
+                console.log('BAN');
+                dispatch(banPost(data.id));
+                triggerUpdate();
+              }}
+              className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-pink-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+              </svg>
+            </button>
+          }
           {data.author.id === userID && (
             <>
               <button
@@ -123,21 +140,6 @@ const Post = ({ data, openForm, triggerUpdate }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" />
                 </svg>
               </button>
-              {
-                userRole === 'ADMIN' &&
-                <button
-                  onClick={() => {
-                    console.log('BAN');
-                    triggerUpdate();
-                  }}
-                  className="ml-2 px-3 py-2 bg-purple-700 hover:bg-purple-600 text-pink-500"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                  </svg>
-                </button>
-              }
-
               <button
                 onClick={() => {
                   // console.log(data.id);
@@ -159,7 +161,7 @@ const Post = ({ data, openForm, triggerUpdate }) => {
       <div className="w-5/6 flex justify-center">
         <img
           src={apiPath + '/static/' + data.image}
-          alt="kal"
+          alt={data.image}
           className="max-w-full m-1 p-1 rounded-xl"
         />
       </div>
