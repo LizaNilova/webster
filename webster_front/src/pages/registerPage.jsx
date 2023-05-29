@@ -72,67 +72,67 @@ export const RegistrationPage = () => {
         className="main-container">
         <div className="card diagonal-gridlines card-border bb">
             <div className="glitch-box">
-            <h3 className="glitch-text" data-text='sign up'>sign up</h3>
+            <h3 className="glitch-text text-[25px]" data-text='sign up'>sign up</h3>
             </div>
             
-            <div className="flex flex-col my-3 w-full">
-                <div className="flex flex-row justify-between">
-                    <span className="">Login</span>
+            <div className="flex flex-col field w-full">
+                <label className="flex flex-row glowtext justify-between">
+                    Login
                     <p className="text-red-600">{regErrorTexts?.login}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
-                </div>
+                </label>
                 <input
                     type="text"
-                    required="required"
+                    // required="required"
                     value={login}
                     onChange={e => setLogin(e.target.value)}
-                    className="card-input" />
+                    className="text-white p-1" />
             </div>
 
-            <div className="flex flex-col my-3 w-full">
-                <div className="flex flex-row justify-between">
-                    <span className="">Email</span>
+            <div className="flex flex-col field w-full">
+                <label className="flex flex-row glowtext justify-between">
+                    Email
                     <p className="text-red-600">{regErrorTexts?.email}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
 
-                </div>
+                </label>
                 <input
                     type="text"
-                    required="required"
+                    // required="required"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="card-input" />
+                    className="text-white p-1" />
             </div>
 
-            <div className="flex flex-col my-3 w-full">
+            <div className="flex flex-col field w-full">
 
-                <div className="flex flex-row justify-between">
-                    <span className="">Password</span>
+                <label className="flex flex-row glowtext justify-between">
+                    Password
                     <p className="text-red-600">{regErrorTexts?.password}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
 
-                </div>
+                </label>
                 <input
                     type="password"
-                    required="required"
+                    // required="required"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="card-input" />
+                    className="text-white p-1" />
 
             </div>
-            <div className="flex flex-col my-3 w-full">
-                <div className="flex flex-row justify-between">
-                    <span className="">Confirm password</span>
+            <div className="flex flex-col field w-full">
+                <label className="flex flex-row glowtext justify-between">
+                    Confirm password
                     <p className="text-red-600">{repeatError}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
 
-                </div>
+                </label>
                 <input
                     type="password"
-                    required="required"
+                    // required="required"
                     value={repeatPassword}
                     onChange={e => setRepeatPassword(e.target.value)}
-                    className="card-input" />
+                    className="text-white p-1" />
 
             </div>
             <div className="flex flex-col gap-2 items-center justify-center">
