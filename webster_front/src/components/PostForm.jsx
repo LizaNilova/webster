@@ -6,6 +6,7 @@ import axios from 'axios';
 import { dataURItoBlob } from '../functions/toBlob';
 import { createPost, getAllPosts, updatePost } from '../redux/postsSlice';
 import '../styles/styleCheckbox.scss'
+import '../styles/glitch.scss'
 const apiPath = 'http://localhost:8080/api';
 
 const PostForm = ({ method, data, closeForm }) => {
@@ -123,9 +124,11 @@ const PostForm = ({ method, data, closeForm }) => {
         <div className="form-content-container">
           {/*header*/}
           <div className="form-header-container">
-            <h3 className="form-header-title grow text">Post creation\edit</h3>
+            <div className="glitch-box">
+                    <h3 className="glitch-text" data-text='Post creation\edit'>Post creation\edit</h3>
+                </div>
             <button
-              className="p-1 ml-auto bg-transparent border-0 text-black opacity-3 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+              className="p-1 red ml-auto bg-transparent border-0 text-black opacity-3 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
               onClick={closeForm}
             >
               <svg
@@ -133,7 +136,7 @@ const PostForm = ({ method, data, closeForm }) => {
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                stroke="black"
+                stroke="white"
                 className="w-7 h-7"
               >
                 <path
