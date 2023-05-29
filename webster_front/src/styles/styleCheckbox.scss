@@ -32,7 +32,7 @@
     width: 1rem;
     height: 1rem;
     background: transparent;
-    border: 2px solid #a537ff;
+    border: 2px solid #11dbab;
   }
   .checkbox-flip + label span:after {
     z-index: 0;
@@ -48,5 +48,5 @@
     -ms-transform: rotateY(180deg);
     -o-transform: rotateY(180deg);
     transform: rotateY(180deg);
-    background: #a537ff;
+    background: #11dbab;
   }
