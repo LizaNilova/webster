@@ -63,45 +63,36 @@ export class UsersService {
 
   // добавить сортировку по рейтингу 
   async getAllUsers(search, page: number) {
-    let users = (search) ? await this.userRepository.findAll({
-      where: {
-        login: {
-          [Op.iLike]: `%${search}%`
-        }
-      },
+    let users = await this.userRepository.findAll({
+      where: (search)? {login: {[Op.iLike]: `%${search}%`}} : {},
       include: { all: true }
-    }) :
-      await this.userRepository.findAll({ include: { all: true } });
+    }) 
 
     const parsedPage = page ? page : 1;
     const perPage = 10;
 
-    const usersWithRating = [];
-
-    for (const user of users) {
+    const usersWithRating = users.map(async (user) => {
       const postIds = user.posts.map((post) => post.id);
+  
+      const [likeCount, subscriberCount] = await Promise.all([
+        this.likeRepository.count({ where: { postId: { [Op.in]: postIds } } }),
+        this.subscriptionsRepository.count({ where: { userId: user.id } })
+      ]);
 
-      const likes = await this.likeRepository.findAll({ where: { postId: postIds } });
-      let rating = likes.length;
-
-      const subscribers = await this.subscriptionsRepository.findAll({ where: { userId: user.id } });
-      rating += subscribers.length;
-
-      const userWithRating = {
+      return {
         id: user.id,
         login: user.login,
         role: user.roles[0].value,
-        rating: rating, 
+        rating: likeCount + subscriberCount, 
         avatar: user.avatar
       };
+    })
 
-      usersWithRating.push(userWithRating);
-    }
+    const sortedUsersWithRating = await Promise.all(usersWithRating);
+    const sortedUsers = sortedUsersWithRating.sort((a, b) => b.rating - a.rating);
 
-    users = usersWithRating.sort((a, b) => b.rating - a.rating);
-
-    const totalPages = Math.ceil(users.length / perPage);
-    const userFilter = users.slice(
+    const totalPages = Math.ceil(sortedUsers.length / perPage);
+    const userFilter = sortedUsers.slice(
       parsedPage * perPage - perPage,
       parsedPage * perPage
     );
