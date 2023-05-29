@@ -188,7 +188,7 @@ const PostsPage = () => {
                                     )
                                 } else {
                                     return (
-                                        <div className='posts-page-users-user-card'>
+                                        <div className='posts-page-users-user-card bg-emerald-800'>
                                             <div className='posts-page-users-user-nickname'>
                                                 {user.login}
                                             </div>
