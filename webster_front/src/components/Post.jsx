@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { likePost, createCommentPost, deletePost } from '../redux/postsSlice';
 import { banPost } from '../redux/postsSlice';
 import '../styles/PostStyle.scss';
+import ConfirmForm from './ConfirmForm';
 
 const apiPath = 'http://localhost:8080/api';
 
@@ -11,11 +12,14 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
   const userRole = useSelector((state) => state.user.user.role);
   // console.log(userRole)
   const dispatch = useDispatch();
-  const [isLike, setLike] = React.useState(false);
-  const [countLikes, setCountLikes] = React.useState(data.likes.length);
-  const [curPage, setCurPage] = React.useState(1);
-  const [isHidden, setHidden] = React.useState(true);
-  const [commentText, setCommentText] = React.useState('');
+  const [isLike, setLike] = useState(false);
+  const [countLikes, setCountLikes] = useState(data.likes.length);
+  const [curPage, setCurPage] = useState(1);
+  const [isHidden, setHidden] = useState(true);
+  const [commentText, setCommentText] = useState('');
+
+  const [cofirmForm, openConfirm] = useState(false);
+
   const parsedPage = curPage;
   const perPage = 5;
   const totalPages = Math.ceil(data.comments.length / perPage);
@@ -99,6 +103,12 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
     <div
       className={`w-5/6 glow ${color[iter]} flex flex-col justify-center items-center m-2 p-2 rounded-xl`}
     >
+      {cofirmForm && <ConfirmForm closeForm={()=>{openConfirm(false);}} confirmAction={()=>{
+          // console.log(data.id);
+          dispatch(deletePost(data.id));
+          triggerUpdate();
+          openConfirm(false);
+      }} action='Delete post' />}
       <div className="w-full flex px-4 p-1 justify-between">
         <div className="w-1/3 flex">
           <div>
@@ -164,11 +174,7 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
                 </svg>
               </button>
               <button
-                onClick={() => {
-                  // console.log(data.id);
-                  dispatch(deletePost(data.id));
-                  triggerUpdate();
-                }}
+                onClick={() => {openConfirm(true)}}
                 className="ml-2 px-3 py-2 red glowbox-del"
               >
                 <svg
