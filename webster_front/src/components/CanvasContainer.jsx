@@ -14,7 +14,7 @@ const CanvasContainer = ({ name, onReady }) => {
     }
     // if(name)
     return (
-        <div className='w-4/6 max-h-screen min-h-screen flex flex-col items-center m-2 sticky top-10 z-10' >
+        <div className='w-4/6 max-h-screen min-h-screen flex flex-col items-center m-2 sticky top-0 z-10' >
             <div className='w-full p-2 text-3xl font-semibold flex items-center justify-center mb-2 '>
                 {!changingName && <p onClick={() => { setChanging(true) }} className='hover:cursor-pointer'>{name}</p>}
                 {changingName &&

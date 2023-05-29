@@ -248,13 +248,11 @@ const MainPage = () => {
 
   const clearCanvasClick = () => {
     editor.canvas.getObjects().forEach((obj) => {
-      if (obj !== editor.canvas.backgroundImage) {
-        editor.canvas.remove(obj);
-      }
+      editor.canvas.remove(obj);
     })
     // setHistory([]);
     editor.canvas.setBackgroundImage(null);
-    editor.canvas.renderAll();
+    editor.canvas.requestRenderAll();
   }
 
   const removeSelectedClick = () => {
@@ -530,6 +528,8 @@ const MainPage = () => {
       }
       if (img.width >= canvasData.width)
         img.scaleToWidth(canvasData.width, false);
+      if (img.height >= canvasData.height)
+        img.scaleToHeight(canvasData.height, false)
       editor.canvas.setBackgroundImage(img);
       editor.canvas.requestRenderAll();
     })
@@ -558,6 +558,7 @@ const MainPage = () => {
       {openedForm === 'Select project' && <ChooseProject closeForm={closeForm} loadProject={loadProject} method='Project'/> }
       {openedForm === 'Select background' && <ChooseProject closeForm={closeForm} loadProject={loadBackground} method='Background'/>}
       {openedForm === 'Select element' && <ChooseProject closeForm={closeForm} loadProject={loadElement} method='Element'/>}
+      {openedForm === 'Select ui' && <ChooseProject closeForm={closeForm} loadProject={loadElement} method='UI'/>}
       {/* <SaveAndPostForm /> */}
       <div className='main-page-container'>
         <SideBar

@@ -28,7 +28,7 @@ const ChooseProject = ({ closeForm, loadProject, method  }) => {
 
   const getBgrnds = () => {
     let jsx = []
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 19; i++) {
       jsx.push(
         <button
           className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
@@ -68,7 +68,28 @@ const ChooseProject = ({ closeForm, loadProject, method  }) => {
     return jsx
   }
 
-  // console.log(projects);
+  const getUI = () => {
+    let jsx = []
+    for (let i = 1; i != 17; i++) {
+      jsx.push(
+        <button
+          className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
+          onClick={() => {
+            loadProject(`ui/ui_${i}.png`);
+            closeForm();
+          }}
+        >
+          <img
+            src={`ui/ui_${i}.png`}
+            className="w-full h-32"
+          />
+        </button>
+      )
+    }
+    return jsx
+  }
+
+  // console.log(method);
   const getContent = () => {
     switch (method) {
       case 'Project':
@@ -77,7 +98,7 @@ const ChooseProject = ({ closeForm, loadProject, method  }) => {
             {projects.map((project, i) => {
               return (
                 <button
-                  className={`w-1/4 mx-2 my-1.5 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
+                  className={`w-1/4 mx-2 my-1 bg-inherit rounded-lg cursor-pointer ${color[i]}`}
                   onClick={() => {
                     loadProject(project);
                     closeForm();
@@ -104,6 +125,12 @@ const ChooseProject = ({ closeForm, loadProject, method  }) => {
           <>
             {getElems()}
           </>
+        )
+      case 'UI':
+        return(
+        <>
+          {getUI()}
+        </>
         )
 
       default:
@@ -152,7 +179,7 @@ const ChooseProject = ({ closeForm, loadProject, method  }) => {
               <label className="text-center w-1/4 glow text">
                 Choose your {method}:
               </label>
-              <div className="w-2/3 flex flex-wrap justify-between">
+              <div className="w-5/6 flex flex-wrap justify-between">
                 {getContent()}
               </div>
             </div>

@@ -231,7 +231,8 @@ const SideBar = ({
             </div>
             <div className='w-full flex flex-col'>
                         <button onClick={()=>{openForm('Select background')}} className='w-5/6 bg-purple-700 m-2'>Choose background</button>
-                        <button onClick={()=>{openForm('Select element')}} className='w-5/6 bg-purple-700 m-2'>Choose element</button>
+                        <button onClick={()=>{openForm('Select element')}} className='w-5/6 bg-purple-700 m-2'>Choose rofl element</button>
+                        <button onClick={()=>{openForm('Select ui')}} className='w-5/6 bg-purple-700 m-2'>Choose UI element</button>
             </div>
           </div>
           <p
