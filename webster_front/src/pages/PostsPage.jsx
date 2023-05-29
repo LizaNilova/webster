@@ -9,6 +9,7 @@ import '../styles/StyleCheckbox.scss';
 import ReportForm from '../components/reportForm';
 import { getAllUsers } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
+import '../styles/createPostStyle.scss'
 
 const PostsPage = () => {
   const dispatch = useDispatch();
