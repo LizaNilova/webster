@@ -30,7 +30,7 @@
     }
 
     .form-body-item-input{
-        @apply border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-full outline-none text-black p-2 bg-light-beige;
+        @apply rounded-lg outline-none text-black p-2;
     }
     .form-body-item-input-color{
         @apply w-1/3 rounded-sm;

@@ -33,19 +33,19 @@ const Header = () => {
         <div className="header-links-container">
           <Link
             to="/"
-            className="flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
+            className="flex glow text justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
           >
             Workspace
           </Link>
           <Link
             to="/posts"
-            className="flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
+            className="flex glow text justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
           >
             Posts
           </Link>
           <Link
             to="/profile"
-            className="flex justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
+            className="flex glow text justify-center items-center text-lg m-5 text-beige hover:animate-pulse"
           >
             Profile
           </Link>
