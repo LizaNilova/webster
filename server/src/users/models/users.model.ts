@@ -50,7 +50,7 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 'qwerty123', description: 'user password' })
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
-  
+
   @ApiProperty({ example: 'true', description: 'account active' })
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   is_active: boolean
@@ -63,25 +63,46 @@ export class User extends Model<User, UserCreationAttrs> {
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
 
-  @HasMany(() => Post)
+  @HasMany(() => Post, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   posts: Post[];
 
-  @HasMany(() => Comment)
+  @HasMany(() => Comment, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   comments: Comment[];
 
-  @HasMany(() => Like)
+  @HasMany(() => Like, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   likes: Like[];
 
-  @HasOne(() => UserBanned)
+  @HasOne(() => UserBanned, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   ban: UserBanned;
 
-  @HasMany(() => Subscriptions)
+  @HasMany(() => Subscriptions, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   subscriptions: Subscriptions[];
 
-  @HasMany(() => Project)
+  @HasMany(() => Project, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   projects: Project[];
 
-  @HasMany(() => UserEvents)
+  @HasMany(() => UserEvents, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   events: UserEvents[];
 
   // @HasMany(() => PostReport)

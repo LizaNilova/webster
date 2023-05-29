@@ -24,6 +24,9 @@ export class UserBanned extends Model<UserBanned> {
   @Column({ type: DataType.STRING, allowNull: true })
   description: string;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   banned: User[];
 }

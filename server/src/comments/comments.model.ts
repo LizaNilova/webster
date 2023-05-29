@@ -35,13 +35,19 @@ export class Comment extends Model<Comment, CommentCreationAttrs> {
   @Column({ type: DataType.INTEGER })
   postId: number;
 
-  @BelongsTo(() => Post)
+  @BelongsTo(() => Post, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   posts: Post[];
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   author: User[];
 }

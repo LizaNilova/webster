@@ -54,16 +54,25 @@ export class Post extends Model<Post, PostCreationAttrs> {
   @Column({ type: DataType.INTEGER })
   userId: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   author: User;
 
   @BelongsToMany(() => Category, () => PostCategory)
   categories: Category[];
 
-  @HasMany(() => Comment)
+  @HasMany(() => Comment, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   comments: Comment[];
 
-  @HasMany(() => Like)
+  @HasMany(() => Like, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   likes: Like[];
 
   // @HasMany(() => PostReport)
