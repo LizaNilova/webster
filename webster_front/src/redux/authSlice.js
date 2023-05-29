@@ -23,28 +23,28 @@ export const registerUser = createAsyncThunk(
     } catch (error) {
       console.log(error.response)
       if(error.response.status === 400){
-        console.log(error.response.data.messages?.email.constraints[0])
+        console.log(error.response.data)
         let passError;
         let loginError;
         let emailError;
         let passConfError;
-        if(error.response.data?.messages?.login?.constraints[0]) {
-          loginError =  error.response.data.messages?.login?.constraints[0]
+        if(error.response.data?.login?.constraints[0]) {
+          loginError =  error.response.data.login?.constraints[0]
         } else {
           loginError = null
         }
-        if(error.response.data?.messages?.email?.constraints[0]) {
-          emailError = error.response.data.messages?.email?.constraints[0]
+        if(error.response.data?.email?.constraints[0]) {
+          emailError = error.response.data.email?.constraints[0]
         } else {
           emailError = null
         }
-        if(error.response.data?.messages?.password?.constraints[0]){
-          passError = error.response.data.messages?.password?.constraints[0]
+        if(error.response.data?.password?.constraints[0]){
+          passError = error.response.data.password?.constraints[0]
         } else {
           passError = null
         }
-        if(error.response.data?.messages?.passwordComfirm?.constraints[0]){
-          passConfError = error.response.data.messages?.passwordComfirm?.constraints[0]
+        if(error.response.data?.passwordComfirm?.constraints[0]){
+          passConfError = error.response.data.passwordComfirm?.constraints[0]
         } else {
           passConfError = null
         }

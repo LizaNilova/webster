@@ -123,7 +123,7 @@ export const RegistrationPage = () => {
             <div className="flex flex-col field w-full">
                 <label className="flex flex-row glowtext justify-between">
                     Confirm password
-                    <p className="text-red-600">{repeatError}</p>
+                    <p className="text-red-600">{regErrorTexts?.passwordConfirm}</p>
                     {/* <p className="text-red-600">АЩИБКА</p> */}
 
                 </label>
