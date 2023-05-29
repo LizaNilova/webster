@@ -136,13 +136,14 @@ const EditProfile = ({ setEditBoxOpen }) => {
             <div className="flex flex-row items-center ml-16">
                 <button
                     onClick={cancelHandler}
-                    className="flex justify-center h-fit items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4">
+                    className="glowbox-del red text-white w-fit cursor-pointer px-2 py-1 mt-4 h-fit text-[18px]">
                     Cancel
                 </button>
                 <div className="glitch-box">
                     <h3 className="glitch-text" data-text='Edit info'>Edit info</h3>
                 </div>
             </div>
+            <div></div>
 
             <img
                 src='http://localhost:3000/back_icon_beige.png'
@@ -175,74 +176,79 @@ const EditProfile = ({ setEditBoxOpen }) => {
                     </div>
                 </div>
 
-                <label className="text-sm text-beige">
-                    Username (login) <span className="text-2xl text-red-500"> *</span>
-                    <input type="text"
-                        placeholder="Login"
+                <div className={'field my-3 w-full'}>
+                    <div className="flex justify-between items-center">
+                        <label className="glow text">Login</label><span className="text-2xl text-red-700"> *</span>
+                    </div>
+                    <input
+                        type="text"
+                        className="text-white p-2"
+                        //   required="required"
                         value={state.login}
-                        name='login'
                         onChange={changeHandler}
-
-                        className={`text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
-                </label>
-
-                <label className="mb-0 text-sm text-beige">
-                    Email <span className="text-red-500 text-2xl"> *</span>
-                    <input type="email"
-                        placeholder="email"
-                        name='email'
-                        value={state.email}
-
-                        onChange={changeHandler}
-                        className={`text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`} />
-                </label>
-
-                <div className="rounded-2xl border-[2px] border-beige bg-lilovii bg-opacity-50 mt-8 mb-6 p-4">
-                    <div className="text-[18px] uppercase">Change password</div>
-
-                    <label className="text-xs text-gray-400">
-                        New password
-                        <input
-                            type="password"
-                            value={state.password}
-                            name='password'
-                            onChange={changeHandler}
-                            placeholder="new password"
-                            className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
-                        />
-                    </label>
-                    <label className="text-xs text-gray-400">
-                        Confirm new password
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            onChange={e => setConfirmPassword(e.target.value)}
-                            placeholder="repeat new password"
-                            className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
-                        />
-                    </label>
+                    />
                 </div>
-                <label className="text-sm text-beige mt-6">
-                    Current password <span className="text-2xl text-red-700"> *</span>
+
+                <div className={'field my-3 w-full'}>
+                    <div className="flex justify-between items-center">
+                        <label className="glow text">Email</label><span className="text-2xl text-red-700"> *</span>
+                    </div>
+                    <input
+                        type="text"
+                        className="text-white p-2"
+                        //   required="required"
+                        value={state.email}
+                        onChange={changeHandler}
+                    />
+                </div>
+
+                <div className="border-[2px] card-border .password-card glowbox bg-opacity-50 mt-8 mb-6 p-4">
+                    <div className="glitch-text uppercase">Change password</div>
+
+                    <div className={`field my-3 w-full`}>
+                        <div className="flex justify-between items-center">
+                            <label className="glow text">New password</label>
+                        </div>
+                        <input
+                            type="password"
+                            className="text-white p-2"
+                            value={state.password}
+                            onChange={changeHandler}
+                        />
+                    </div>
+                    <div className={`field my-3 w-full`}>
+                        <div className="flex justify-between items-center">
+                            <label className="glow text">Repeat password</label>
+                        </div>
+                        <input
+                            type="password"
+                            className="text-white p-2"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className={`field my-3 w-full`}>
+                    <div className="flex justify-between items-center">
+                        <label className="glow text">Current password</label><span className="text-2xl text-red-700"> *</span>
+                    </div>
                     <input
                         type="password"
+                        className="text-white p-2"
                         value={state.oldPassword}
-                        name='oldPassword'
                         onChange={changeHandler}
-                        placeholder="current password"
-                        className={` text-black w-full rounded-lg border py-1 px-2 text-xs outline-none placeholder:text-gray-700`}
                     />
-                </label>
+                </div>
 
                 <div className="flex gap-8 items-center justify-center mt-4">
                     <button
                         onClick={submitHandler}
-                        className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4">
+                        className="glowbox blue text-white w-fit cursor-pointer px-2 py-1 mt-4 h-fit text-[18px]">
                         Save changes
                     </button>
                     <button
                         onClick={cancelHandler}
-                        className="flex justify-center items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4">
+                        className="glowbox-del red text-white w-fit cursor-pointer px-2 py-1 mt-4 h-fit text-[18px]">
                         Cancel
                     </button>
                 </div>
