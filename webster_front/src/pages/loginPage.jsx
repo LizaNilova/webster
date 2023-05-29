@@ -59,7 +59,7 @@ export const LoginPage = () => {
         <div className="separator"></div>
         <div className="flex flex-col justify-center items-center w-full">
           <div
-            className={`field my-3 w-2/3 ${
+            className={`field flex-col my-3 w-2/3 ${
               status?.username?.constraints[0] ? 'error' : ''
             }`}
           >
@@ -80,7 +80,7 @@ export const LoginPage = () => {
             />
           </div>
 
-          <div className={`field my-3 w-2/3 ${
+          <div className={`field flex-col my-3 w-2/3 ${
               status?.password?.constraints[0] ? 'error' : ''
             }`}>
             <div className="flex justify-between items-center">

@@ -16,7 +16,8 @@ export const UserPage = () => {
     const dispatch = useDispatch()
     const params = useParams()
 
-    const [subscribed, setSubscribed] = useState(() => {
+    const [subscribed, setSubscribed] = useState(async() => {
+        dispatch(userProfile())
         for (let i = 0; i < subscriptions.length; i++) {
             if (params.id === subscriptions[i].id) {
                 return true

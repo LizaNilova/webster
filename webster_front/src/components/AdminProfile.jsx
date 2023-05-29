@@ -59,7 +59,7 @@ const AdminProfile = ({ user }) => {
   }
 
   return (
-    <div className="flex flex-col bg-opacity-30 w-2/3 bg-pomp-and-power border-opacity-30 text-[2rem] items-center justify-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
+    <div className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
       {
         editBoxOpen &&
         <EditProfile setEditBoxOpen={setEditBoxOpen} />
@@ -74,28 +74,34 @@ const AdminProfile = ({ user }) => {
         </div>
 
         {/* Full name */}
-        <div className="text-[25px]">{user.login}</div>
+        <div className='glitch-box' >
+                  <div data-text={user.login} className="text-[25px] glitch-text">{user.login}</div>
+                </div>
 
         {/* Login */}
-        <p className="text-xl" >{user.email}</p>
+        <p className="text-xl glowtext" >{user.email}</p>
 
 
-        <div
-          className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
-          onClick={() => { setEditBoxOpen(true) }}>
-          <img className="w-6" src='editing_icon.png' alt='edit info' />
-          Edit profile
+        <div className='w-fit'>
+          <button
+            //className="text-[16px] mt-5 flex  cursor-pointer flex-row space-x-3 px-3 py-2 rounded-3xl hover:bg-opacity-70 bg-beige border-dark-purple text-dark-purple"
+            className="button btn-cyber-punk mt-5"
+            type='submit'
+            onClick={() => { setEditBoxOpen(true) }}>
+            {/* <img className="w-6" src='editing_icon.png' alt='edit info' /> */}
+            Edit profile
+          </button>
         </div>
-        
+
       </div>}
 
 
 
       <div className='flex flex-col w-2/3 justify-center items-center'>
-        {form && <PostForm data={form} closeForm={() => { openForm(null); triggerUpdate() }} />}
-        {usersPosts && usersPosts.map((post, index) => {
+
+        {usersPosts && usersPosts?.map((post, i) => {
           return (
-            <Post data={post} key={index} openForm={() => { }} triggerUpdate={triggerUpdate} />
+            <Post data={post.reportedPost} iter={i} openForm={() => { }} triggerUpdate={triggerUpdate} />
           )
         })}
         {usersMeta && usersMeta?.totalPages !== 1 ?
