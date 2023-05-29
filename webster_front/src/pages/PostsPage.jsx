@@ -85,6 +85,7 @@ const PostsPage = () => {
     <>
       {form && form.method !== 'Report' && (
         <PostForm
+          method={form.method}
           data={form.data}
           closeForm={() => {
             openForm(null);
@@ -105,7 +106,7 @@ const PostsPage = () => {
           {user?.role !== 'ADMIN' && (
             <button
               onClick={() => {
-                openForm('Create');
+                openForm({method: 'Create', data: null});
               }}
               className="posts-page-filters-button"
             >
@@ -193,7 +194,7 @@ const PostsPage = () => {
             })}
           </div>
           {meta.totalPages !== 1 ? (
-            <div className='sticky bottom-3'>
+            <div className={(meta.totalPages === curPage && posts.length < 2) ? 'sticky bottom-3' : ''}>
               <ul class="inline-flex -space-x-px">
                 {getPageCount(meta.totalPages)}
               </ul>
