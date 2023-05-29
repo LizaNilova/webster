@@ -350,14 +350,14 @@ const Post = ({ data, openForm, triggerUpdate, iter }) => {
                     <div class="items-center justify-center w-12 h-12 mx-auto">
                       <img
                         alt="profil"
-                        src={`http://localhost:8080/api/static/${comment.author.avatar}`}
+                        src={`http://localhost:8080/api/static/${comment?.author?.avatar}`}
                         class="object-cover w-12 h-12 mx-auto rounded-full"
                       />
                     </div>
                   </div>
                   <div class="flex-1 pl-1">
                     <div class="text-base font-semibold text-white glow text">
-                      {comment.author.login}
+                      {comment.author?.login ? comment.author?.login : 'DELETE'}
                       <span class="text-sm font-normal text-white glow text">
                         {' '}
                         - {`${date} ${time}`}
