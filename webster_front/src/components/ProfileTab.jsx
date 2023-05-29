@@ -180,7 +180,8 @@ const ProfileTab = () => {
                   dispatch(logout());
                   setTimeout(() => {
                     navigate('/');
-                    location.reload()
+                    openConfirm(false);
+                    location.reload();
                   }, 500);
                 }, 1000);
               }} action={'Deleting account'} />}

@@ -89,6 +89,7 @@ const PostsPage = () => {
     <>
       {form && form.method !== 'Report' && (
         <PostForm
+          method={form.method}
           data={form.data}
           closeForm={() => {
             openForm(null);
@@ -109,7 +110,7 @@ const PostsPage = () => {
           {user?.role !== 'ADMIN' && (
             <button
               onClick={() => {
-                openForm('Create');
+                openForm({method: 'Create', data:null});
               }}
               className="posts-page-filters-button purple transition"
             >
