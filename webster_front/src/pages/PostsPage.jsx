@@ -204,6 +204,7 @@ const PostsPage = () => {
               posts.map((post, i) => {
                 return (
                   <Post
+                  key={i}
                     iter={i}
                     data={post}
                     openForm={openForm}
