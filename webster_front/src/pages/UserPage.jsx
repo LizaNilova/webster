@@ -75,8 +75,8 @@ export const UserPage = () => {
         </div>
     }
 
-    return <div className='flex flex-col justify-center items-center w-full h-fit bg-dark-purple'>
-        <div className="flex flex-col bg-opacity-30 w-full bg-pomp-and-power border-opacity-30 text-[2rem] items-center text-center border-[1px] border-beige rounded-[2rem] min-h-[400px] space-y-4 p-6">
+    return <div className="main-container flex-col p-10 h-fit min-h-screen ">
+        <div  className="flex flex-col bg-opacity-30 w-5/6 diagonal-gridlines glowbox-diagonales items-center text-center min-h-[400px] space-y-4 p-6">
             <div className="flex w-1/2 flex-col text-[2rem] items-center text-center min-h-[400px]">
 
                 <div className="justify-center w-40 mt-5 ">
@@ -86,8 +86,9 @@ export const UserPage = () => {
                 </div>
 
                 {/* Login */}
-                <div className="text-[25px]">{anotherUser.user.login}</div>
-
+                <div className='glitch-box' >
+                  <div data-text={anotherUser.user.login} className="text-[25px] glitch-text">{anotherUser.user.login}</div>
+                </div>
                 {subscribed && <div className='w-fit'>
                     <button
                         className="button btn-cyber-punk mt-5"
