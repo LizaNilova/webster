@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/styleModalDelete.scss'
+import '../styles/styleModal.scss'
 import '../styles/glitch.scss'
 
 const ConfirmForm = ({ closeForm, confirmAction, action }) => {
