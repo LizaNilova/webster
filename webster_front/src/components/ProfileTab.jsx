@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TabNavItem from "./TabNavItem"
 import TabContent from "./TabContent";
 import '../styles/TabsStyles.css'
-import '../styles/ScrollbarStyles.css'
+// import '../styles/ScrollbarStyles.css'
 import '../styles/profile.scss'
 
 import PostForm from '../components/PostForm';
@@ -100,10 +100,13 @@ const ProfileTab = () => {
               </div>
 
               {/* Full name */}
-              <div className="text-[25px]">{user.login}</div>
+              <div className='glitch-box' > 
+              <div className="text-[25px] glitch-text">{user.login}</div>
+              </div>
+              
 
               {/* Login */}
-              <p className="text-xl" >{user.email}</p>
+              <p className="text-xl glowtext" >{user.email}</p>
 
 
               <div
@@ -117,10 +120,8 @@ const ProfileTab = () => {
 
               <div 
               // className="min-h-[519px] bg-dark-purple bg-opacity-80 p-[1rem] text-sm text-beige border-[2px] border-beige rounded-2xl"
-              className="profile-card"
+              className="profile-card glowbox"
               >
-
-
                 <ul className="Horizontalnav">
                   <TabNavItem title={`following`} id="following" activeTab={activeTab} setActiveTab={setActiveTab} />
                   <TabNavItem title={`followers`} id="followers" activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -133,7 +134,7 @@ const ProfileTab = () => {
                       You don't follow any user yet...
                     </div>}
                     {subscriptions.length > 0 &&
-                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
+                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
                         {
                           subscriptions.map((user, index) => (
                             <UserListItem
@@ -151,7 +152,7 @@ const ProfileTab = () => {
                       </div>}
 
                     {subscribers.length > 0 &&
-                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[400px]">
+                      <ul className="w-full pr-5 space-y-3 first-letter overflow-y-scroll scrollbar h-[250px]">
                         {
                           subscribers.map((user, index) => (
                             <UserListItem

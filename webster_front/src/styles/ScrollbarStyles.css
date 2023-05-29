@@ -9,15 +9,15 @@
   }
 
   .scrollbar::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: #C9ADA7;
-    opacity: 60%;
+    /* border-radius: 100vh; */
+    background: #11dbab;
+    opacity: 40%;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    background: #22223B;
+    background: #7B6CD9;
     border-radius: 100vh;
-    border: 3px solid #C9ADA7;
+    border: 3px solid #11dbab;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
