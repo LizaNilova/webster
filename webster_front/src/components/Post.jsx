@@ -159,7 +159,7 @@ const Post = ({ data, openForm, triggerUpdate }) => {
       <div className="w-5/6 flex justify-center">
         <img
           src={apiPath + '/static/' + data.image}
-          alt="kal"
+          alt={data.image}
           className="max-w-full m-1 p-1 rounded-xl"
         />
       </div>

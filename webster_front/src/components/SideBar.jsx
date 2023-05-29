@@ -3,7 +3,7 @@ import React from 'react';
 const SideBar = ({ canvasData, openForm, clearCanvasClick,
     undoClick, redoClick, addImageToCanvas, setBackgroundImage, exportAsImage, saveCanvasState, restoreCanvasState, onChangeBGColor, addText, createProject, updateProject }) => {
         return (
-        <div className='w-1/6 h-screen flex flex-col items-center p-2 border-r-2 border-purple-900 sticky top-10 z-10'>
+        <div className='w-1/6 min-h-screen flex flex-col items-center p-2 border-r-2 border-purple-900'>
             <p className='sidebar-item-title hover:cursor-default'>Create new canvas</p>
             <button onClick={()=>{openForm('Create')}} className='w-2/3 bg-purple-700 m-2'>Create new canvas</button>
             <button onClick={()=>{openForm('Select project')}} className='w-2/3 bg-purple-700 m-2'>Load project</button>
@@ -100,13 +100,6 @@ const SideBar = ({ canvasData, openForm, clearCanvasClick,
                         </svg>
                     </p>
                     <div className='w-full text-center hidden' id='text-actions-container'>
-                        {/* <div className='sidebar-item-container'>
-                            <div className='w-full flex items-center justify-center p-2'>
-                                <p className='pr-2 text-lg'>Text:</p>
-                                <input type='text' className='w-2/3 border-2 border-purple-500 focus:border-emerald-600 focus:border-2 rounded-md outline-none text-black p-1 bg-light-beige' 
-                                    id='text' />
-                            </div>
-                        </div> */}
                         <button onClick={addText} className='w-2/3 bg-purple-700 m-2'>Add text</button>
                     </div>
                     {/* <button onClick={undoClick} className='w-2/3 bg-purple-700 m-2'>Undo</button>
