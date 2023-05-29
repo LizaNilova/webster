@@ -101,7 +101,7 @@ const ProfileTab = () => {
 
               {/* Full name */}
               <div className='glitch-box' > 
-              <div className="text-[25px] glitch-text">{user.login}</div>
+              <div data-count={user.login} className="text-[25px] glitch-text">{user.login}</div>
               </div>
               
 

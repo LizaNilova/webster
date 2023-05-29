@@ -15,7 +15,7 @@
         &:before,
         &:after {
           position: absolute;
-          content: 'sign in';
+          content: attr(data-text);
           padding: 28px;
           top: 0;
           left: 0;
