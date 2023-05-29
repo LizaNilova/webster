@@ -108,9 +108,9 @@ export const UserPage = () => {
                 {!usersPosts && <div className="text-beige m-auto text-md h-full w-full">
                     User have not any posts yet...
                 </div>}
-                {usersPosts && usersPosts.map(post => {
+                {usersPosts && usersPosts.map((post, i) => {
                     return (
-                        <Post data={post} openForm={openForm} />
+                        <Post iter={i} data={post} openForm={openForm} />
                     )
                 })}
                 {usersMeta && usersMeta.totalPages !== 1 ?
