@@ -108,25 +108,27 @@ const PostsPage = () => {
               onClick={() => {
                 openForm({method: 'Create', data: null});
               }}
-              className="posts-page-filters-button"
+              className="posts-page-filters-button purple transition"
             >
               Create
             </button>
           )}
-          <div className="text-xl mb-3">Search post:</div>
-          <div className="w-full m-1">
+          {/* <div className=""></div> */}
+          <div className="w-full m-1 field purple">
+          <label htmlFor="search" className='text-center text-xl mb-3 glow text'>Search post:</label>
             <input
+            id='search'
               autoComplete="off"
               type="text"
               name="search"
-              className="posts-page-filters-text-input"
+              className="w-full text-base p-3 rounded-lg outline-none"
               placeholder="Input name of post ..."
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
             />
           </div>
-          <div className="posts-page-filters-header">
+          <div className="posts-page-filters-header glow text purple">
             Filters by categories:
           </div>
           <div className="posts-page-filters-categories-container">
