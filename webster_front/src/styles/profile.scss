@@ -21,7 +21,7 @@ body {
   align-items: center;
   background: linear-gradient(-45deg, $secondary-bg, $main-bg);
   color: $main-fg;
-  display: grid;  
+  display: flex;  
   height: 100vh;
   justify-content: center;
   width: 100vw;
@@ -29,8 +29,8 @@ body {
 
 .profile-card {
   background: rgba(0,0,0,.5);
-  width: 450px;
-  height: 450px;
+  width: 900px;
+  height: 900px;
   padding: calc($notchSize / 2) $notchSize;
   clip-path: polygon(
     0% $notchSize, 

@@ -86,6 +86,7 @@ const AdminProfile = ({ user }) => {
           <img className="w-6" src='editing_icon.png' alt='edit info' />
           Edit profile
         </div>
+        
       </div>}
 
 
@@ -97,10 +98,10 @@ const AdminProfile = ({ user }) => {
             <Post data={post} key={index} openForm={() => { }} triggerUpdate={triggerUpdate} />
           )
         })}
-        {usersMeta && usersMeta.totalPages !== 1 ?
+        {usersMeta && usersMeta?.totalPages !== 1 ?
           <div >
             <ul class="inline-flex -space-x-px">
-              {getPageCount(usersMeta.totalPages)}
+              {getPageCount(usersMeta?.totalPages)}
             </ul>
           </div> : ''
         }

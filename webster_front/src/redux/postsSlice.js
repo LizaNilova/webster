@@ -182,8 +182,9 @@ const postsSlice = createSlice({
       state.message = action.payload.message
     },
     [getReportedPosts.fulfilled]: (state, action) => {
-      state.usersPosts = action.payload.post.posts
-      state.usersMeta = action.payload.post.meta
+      console.log(action)
+      state.usersPosts = action.payload?.posts
+      state.usersMeta = action.payload?.meta
       state.message = action.payload.message
     }
   }
