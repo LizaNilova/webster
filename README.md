@@ -6,6 +6,7 @@ It is kept for demonstration purposes only, showcasing the code structure, desig
 
 ## Installation
 
+
 ```bash
 # clone this project
 $ git clone https://github.com/LizaNilova/webster.git
